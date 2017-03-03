@@ -15,7 +15,9 @@ import frontend.AppWriter;
  * Created by magnus on 17.02.2017.
  */
 
+
 public class RoleSelect extends AppCompatActivity {
+    //Page for redirecting to the students' GUI or the Professors' GUI. Might be changed for a login page.
     public static StudentInfo stud;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +27,22 @@ public class RoleSelect extends AppCompatActivity {
         Button ProfBtn= (Button) findViewById(R.id.profBtn);
         StudBtn.setOnClickListener(handler);
         ProfBtn.setOnClickListener(handler);
+        //Allows threads
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
     }
 
+    /**
+     * Sends to the ProfessorLive view
+     */
     public void selectProfessor(){
         Intent intent= new Intent(RoleSelect.this,ProfessorLive.class);
         startActivity(intent);
     }
+
+    /**
+     * Sends to the StudentRating view
+     */
     public void selectStudent(){
         if(stud==null){
             stud=new StudentInfo(null,(byte) 0,(byte) 0);
@@ -40,6 +50,10 @@ public class RoleSelect extends AppCompatActivity {
         Intent intent= new Intent(RoleSelect.this,StudentRating.class);
         startActivity(intent);
     }
+
+    /**
+     * Checks weither the user clicks the professor or the student button.
+     */
     View.OnClickListener handler= new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -55,9 +69,15 @@ public class RoleSelect extends AppCompatActivity {
             }
         }
     };
+
     public static StudentInfo getStud(){
         return stud;
     }
+
+    /**
+     * Changes the current tempo rating of the student
+     * @param rating
+     */
     public static void changeStud(byte rating){
 
         stud.setRank(rating);

@@ -1,9 +1,7 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,20 +22,24 @@ public class ProfessorLive extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.professor_layout);
-        Button start;
-        start = (Button) findViewById(R.id.genRandomNumBtn);
+        setContentView(R.layout.professor_live);
+        Button updateBtn;
+        updateBtn = (Button) findViewById(R.id.updateLiveBtn);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         AppReader ar = new AppReader();
-        start.setOnClickListener(new View.OnClickListener() {
+        updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //float avg = (float) (Math.random()*40)+10;
-                //avg = (float) Math.floor(avg);
-                //avg = avg/10;
-                //update(avg);
+
+                /* Testcode: gives random input to the live view
+                float avg = (float) (Math.random()*40)+10;
+                avg = (float) Math.floor(avg);
+                avg = avg/10;
+                update(avg);
+                */
+
                 //while(hasWindowFocus()){
                     ar.run();
                     update(ar.ti.getSnitt());
@@ -49,39 +51,53 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        //Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
-        //startActivityForResult(myIntent, 0);
+        /* Sets the Back button to create a new instance of a view - didn't work as intended, but might be interesting later.
+        Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
+        startActivityForResult(myIntent, 0);
+        */
         finish();
         return true;
 
     }
 
+    /**
+     * Translates a float between 1 and 5 to RGB code in hex scaling from blue to red.
+     * @param average Float between 1 and 5
+     * @return Color in form of hex-string "#XXXXXX"
+     */
     protected String translateColor(float average){
+
         String ratingColor;
         String opacityColor;
 
-        int opacity = (int) ((average-3)*100)*250/200; //gir et tall mellom -250 og 250 som vil gi blaa/roed hex respektivt.
-
-
+        //gives a number between -250 and 250 respectively,depending on distance to "perfect tempo".
+        int opacity = (int) ((average-3)*100)*250/200;
+        //Translates opacity into hex
         opacityColor = Integer.toHexString(255-Math.abs(opacity));
 
 
         if (opacity == 0) {
-            ratingColor = "#ffffff";
+            ratingColor = "#ffffff"; //Pure white
         } else if (opacity > 255 - 16) {
-            ratingColor = "#ff0" + opacityColor + "0" + opacityColor; //Sterk roed
+            ratingColor = "#ff0" + opacityColor + "0" + opacityColor; //Red, edge case when hex only gives 1 letter
         } else if (opacity > 0) {
-            ratingColor = "#ff" + opacityColor + opacityColor;
+            ratingColor = "#ff" + opacityColor + opacityColor; //Red
         } else if (opacity < 16 - 255) {
-            ratingColor = "#0" + opacityColor + "0" + opacityColor + "ff";
+            ratingColor = "#0" + opacityColor + "0" + opacityColor + "ff"; //Blue, edge case when hex only gives 1 letter
         } else {
-            ratingColor = "#" + opacityColor + opacityColor + "ff";
+            ratingColor = "#" + opacityColor + opacityColor + "ff"; // Blue
         }
         return ratingColor;
 
 
     }
 
+    /**
+     * Gives a darker hue of the chosen color, based on the factor used (0.8 means 20% darker)
+     * @param color the color you wish to change the hue of.
+     * @param factor float between 0 and 1.
+     * @return int
+     */
     public static int darker (int color, float factor) {
         int a = Color.alpha( color );
         int r = Color.red( color );
@@ -94,6 +110,10 @@ public class ProfessorLive extends AppCompatActivity {
                 Math.max( (int)(b * factor), 0 ) );
     }
 
+    /**
+     * Updates all info on the ProfessorLive view: Background and ActionBar color, and the number on the text view.
+     * @param average Float between 1 and 5 with input from the tempo RadioButtons from the associated lecture
+     */
     protected void update(float average){
         System.out.println(average);
         if(average<1||average>5){

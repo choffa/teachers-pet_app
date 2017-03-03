@@ -29,13 +29,13 @@
         android:layout_marginStart="13dp" />
 
     <Button
-        android:text="Update"
+        android:id="@+id/updateLiveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/treKommaFem"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="62dp"
-        android:id="@+id/genRandomNumBtn" />
+        android:text="Update" />
 
     <CheckedTextView
         android:text="FagKode"

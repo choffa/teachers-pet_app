@@ -14,8 +14,8 @@ import backend.Lecture;
  * Created by magnus on 22.02.2017.
  */
 
-public class LectureList extends ListActivity {
-
+public class StudentLectureList extends ListActivity {
+//Ren copy/paste fra LectureList atm
     ArrayList<String> listItems=new ArrayList<>();
     ArrayAdapter<String> adapter;
     private EditText medit;
@@ -28,7 +28,7 @@ public class LectureList extends ListActivity {
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lectures);
+        setContentView(R.layout.lectures_student);
         adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listItems);
         setListAdapter(adapter);
         medit= (EditText) findViewById(R.id.lecture_name);
