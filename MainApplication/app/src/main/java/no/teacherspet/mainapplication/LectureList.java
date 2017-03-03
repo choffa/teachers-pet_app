@@ -22,17 +22,15 @@ import backend.Lecture;
 
 public class LectureList extends ListActivity {
 
-    ArrayList<String> listItems=new ArrayList<>();
-    ArrayList<Lecture> lectures=new ArrayList<>();
+    static ArrayList<String> listItems=new ArrayList<>();
+    static ArrayList<Lecture> lectures=new ArrayList<>();
     ArrayAdapter<String> adapter;
-    private boolean isStart;
     private int start;
     private int end;
     private String name;
     private String room;
     private static String ID;
     Button btn;
-    PopupWindow popUp;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -44,7 +42,9 @@ public class LectureList extends ListActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUp.showAtLocation(findViewById(R.layout.lectures), Gravity.TOP,10,10);
+                Intent creatingLecture = new Intent(getApplicationContext(),CreateLecture.class);
+                startActivity(creatingLecture);
+
             }
         });
 

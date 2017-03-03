@@ -30,13 +30,13 @@ android:id="@+id/nametxt" />
         android:id="@+id/room_header" />
 
     <EditText
+        android:id="@+id/roomtxt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
         android:ems="10"
-        android:textSize="30dp"
         android:hint="Write roomnumber here:"
-        android:id="@+id/editText3" />
+        android:inputType="textPersonName"
+        android:textSize="30dp" />
 
     <Button
         android:text="Set start time"
@@ -60,9 +60,9 @@ android:id="@+id/nametxt" />
         android:id="@+id/ferdigbtn" />
 
     <Button
-    android:text="Button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/cancelbtn" />
+        android:id="@+id/cancelbtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
 
 </LinearLayout>
