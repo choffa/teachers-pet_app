@@ -35,6 +35,7 @@ public class StudentRating extends AppCompatActivity {
             tempo.check((RoleSelect.saves.get(LectureList.getID())).get(2));
         }
         hello = (TextView) findViewById(R.id.textView2);
+        //Sets the radiobuttons to send the new info to the server on every click.
         tempo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 
             @Override
@@ -63,8 +64,9 @@ public class StudentRating extends AppCompatActivity {
         });
     }
     public boolean onOptionsItemSelected(MenuItem item){
+        /* Unnecessary as it creates a new instance of the RoleSelect page
         Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
-        startActivityForResult(myIntent, 0);
+        startActivityForResult(myIntent, 0); */
         finish();
         return true;
 
