@@ -10,6 +10,15 @@ public class Lecture {
     private static int start;
     private static int end;
     private static String room;
+    private static String ID;
+
+    public Lecture(String fagkode, int start, int end, String room){
+        setFagkode(fagkode);
+        setStart(start);
+        setEnd(end);
+        setRoom(room);
+        setID();
+    }
 
     public static void setFagkode(String fagkode) {
         Lecture.fagkode = fagkode;
@@ -46,5 +55,11 @@ public class Lecture {
 
     public static String getRoom() {
         return room;
+    }
+    private static void setID(){
+        Lecture.ID=getFagkode() + ":" + Integer.toString(getStart()) + ":" + Integer.toString(getEnd()) + ":" + getRoom();
+    }
+    public static String getID(){
+        return ID;
     }
 }
