@@ -49,8 +49,8 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
-        startActivityForResult(myIntent, 0);
+        //Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
+        //startActivityForResult(myIntent, 0);
         finish();
         return true;
 
