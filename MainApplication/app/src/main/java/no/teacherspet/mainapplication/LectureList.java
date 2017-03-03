@@ -1,10 +1,16 @@
 package no.teacherspet.mainapplication;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 
 import java.util.ArrayList;
 
@@ -17,21 +23,40 @@ import backend.Lecture;
 public class LectureList extends ListActivity {
 
     ArrayList<String> listItems=new ArrayList<>();
+    ArrayList<Lecture> lectures=new ArrayList<>();
     ArrayAdapter<String> adapter;
-    private EditText medit;
     private boolean isStart;
-    Lecture L;
     private int start;
     private int end;
     private String name;
     private String room;
+    private static String ID;
+    Button btn;
+    PopupWindow popUp;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.lectures);
+        ListView lectures = (ListView) findViewById(android.R.id.list);
         adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listItems);
-        setListAdapter(adapter);
-        medit= (EditText) findViewById(R.id.lecture_name);
+        lectures.setAdapter(adapter);
+        btn= (Button) findViewById(R.id.createbtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUp.showAtLocation(findViewById(R.layout.lectures), Gravity.TOP,10,10);
+            }
+        });
+
+       lectures.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Lecture L= (Lecture) lectures.getItemAtPosition(position);
+               ID=L.getID();
+               Intent myIntent=new Intent(getApplicationContext(),StudentRating.class);
+               startActivity(myIntent);
+           }
+       });
     }
 
     void setName(String name){
@@ -39,7 +64,11 @@ public class LectureList extends ListActivity {
     }
 
     public void addItems(View v){
-        listItems.add(medit.getText().toString());
+        listItems.add(name);
+        lectures.add(new Lecture(name,start,end,room));
         adapter.notifyDataSetChanged();
+    }
+    public static String getID(){
+        return ID;
     }
 }

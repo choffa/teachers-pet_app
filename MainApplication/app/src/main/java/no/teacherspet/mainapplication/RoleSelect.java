@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import backend.StudentInfo;
 import frontend.AppWriter;
 
@@ -19,6 +22,7 @@ import frontend.AppWriter;
 public class RoleSelect extends AppCompatActivity {
     //Page for redirecting to the students' GUI or the Professors' GUI. Might be changed for a login page.
     public static StudentInfo stud;
+    public static HashMap<String,ArrayList<Integer>> saves=new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +40,7 @@ public class RoleSelect extends AppCompatActivity {
      * Sends to the ProfessorLive view
      */
     public void selectProfessor(){
-        Intent intent= new Intent(RoleSelect.this,ProfessorLive.class);
+        Intent intent= new Intent(RoleSelect.this,LectureList.class);
         startActivity(intent);
     }
 

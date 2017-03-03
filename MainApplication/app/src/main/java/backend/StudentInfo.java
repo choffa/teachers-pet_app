@@ -10,7 +10,8 @@ public class StudentInfo implements Serializable{
 	byte rank;
     byte oldRank;
     String fag;
-    int id;
+    int button;
+    String LectureID;
 
     public StudentInfo(String fag, byte rank, byte oldRank){
         this.fag = fag;
@@ -45,12 +46,18 @@ public class StudentInfo implements Serializable{
     }
 
 
-	public int getID() {
-		return id;
+	public int getButton() {
+		return button;
 	}
 
-	public void setID(int id) {
+	public void setButton(int id) {
 
-		this.id = id;
+		this.button = id;
 	}
+    public void setLectureID(String LID){
+        LectureID=LID;
+    }
+    public String getLectureID(){
+        return LectureID;
+    }
 }
