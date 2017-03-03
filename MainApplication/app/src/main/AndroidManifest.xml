@@ -10,7 +10,6 @@
         android:theme="@style/AppTheme"
         android:logo="@drawable/ic_doggo3"
         >
-
         <activity android:name=".StudentRating">
         </activity>
         <activity android:name=".LectureList">
