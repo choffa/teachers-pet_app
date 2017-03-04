@@ -5,61 +5,39 @@ package backend;
  */
 
 public class Lecture {
-    private static String fagkode;
-    private static String professorId;
-    private static int start;
-    private static int end;
-    private static String room;
-    private static String ID;
+    private int start;
+    private int end;
+    private String fagkode;
+    private String room;
+    private String lectureID;
 
-    public Lecture(String fagkode, int start, int end, String room){
-        setFagkode(fagkode);
-        setStart(start);
-        setEnd(end);
-        setRoom(room);
+    public Lecture(){
+        super();
+    }
+
+    public Lecture(String fagkode, int start, int end, String room) {
+        super();
+        this.start = start;
+        this.end = end;
+        this.fagkode = fagkode;
+        this.room = room;
         setID();
     }
 
-    public static void setFagkode(String fagkode) {
-        Lecture.fagkode = fagkode;
+    @Override
+    public String toString() {
+        return this.fagkode+"\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
     }
 
-    public static void setStart(int hour){
-        start=hour;
-    }
-    public static void setEnd(int hour){
-        end=hour;
-    }
-    public static void setRoom(String roomName){
-        room=roomName;
-    }
-    public static void setProfessorId(String Id){
-        professorId=Id;
+    private void setID(){
+        this.lectureID = this.fagkode+":"+this.start+":"+this.end+":"+this.room;
     }
 
-    public static String getFagkode() {
-        return fagkode;
+    public String getID(){
+        return lectureID;
     }
 
-    public static String getProfessorId() {
-        return professorId;
-    }
-
-    public static int getStart() {
-        return start;
-    }
-
-    public static int getEnd() {
-        return end;
-    }
-
-    public static String getRoom() {
-        return room;
-    }
-    private static void setID(){
-        Lecture.ID=getFagkode() + ":" + Integer.toString(getStart()) + ":" + Integer.toString(getEnd()) + ":" + getRoom();
-    }
-    public static String getID(){
-        return ID;
+    public void setFagkode(String fagkode) {
+        this.fagkode = fagkode;
     }
 }
