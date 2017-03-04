@@ -33,10 +33,6 @@ public class StudentLectureList extends ListActivity {
         setListAdapter(adapter);
     }
 
-    void setName(String name){
-        Lecture.setFagkode(name);
-    }
-
     public void addItems(View v){
         listItems.add(medit.getText().toString());
         adapter.notifyDataSetChanged();

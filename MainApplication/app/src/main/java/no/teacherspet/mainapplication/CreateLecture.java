@@ -57,9 +57,9 @@ public class CreateLecture extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
-                        LectureList.listItems.add(lecture.getText().toString());
+ //                       LectureList.listItems.add(lecture.getText().toString());
                         LectureList.adapter.notifyDataSetChanged();
-                        LectureList.lectures.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString()));
+                        LectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString()));
                         finish();
                     }
                     break;

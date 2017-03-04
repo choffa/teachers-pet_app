@@ -115,7 +115,9 @@ public class ProfessorLive extends AppCompatActivity {
      * @param average Float between 1 and 5 with input from the tempo RadioButtons from the associated lecture
      */
     protected void update(float average){
-        System.out.println(average);
+        //System.out.println(average);
+
+        //Checks to see if the average is between the 
         if(average<1||average>5){
             average= (float) 3.0;
         }
