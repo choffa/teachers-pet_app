@@ -31,7 +31,6 @@ public class StudentLectureList extends ListActivity {
         setContentView(R.layout.lectures_student);
         adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,listItems);
         setListAdapter(adapter);
-        medit= (EditText) findViewById(R.id.lecture_name);
     }
 
     void setName(String name){
