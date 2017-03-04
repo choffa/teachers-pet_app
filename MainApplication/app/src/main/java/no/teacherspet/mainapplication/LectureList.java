@@ -24,7 +24,7 @@ public class LectureList extends ListActivity {
 
     static ArrayList<String> listItems=new ArrayList<>();
     static ArrayList<Lecture> lectures=new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    public static ArrayAdapter<String> adapter;
     private int start;
     private int end;
     private String name;

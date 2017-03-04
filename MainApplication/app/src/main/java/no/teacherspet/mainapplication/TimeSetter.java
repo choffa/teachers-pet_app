@@ -15,7 +15,7 @@ public class TimeSetter extends AppCompatActivity {
     TimePicker clock;
     Button done;
 
-    public void OnCreate(Bundle SavedInstanceState){
+    public void onCreate(Bundle SavedInstanceState){
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.timesetter);
         done= (Button) findViewById(R.id.okbtn);
@@ -25,14 +25,15 @@ public class TimeSetter extends AppCompatActivity {
     View.OnClickListener buttonPresser=new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent finished=new Intent(getApplicationContext(),CreateLecture.class);
+            //Intent finished=new Intent(getApplicationContext(),CreateLecture.class);
             if(CreateLecture.getIsStart()){
                 CreateLecture.setStart(clock.getCurrentHour());
             }
             else{
                 CreateLecture.setEnd(clock.getCurrentHour());
             }
-            startActivity(finished);
+            //startActivity(finished);
+            finish();
         }
     };
 }
