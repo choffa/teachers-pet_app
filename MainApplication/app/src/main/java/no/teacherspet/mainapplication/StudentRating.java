@@ -20,7 +20,7 @@ public class StudentRating extends AppCompatActivity {
     RadioGroup tempo;
     HashMap<String,ArrayList<Integer>> savedLectures=new HashMap<>();
     TextView hello; //Textfield only for debugging purposes: shows the last two values
-    StudentInfo stud=RoleSelect.getStud();
+    StudentInfo stud=RoleSelect.getStud(); //no longer necessary
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,7 @@ public class StudentRating extends AppCompatActivity {
         setContentView(R.layout.activity_student_rating);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(StudentLectureList.getName());
         tempo = (RadioGroup) findViewById(R.id.tempoRadioGroup);
         if(RoleSelect.saves.containsKey(StudentLectureList.getID())){
             tempo.check(RoleSelect.saves.get(lectureID).get(0));
