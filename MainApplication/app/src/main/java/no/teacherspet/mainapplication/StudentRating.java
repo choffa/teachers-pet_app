@@ -18,21 +18,23 @@ public class StudentRating extends AppCompatActivity {
 
     byte rating;
     int radioButtonID;
+    private static String lectureID;
     RadioGroup tempo;
-    TextView hello;
     HashMap<String,ArrayList<Integer>> savedLectures=new HashMap<>();
+    TextView hello; //Textfield only for debugging purposes: shows the last two values
     StudentInfo stud=RoleSelect.getStud();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        lectureID=LectureList.getID();
         setContentView(R.layout.activity_student_rating);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         tempo = (RadioGroup) findViewById(R.id.tempoRadioGroup);
         if(RoleSelect.saves.containsKey(LectureList.getID())){
-            tempo.check((RoleSelect.saves.get(LectureList.getID())).get(2));
+            tempo.check(RoleSelect.saves.get(lectureID).get(0));
         }
         hello = (TextView) findViewById(R.id.textView2);
         //Sets the radiobuttons to send the new info to the server on every click.
@@ -43,7 +45,7 @@ public class StudentRating extends AppCompatActivity {
                 ArrayList<Integer> changes=new ArrayList<Integer>();
                 radioButtonID = tempo.getCheckedRadioButtonId();
                 changes.add(radioButtonID);
-                RoleSelect.getStud().setButton(tempo.getCheckedRadioButtonId());
+                //RoleSelect.getStud().setButton(radioButtonID);
                 View radioButton = tempo.findViewById(radioButtonID);
                 int rating = tempo.indexOfChild(radioButton) +1;
                 changes.add(rating);
@@ -54,12 +56,12 @@ public class StudentRating extends AppCompatActivity {
                     changes.add(0);
                 }
 
-                RoleSelect.changeStud((byte)rating);
+                //RoleSelect.changeStud((byte)rating);
                 if(RoleSelect.saves.containsKey(LectureList.getID())){
                     RoleSelect.saves.remove(LectureList.getID());
                 }
-                RoleSelect.saves.put(LectureList.getID(),changes);
-                hello.setText(Integer.toString(RoleSelect.getStud().getRank())+" , "+Integer.toString(RoleSelect.getStud().getOldRank()));
+                RoleSelect.saves.put(lectureID,changes);
+                hello.setText(Integer.toString(RoleSelect.saves.get(lectureID).get(1))+" , "+Integer.toString(RoleSelect.saves.get(lectureID).get(2)));
             }
         });
     }

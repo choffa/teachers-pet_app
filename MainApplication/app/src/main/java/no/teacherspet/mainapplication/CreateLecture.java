@@ -37,7 +37,7 @@ public class CreateLecture extends AppCompatActivity {
         start=i;
     }
     public static void setEnd(int i){
-        end=1;
+        end=i;
     }
     View.OnClickListener handler = new View.OnClickListener() {
         @Override
@@ -91,6 +91,8 @@ public class CreateLecture extends AppCompatActivity {
         endTime.setOnClickListener(handler);
         done.setOnClickListener(handler);
         cancel.setOnClickListener(handler);
+        start=-1;
+        end=-1;
     }
 
 }
