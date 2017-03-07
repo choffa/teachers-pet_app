@@ -40,7 +40,7 @@ public class RoleSelect extends AppCompatActivity {
      * Sends to the ProfessorLive view
      */
     public void selectProfessor(){
-        Intent intent= new Intent(RoleSelect.this,LectureList.class);
+        Intent intent= new Intent(RoleSelect.this,ProfessorLectureList.class);
         startActivity(intent);
     }
 
@@ -51,7 +51,7 @@ public class RoleSelect extends AppCompatActivity {
         if(stud==null){
             stud=new StudentInfo(null,(byte) 0,(byte) 0);
         }
-        Intent intent= new Intent(RoleSelect.this,StudentRating.class);
+        Intent intent= new Intent(RoleSelect.this,StudentLectureList.class);
         startActivity(intent);
     }
 

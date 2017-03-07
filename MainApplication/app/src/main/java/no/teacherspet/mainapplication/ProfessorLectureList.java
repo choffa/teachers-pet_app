@@ -1,8 +1,8 @@
 package no.teacherspet.mainapplication;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +17,7 @@ import backend.Lecture;
  * Created by magnus on 22.02.2017.
  */
 
-public class LectureList extends ListActivity {
+public class ProfessorLectureList extends AppCompatActivity {
 
  //   static ArrayList<String> listItems=new ArrayList<>();
     static ArrayList<Lecture> lecturesArray =new ArrayList<>();
@@ -50,7 +50,8 @@ public class LectureList extends ListActivity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
-               Intent myIntent=new Intent(getApplicationContext(),StudentRating.class);
+               Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
+               ProfessorLive.setID(ID);
                startActivity(myIntent);
            }
        });
@@ -63,6 +64,6 @@ public class LectureList extends ListActivity {
         adapter.notifyDataSetChanged();
     }
     public static String getID(){
-        return LectureList.ID;
+        return ProfessorLectureList.ID;
     }
 }

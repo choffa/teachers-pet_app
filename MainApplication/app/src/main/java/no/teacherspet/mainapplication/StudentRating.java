@@ -1,6 +1,5 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import backend.StudentInfo;
 
@@ -28,12 +26,12 @@ public class StudentRating extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        lectureID=LectureList.getID();
+        lectureID= StudentLectureList.getID();
         setContentView(R.layout.activity_student_rating);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         tempo = (RadioGroup) findViewById(R.id.tempoRadioGroup);
-        if(RoleSelect.saves.containsKey(LectureList.getID())){
+        if(RoleSelect.saves.containsKey(StudentLectureList.getID())){
             tempo.check(RoleSelect.saves.get(lectureID).get(0));
         }
         hello = (TextView) findViewById(R.id.textView2);
@@ -49,16 +47,16 @@ public class StudentRating extends AppCompatActivity {
                 View radioButton = tempo.findViewById(radioButtonID);
                 int rating = tempo.indexOfChild(radioButton) +1;
                 changes.add(rating);
-                if(RoleSelect.saves.containsKey(LectureList.getID())){
-                    changes.add(RoleSelect.saves.get(LectureList.getID()).get(1));
+                if(RoleSelect.saves.containsKey(StudentLectureList.getID())){
+                    changes.add(RoleSelect.saves.get(StudentLectureList.getID()).get(1));
                 }
                 else{
                     changes.add(0);
                 }
 
                 //RoleSelect.changeStud((byte)rating);
-                if(RoleSelect.saves.containsKey(LectureList.getID())){
-                    RoleSelect.saves.remove(LectureList.getID());
+                if(RoleSelect.saves.containsKey(StudentLectureList.getID())){
+                    RoleSelect.saves.remove(StudentLectureList.getID());
                 }
                 RoleSelect.saves.put(lectureID,changes);
                 hello.setText(Integer.toString(RoleSelect.saves.get(lectureID).get(1))+" , "+Integer.toString(RoleSelect.saves.get(lectureID).get(2)));

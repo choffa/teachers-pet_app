@@ -19,6 +19,8 @@ import frontend.AppReader;
 
 
 public class ProfessorLive extends AppCompatActivity {
+
+    private static String ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,5 +134,12 @@ public class ProfessorLive extends AppCompatActivity {
         text.setText(String.format("%.1f",average-3));
     }
 
+    public static void setID(String ID) {
+        ProfessorLive.ID = ID;
+    }
+
+    public static String getID() {
+        return ProfessorLive.ID;
+    }
 }
 

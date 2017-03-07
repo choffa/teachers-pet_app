@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import backend.Lecture;
 
-import static no.teacherspet.mainapplication.R.id.cancelbtn;
-
 /**
  * Created by magnus on 03.03.2017.
  */
@@ -57,9 +55,9 @@ public class CreateLecture extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
- //                       LectureList.listItems.add(lecture.getText().toString());
-                        LectureList.adapter.notifyDataSetChanged();
-                        LectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString()));
+ //                       ProfessorLectureList.listItems.add(lecture.getText().toString());
+                        ProfessorLectureList.adapter.notifyDataSetChanged();
+                        ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString()));
                         finish();
                     }
                     break;
