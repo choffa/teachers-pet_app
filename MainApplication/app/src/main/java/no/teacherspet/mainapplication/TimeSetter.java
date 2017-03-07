@@ -20,6 +20,7 @@ public class TimeSetter extends AppCompatActivity {
         setContentView(R.layout.timesetter);
         done= (Button) findViewById(R.id.okbtn);
         clock = (TimePicker) findViewById(R.id.timePicker);
+        clock.setIs24HourView(true);
         done.setOnClickListener(buttonPresser);
     }
     View.OnClickListener buttonPresser=new View.OnClickListener() {
