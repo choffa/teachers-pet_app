@@ -19,7 +19,6 @@ import backend.Lecture;
 
 public class ProfessorLectureList extends AppCompatActivity {
 
- //   static ArrayList<String> listItems=new ArrayList<>();
     static ArrayList<Lecture> lecturesArray =new ArrayList<>();
     public static ArrayAdapter<Lecture> adapter;
     private int start;
@@ -27,6 +26,7 @@ public class ProfessorLectureList extends AppCompatActivity {
     private String name;
     private String room;
     private static String ID;
+    private static String Name;
     Button btn;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -50,6 +50,7 @@ public class ProfessorLectureList extends AppCompatActivity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
+               Name=L.getFagkode();
                Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
                ProfessorLive.setID(ID);
                startActivity(myIntent);
@@ -59,11 +60,14 @@ public class ProfessorLectureList extends AppCompatActivity {
 
 
     public void addItems(View v){
-      //  listItems.add(name);
         lecturesArray.add(new Lecture(name,start,end,room));
         adapter.notifyDataSetChanged();
     }
     public static String getID(){
         return ProfessorLectureList.ID;
+    }
+
+    public static String getName() {
+        return ProfessorLectureList.Name;
     }
 }

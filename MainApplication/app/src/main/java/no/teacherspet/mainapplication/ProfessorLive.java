@@ -30,6 +30,7 @@ public class ProfessorLive extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(ProfessorLectureList.getName());
         AppReader ar = new AppReader();
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override

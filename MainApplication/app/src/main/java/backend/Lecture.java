@@ -36,4 +36,8 @@ public class Lecture {
     public void setFagkode(String fagkode) {
         this.fagkode = fagkode;
     }
+
+    public String getFagkode() {
+        return fagkode;
+    }
 }
