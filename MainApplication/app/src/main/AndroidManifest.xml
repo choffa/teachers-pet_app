@@ -14,10 +14,12 @@
         <activity android:name=".TimeSetter"></activity>
         <activity android:name=".StudentRating">
         </activity>
-        <activity android:name=".LectureList">
+        <activity android:name=".ProfessorLectureList">
         </activity>
         <activity android:name=".ProfessorLive" android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".StudentLectureList"/>
+
         <activity android:name=".RoleSelect" android:label="@string/startup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -11,12 +11,8 @@ public class Lecture {
     private String room;
     private String lectureID;
 
-    public Lecture(){
-        super();
-    }
 
     public Lecture(String fagkode, int start, int end, String room) {
-        super();
         this.start = start;
         this.end = end;
         this.fagkode = fagkode;
