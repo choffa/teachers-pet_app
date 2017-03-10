@@ -21,6 +21,7 @@ public class StudentLectureList extends AppCompatActivity {
     static ArrayList<Lecture> lecturesArray = ProfessorLectureList.lecturesArray;
     public static ArrayAdapter<Lecture> adapter;
     private static String ID;
+    private static Lecture L;
     private static String Name;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -33,20 +34,24 @@ public class StudentLectureList extends AppCompatActivity {
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Lecture L= (Lecture) list_view.getItemAtPosition(position);
+                L= (Lecture) list_view.getItemAtPosition(position);
                 ID=L.getID();
-                Name=L.getFagkode();
+                Name = L.getName();
                 Intent myIntent=new Intent(getApplicationContext(),StudentRating.class);
                 startActivity(myIntent);
             }
         });
     }
 
-    public static String getID() {
-        return StudentLectureList.ID;
+    public static Lecture getL() {
+        return StudentLectureList.L;
     }
 
-    public static String getName() {
+    public static String getName(){
         return StudentLectureList.Name;
+    }
+
+    public static String getID() {
+        return StudentLectureList.ID;
     }
 }

@@ -1,13 +1,17 @@
 package no.teacherspet.mainapplication;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Date;
 
 import backend.Lecture;
 
@@ -25,6 +29,8 @@ public class CreateLecture extends AppCompatActivity {
     Button endTime;
     Button done;
     Button cancel;
+    Button dateBtn;
+    private static Date date;
     private static int start=-1;
     private static int end=-1;
     private static boolean isStart;
@@ -37,10 +43,18 @@ public class CreateLecture extends AppCompatActivity {
     public static void setEnd(int i){
         end=i;
     }
+    public static void setDate(Date date){
+        CreateLecture.date=date;
+    }
     View.OnClickListener handler = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch(v.getId()){
+
+                case(R.id.dateBtn):
+                    dateSelect();
+                    break;
+
                 case(R.id.startbtn):
                     isStart = true;
                     timeSelect();
@@ -57,7 +71,7 @@ public class CreateLecture extends AppCompatActivity {
                     else {
  //                       ProfessorLectureList.listItems.add(lecture.getText().toString());
                         ProfessorLectureList.adapter.notifyDataSetChanged();
-                        ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString()));
+                        ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(),date));
                         finish();
                     }
                     break;
@@ -74,6 +88,11 @@ public class CreateLecture extends AppCompatActivity {
         startActivity(getClock);
     }
 
+    private void dateSelect() {
+        Intent getCalendar=new Intent(getApplicationContext(),DateSetter.class);
+        startActivity(getCalendar);
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_lecture);
@@ -85,10 +104,12 @@ public class CreateLecture extends AppCompatActivity {
         endTime = (Button) findViewById(R.id.endbtn);
         done = (Button) findViewById(R.id.ferdigbtn);
         cancel = (Button) findViewById(R.id.cancelbtn);
+        dateBtn = (Button) findViewById(R.id.dateBtn);
         startTime.setOnClickListener(handler);
         endTime.setOnClickListener(handler);
         done.setOnClickListener(handler);
         cancel.setOnClickListener(handler);
+        dateBtn.setOnClickListener(handler);
         start=-1;
         end=-1;
     }
