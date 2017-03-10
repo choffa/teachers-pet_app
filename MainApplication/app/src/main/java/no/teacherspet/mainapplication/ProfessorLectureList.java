@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import backend.Lecture;
 
@@ -19,14 +20,15 @@ import backend.Lecture;
 
 public class ProfessorLectureList extends AppCompatActivity {
 
+ //   static ArrayList<String> listItems=new ArrayList<>();
     static ArrayList<Lecture> lecturesArray =new ArrayList<>();
     public static ArrayAdapter<Lecture> adapter;
     private int start;
     private int end;
-    private String name;
-    private String room;
-    private static String ID;
     private static String Name;
+    private String room;
+    private Date date;
+    private static String ID;
     Button btn;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -50,7 +52,7 @@ public class ProfessorLectureList extends AppCompatActivity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
-               Name=L.getFagkode();
+               Name = L.getName();
                Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
                ProfessorLive.setID(ID);
                startActivity(myIntent);
@@ -60,7 +62,8 @@ public class ProfessorLectureList extends AppCompatActivity {
 
 
     public void addItems(View v){
-        lecturesArray.add(new Lecture(name,start,end,room));
+      //  listItems.add(Name);
+        lecturesArray.add(new Lecture(Name,start,end,room,date));
         adapter.notifyDataSetChanged();
     }
     public static String getID(){

@@ -39,6 +39,12 @@ android:id="@+id/nametxt" />
         android:textSize="30dp" />
 
     <Button
+        android:id="@+id/dateBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set lecture date" />
+
+    <Button
         android:text="Set start time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
