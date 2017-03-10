@@ -1,50 +1,59 @@
 package backend;
 
+import java.util.Date;
+
 /**
  * Created by magnus on 03.03.2017.
  */
 
 public class Lecture {
-    private static String fagkode;
-    private static String professorId;
-    private static int start;
-    private static int end;
-    private static String room;
+    private int start;
+    private int end;
+    private String name;
+    private String room;
+    private String lectureID;
+    private Date date;
 
-    public static void setFagkode(String fagkode) {
-        Lecture.fagkode = fagkode;
-    }
 
-    public static void setStart(int hour){
-        start=hour;
-    }
-    public static void setEnd(int hour){
-        end=hour;
-    }
-    public static void setRoom(String roomName){
-        room=roomName;
-    }
-    public static void setProfessorId(String Id){
-        professorId=Id;
+    public Lecture(String name, int start, int end, String room, Date date) {
+        this.start = start;
+        this.end = end;
+        this.name = name;
+        this.room = room;
+        this.date = date;
+        setID();
     }
 
-    public static String getFagkode() {
-        return fagkode;
+    @Override
+    public String toString() {
+        return this.name+"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + this.date.getYear() + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
     }
 
-    public static String getProfessorId() {
-        return professorId;
+    private void setID(){
+        this.lectureID = this.name+":"+this.start+":"+this.end+":"+this.room;
     }
 
-    public static int getStart() {
-        return start;
+    public String getID(){
+        return lectureID;
     }
 
-    public static int getEnd() {
+    public void setFagkode(String fagkode) {
+        this.name = fagkode;
+    }
+
+    public int getEnd() {
         return end;
     }
 
-    public static String getRoom() {
-        return room;
+    public int getStart() {
+        return start;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public String getName() {
+        return name;
     }
 }

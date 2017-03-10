@@ -3,8 +3,10 @@ package backend;
 import java.io.Serializable;
 
 public class TeacherInfo implements Serializable{
-    float snitt;
-    int antall;
+    private float snitt;
+    private int antall;
+    private String LectureID;
+    private String professorID;
 
     public TeacherInfo(float snitt, int antall) {
         this.snitt = snitt;
