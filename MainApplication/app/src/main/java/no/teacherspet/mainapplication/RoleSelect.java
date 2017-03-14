@@ -18,7 +18,8 @@ import java.util.HashMap;
 
 public class RoleSelect extends AppCompatActivity {
     //Page for redirecting to the students' GUI or the Professors' GUI. Might be changed for a login page.
-    public static HashMap<Integer, ArrayList<Integer>> saves=new HashMap<>();
+    protected static HashMap<Integer, ArrayList<Integer>> saves=new HashMap<>();
+    protected static HashMap<String,String> professors = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class RoleSelect extends AppCompatActivity {
      * Sends to the ProfessorLive view
      */
     public void selectProfessor(){
-        Intent intent= new Intent(RoleSelect.this,ProfessorLectureList.class);
+        Intent intent= new Intent(RoleSelect.this,CreateAccount.class);
         startActivity(intent);
     }
 
