@@ -65,7 +65,7 @@ public class CreateLecture extends AppCompatActivity {
                     timeSelect();
                     break;
                 case(R.id.ferdigbtn):
-                    if(lecture==null || room==null || start==-1 || end==-1){
+                    if(lecture==null || room==null || start==-1 || end==-1 || date == null){
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
@@ -82,6 +82,14 @@ public class CreateLecture extends AppCompatActivity {
             }
         }
     };
+
+    public static int getStart() {
+        return start;
+    }
+
+    public static int getEnd() {
+        return end;
+    }
 
     private void timeSelect() {
         Intent getClock=new Intent(getApplicationContext(),TimeSetter.class);
