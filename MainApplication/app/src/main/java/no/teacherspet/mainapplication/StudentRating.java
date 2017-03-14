@@ -11,18 +11,18 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import backend.Lecture;
-import backend.StudentInfo;
 
 public class StudentRating extends AppCompatActivity {
 
     byte rating;
     int radioButtonID;
-    private static String lectureID;
+    private static int lectureID;
     RadioGroup tempo;
+    HashMap<String,ArrayList<Integer>> savedLectures=new HashMap<>();
     TextView hello; //Textfield only for debugging purposes: shows the last two values
-    StudentInfo stud=RoleSelect.getStud(); //no longer necessary
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

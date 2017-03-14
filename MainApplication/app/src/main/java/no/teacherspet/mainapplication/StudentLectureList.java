@@ -20,7 +20,7 @@ public class StudentLectureList extends AppCompatActivity {
 
     static ArrayList<Lecture> lecturesArray = ProfessorLectureList.lecturesArray;
     public static ArrayAdapter<Lecture> adapter;
-    private static String ID;
+    private static int ID;
     private static Lecture L;
     private static String Name;
 
@@ -36,7 +36,7 @@ public class StudentLectureList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 L= (Lecture) list_view.getItemAtPosition(position);
                 ID=L.getID();
-                Name = L.getName();
+                Name = L.getCourseID();
                 Intent myIntent=new Intent(getApplicationContext(),StudentRating.class);
                 startActivity(myIntent);
             }
@@ -51,7 +51,7 @@ public class StudentLectureList extends AppCompatActivity {
         return StudentLectureList.Name;
     }
 
-    public static String getID() {
+    public static int getID() {
         return StudentLectureList.ID;
     }
 }

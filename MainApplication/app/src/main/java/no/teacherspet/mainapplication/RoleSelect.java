@@ -11,9 +11,6 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import backend.StudentInfo;
-import frontend.AppWriter;
-
 /**
  * Created by magnus on 17.02.2017.
  */
@@ -21,8 +18,7 @@ import frontend.AppWriter;
 
 public class RoleSelect extends AppCompatActivity {
     //Page for redirecting to the students' GUI or the Professors' GUI. Might be changed for a login page.
-    public static StudentInfo stud;
-    public static HashMap<String,ArrayList<Integer>> saves=new HashMap<>();
+    public static HashMap<Integer, ArrayList<Integer>> saves=new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +44,7 @@ public class RoleSelect extends AppCompatActivity {
      * Sends to the StudentRating view
      */
     public void selectStudent(){
-        if(stud==null){
-            stud=new StudentInfo(null,(byte) 0,(byte) 0);
-        }
+
         Intent intent= new Intent(RoleSelect.this,StudentLectureList.class);
         startActivity(intent);
     }
@@ -74,23 +68,7 @@ public class RoleSelect extends AppCompatActivity {
         }
     };
 
-    public static StudentInfo getStud(){
-        return stud;
-    }
 
-    /**
-     * Changes the current tempo rating of the student
-     * @param rating
-     */
-    public static void changeStud(byte rating){
-
-        stud.setRank(rating);
-        try{
-            AppWriter aw = new AppWriter();
-            aw.setInfo(stud);
-            aw.run();
-        } catch (Exception e) {e.printStackTrace();}
-    }
 
 
 }

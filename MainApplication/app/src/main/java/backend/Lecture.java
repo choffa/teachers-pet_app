@@ -1,44 +1,71 @@
 package backend;
 
 import java.util.Date;
+import java.util.Random;
 
 /**
  * Created by magnus on 03.03.2017.
  */
 
 public class Lecture {
+    private String professorID;
     private int start;
     private int end;
-    private String name;
+    private String courseID;
     private String room;
-    private String lectureID;
+    private int lectureID;
     private Date date;
 
 
-    public Lecture(String name, int start, int end, String room, Date date) {
+    /**
+     * Outdated, use the other constructor if at all possible
+     * @param courseID (fagkode)
+     * @param start Start hour
+     * @param end End hour
+     * @param room Room number
+     * @param date Date of lecture
+     */
+    public Lecture(String courseID, int start, int end, String room, Date date) {
         this.start = start;
         this.end = end;
-        this.name = name;
+        this.courseID = courseID;
         this.room = room;
         this.date = date;
-        setID();
+        //setID();
+        this.lectureID = (int) (Math.random()*500);
+    }
+
+    /**
+     *
+     * @param lectureID int Lecture ID, get from server
+     * @param professorID String professorID
+     * @param courseID String courseID of class
+     * @param start int Start hour
+     * @param end int End hour
+     * @param room String Room number
+     * @param date Date of Lecture
+     */
+    public Lecture(int lectureID, String professorID , String courseID, int start, int end, String room, Date date) {
+        this.start = start;
+        this.end = end;
+        this.courseID = courseID;
+        this.room = room;
+        this.date = date;
+        this.lectureID = lectureID;
+        this.professorID = professorID;
     }
 
     @Override
     public String toString() {
-        return this.name+"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + this.date.getYear() + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
+        return this.courseID +"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + this.date.getYear() + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
     }
 
-    private void setID(){
-        this.lectureID = this.name+":"+this.start+":"+this.end+":"+this.room;
-    }
-
-    public String getID(){
+    public int getID(){
         return lectureID;
     }
 
     public void setFagkode(String fagkode) {
-        this.name = fagkode;
+        this.courseID = fagkode;
     }
 
     public int getEnd() {
@@ -53,7 +80,15 @@ public class Lecture {
         return date;
     }
 
-    public String getName() {
-        return name;
+    public String getCourseID() {
+        return courseID;
+    }
+
+    public String getProfessorID() {
+        return professorID;
+    }
+
+    public String getRoom() {
+        return room;
     }
 }

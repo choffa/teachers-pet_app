@@ -28,7 +28,7 @@ public class ProfessorLectureList extends AppCompatActivity {
     private static String Name;
     private String room;
     private Date date;
-    private static String ID;
+    private static int ID;
     Button btn;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -52,7 +52,7 @@ public class ProfessorLectureList extends AppCompatActivity {
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
-               Name = L.getName();
+               Name = L.getCourseID();
                Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
                ProfessorLive.setID(ID);
                startActivity(myIntent);
@@ -66,7 +66,7 @@ public class ProfessorLectureList extends AppCompatActivity {
         lecturesArray.add(new Lecture(Name,start,end,room,date));
         adapter.notifyDataSetChanged();
     }
-    public static String getID(){
+    public static int getID(){
         return ProfessorLectureList.ID;
     }
 

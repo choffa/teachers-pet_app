@@ -1,7 +1,9 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +13,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import frontend.AppReader;
+import java.io.IOException;
+
+import frontend.Connection;
 
 /**
  * Created by magnus on 17.02.2017.
@@ -20,7 +24,14 @@ import frontend.AppReader;
 
 public class ProfessorLive extends AppCompatActivity {
 
-    private static String ID;
+    private static int ID;
+
+    Connection conn;
+
+    public static void setID(int ID) {
+        ProfessorLive.ID = ID;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +42,12 @@ public class ProfessorLive extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
-        AppReader ar = new AppReader();
+        try {
+            conn = new Connection();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,8 +60,8 @@ public class ProfessorLive extends AppCompatActivity {
                 */
 
                 //while(hasWindowFocus()){
-                    ar.run();
-                    update(ar.ti.getSnitt());
+                    conn.getAverageSpeedRating(ProfessorLectureList.getID());
+                    update(conn.getAverageSpeedRating(ProfessorLectureList.getID()));
                 //}
             }
         });
@@ -80,15 +96,15 @@ public class ProfessorLive extends AppCompatActivity {
 
 
         if (opacity == 0) {
-            ratingColor = "#ffffff"; //Pure white
+            ratingColor = "#ffffff";
         } else if (opacity > 255 - 16) {
-            ratingColor = "#ff0" + opacityColor + "0" + opacityColor; //Red, edge case when hex only gives 1 letter
+            ratingColor = "#ff0" + opacityColor + "0" + opacityColor; //Sterk roed
         } else if (opacity > 0) {
-            ratingColor = "#ff" + opacityColor + opacityColor; //Red
+            ratingColor = "#ff" + opacityColor + opacityColor;
         } else if (opacity < 16 - 255) {
-            ratingColor = "#0" + opacityColor + "0" + opacityColor + "ff"; //Blue, edge case when hex only gives 1 letter
+            ratingColor = "#0" + opacityColor + "0" + opacityColor + "ff";
         } else {
-            ratingColor = "#" + opacityColor + opacityColor + "ff"; // Blue
+            ratingColor = "#" + opacityColor + opacityColor + "ff";
         }
         return ratingColor;
 
@@ -120,7 +136,7 @@ public class ProfessorLive extends AppCompatActivity {
     protected void update(float average){
         //System.out.println(average);
 
-        //Checks to see if the average is between the 
+        //Checks to see if the average is between the
         if(average<1||average>5){
             average= (float) 3.0;
         }
@@ -135,12 +151,5 @@ public class ProfessorLive extends AppCompatActivity {
         text.setText(String.format("%.1f",average-3));
     }
 
-    public static void setID(String ID) {
-        ProfessorLive.ID = ID;
-    }
-
-    public static String getID() {
-        return ProfessorLive.ID;
-    }
 }
 
