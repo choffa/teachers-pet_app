@@ -6,10 +6,10 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
-public class Connection implements Closeable, AutoCloseable {
+import backend.Lecture;
+
+public class Connection implements Closeable {
 
 	private final int PORT = 4728;
 	private final String HOST = "localhost";
@@ -132,7 +132,7 @@ public class Connection implements Closeable, AutoCloseable {
 			int start = in.nextInt();
 			int end = in.nextInt();
 			String room = in.next();
-			res.add(new Lecture(lectureID, professorID, courseID, date, start, end, room));
+			res.add(new Lecture(lectureID, professorID, courseID, start, end, room, date));
 		}
 		return res;
 	}
