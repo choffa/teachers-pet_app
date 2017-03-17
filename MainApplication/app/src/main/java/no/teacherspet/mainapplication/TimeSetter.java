@@ -41,10 +41,9 @@ public class TimeSetter extends AppCompatActivity {
             else{
                 if (CreateLecture.getStart() != -1 && CreateLecture.getStart()>clock.getCurrentHour()) {
                     Toast.makeText(getApplicationContext(), "End time cannot be before Start Time", Toast.LENGTH_LONG).show();
-                    clock.clearFocus();
+
                 }else if(CreateLecture.getStart()!= -1 && CreateLecture.getStart()==clock.getCurrentHour()){
                     Toast.makeText(getApplicationContext(),"End time cannot the same as Start time", Toast.LENGTH_LONG).show();
-                    clock.clearFocus();
                 }else{
                     CreateLecture.setEnd(clock.getCurrentHour());
                     finish();
