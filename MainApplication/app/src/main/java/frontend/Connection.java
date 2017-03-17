@@ -262,6 +262,23 @@ public class Connection implements Closeable, AutoCloseable {
 		return in.nextBoolean();
 	}
 
+	/**
+	 * This methods gets the number of votes on speed i lecture
+	 * @param LectureID - the ID of the lecture in question
+	 * @return an int of the number of votes
+	 */
+	public int getTempoVotesInLecture(int LectureID) {
+		checkState();
+		out.println("GET_NUMBEROFUSERS"+" "+LectureID);
+		return readUsersInput();
+	}
+
+	private int readUsersInput() {
+		int ret = in.nextInt();
+		return ret;
+	}
+
+
 	public boolean validateUser(String username, String password) {
 		checkState();
 		out.println("VALIDATE " + username + " " + password);
