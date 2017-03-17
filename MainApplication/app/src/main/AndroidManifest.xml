@@ -18,7 +18,11 @@
         <activity android:name=".DateSetter"></activity>
         <activity android:name=".StudentRating">
         </activity>
+        <activity android:name=".ProfessorLogin">
+        </activity>
         <activity android:name=".ProfessorLectureList">
+        </activity>
+        <activity android:name=".CreateOrLogIn">
         </activity>
         <activity android:name=".ProfessorLive" android:screenOrientation="portrait">
         </activity>

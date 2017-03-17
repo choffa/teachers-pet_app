@@ -26,7 +26,7 @@ public class CreateAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
-        setTitle("Create your vey own Teacher's Pet account");
+        setTitle("Create a new account");
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         btn = (Button) findViewById(R.id.account_createbtn);

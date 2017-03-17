@@ -26,9 +26,11 @@ public class RoleSelect extends AppCompatActivity {
     protected static HashMap<Integer, ArrayList<Integer>> saves=new HashMap<>();
     protected static HashMap<String,String> professors = new HashMap<>();
     protected static String StudentId;
+    protected static boolean isValidated;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isValidated=false;
         setContentView(R.layout.activity_select_role);
         Button StudBtn= (Button) findViewById(R.id.studBtn);
         Button ProfBtn= (Button) findViewById(R.id.profBtn);
@@ -52,8 +54,14 @@ public class RoleSelect extends AppCompatActivity {
      * Sends to the ProfessorLive view
      */
     public void selectProfessor(){
-        Intent intent= new Intent(RoleSelect.this,CreateAccount.class);
-        startActivity(intent);
+        if(isValidated){
+            Intent showProfessorLectures=new Intent(getApplicationContext(),ProfessorLectureList.class);
+            startActivity(showProfessorLectures);
+        }
+        else{
+            Intent loginScreen = new Intent(getApplicationContext(),CreateOrLogIn.class);
+            startActivity(loginScreen);
+        }
     }
 
     /**
