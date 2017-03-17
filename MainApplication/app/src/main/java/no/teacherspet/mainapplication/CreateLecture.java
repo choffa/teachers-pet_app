@@ -144,6 +144,7 @@ public class CreateLecture extends AppCompatActivity {
         dateBtn.setOnClickListener(handler);
         start=-1;
         end=-1;
+        date = null;
     }
 
 }
