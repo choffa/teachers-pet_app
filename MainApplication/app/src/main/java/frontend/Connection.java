@@ -241,6 +241,33 @@ public class Connection implements Closeable, AutoCloseable {
 		}
 	}
 
+	/**
+	 * This method creates new users in the database
+	 * @param username - Username for the new user
+	 * @param password - Password for the new user
+	 */
+	public void createUser(String username, String password) {
+		checkState();
+		out.println("SET_USER " + username + " " + password);
+	}
+
+	/**
+	 * This method checks the availability of the username in the database
+	 * @param username - The username that is to be checked in the databse
+	 * @return A boolean value representing the
+	 */
+	public boolean checkUsername(String username) {
+		checkState();
+		out.println("CHECK_USER " + username);
+		return in.nextBoolean();
+	}
+
+	public boolean validateUser(String username, String password) {
+		checkState();
+		out.println("VALIDATE " + username + " " + password);
+		return in.nextBoolean();
+	}
+
 	private void checkState() {
 		if(this.isClosed |!socket.isConnected()){
 			throw new IllegalStateException();
