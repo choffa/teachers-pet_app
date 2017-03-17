@@ -1,8 +1,5 @@
 package no.teacherspet.mainapplication;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import backend.Lecture;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by magnus on 14.03.2017.
@@ -46,8 +45,8 @@ public class CreateAccount extends AppCompatActivity {
                     }
                     else {
                         try {
-                            RoleSelect.professors.put(email.getText().toString(), SHA1(password.getText().toString()));
-                            Toast.makeText(getApplicationContext(),SHA1(password.getText().toString()),Toast.LENGTH_LONG).show();
+                            RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
+                            Toast.makeText(getApplicationContext(),SHA1(password.getText().toString()) + ", " + md5(email.getText().toString()),Toast.LENGTH_LONG).show();
                             finish();
                         } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
@@ -87,5 +86,12 @@ public class CreateAccount extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
+    }
+    private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] idBytes=id.getBytes("iso-8859-1");
+        md.update(idBytes,0,idBytes.length);
+        byte[] md5Hash=md.digest();
+        return convertToHex(md5Hash);
     }
 }
