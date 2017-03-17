@@ -24,7 +24,13 @@ public class DateSetter extends AppCompatActivity {
         setContentView(R.layout.datesetter);
         confirm = (Button) findViewById(R.id.confirmDateBtn);
         calendar = (DatePicker) findViewById(R.id.datePicker);
-
+        if(CreateLecture.getDate()!=null){
+            Date currentCreatedDate = CreateLecture.getDate();
+            int currentYear = currentCreatedDate.getYear()+1900;
+            int currentMonth = currentCreatedDate.getMonth();
+            int currentDay = currentCreatedDate.getDate();
+            calendar.updateDate(currentYear,currentMonth,currentDay);
+        }
         confirm.setOnClickListener(buttonPresser);
 
     }
