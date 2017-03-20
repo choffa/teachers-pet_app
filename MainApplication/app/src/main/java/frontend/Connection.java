@@ -11,8 +11,8 @@ import java.time.LocalTime;
 
 public class Connection implements Closeable, AutoCloseable {
 
-	private final int PORT = 4728;
-	private final String HOST = "doktor.pvv.org";
+	private static final int PORT = 4728;
+	private static final String HOST = "doktor.pvv.org";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
@@ -27,10 +27,20 @@ public class Connection implements Closeable, AutoCloseable {
 	 * @throws IOException
 	 */
 	public Connection() throws IOException {
+		this(new Socket(HOST, PORT));
+	}
+
+	/**
+	 * Mostly for testing purposes, this constructor allows you to set the object Socket to a
+	 * specified socket
+	 * @param socket - The socket to bind the object to
+	 * @throws IOException
+	 */
+	public Connection(Socket socket) throws IOException {
 		isClosed = false;
-		socket = new Socket(HOST, PORT);
-		out = new PrintWriter(socket.getOutputStream());
-		in = new Scanner(socket.getInputStream());
+		this.socket = socket;
+		this.out = new PrintWriter(socket.getOutputStream());
+		this.in = new Scanner(socket.getInputStream());
 	}
 
 	/**
