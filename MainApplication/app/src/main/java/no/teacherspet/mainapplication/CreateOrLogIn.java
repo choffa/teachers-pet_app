@@ -20,6 +20,9 @@ public class CreateOrLogIn extends AppCompatActivity{
         setContentView(R.layout.create_or_login);
         handler= new View.OnClickListener() {
             @Override
+            /**
+             * Handles the different buttons and starts their respective activities.
+             */
             public void onClick(View v) {
                 switch(v.getId()){
                     case(R.id.backbtn):

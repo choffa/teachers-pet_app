@@ -27,6 +27,7 @@ public class RoleSelect extends AppCompatActivity {
     protected static HashMap<String,String> professors = new HashMap<>();
     protected static String StudentId;
     protected static boolean isValidated;
+    protected static String ProfessorID="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
