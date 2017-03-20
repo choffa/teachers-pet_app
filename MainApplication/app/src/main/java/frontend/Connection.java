@@ -100,7 +100,7 @@ public class Connection implements Closeable, AutoCloseable {
 	 */
 	public float getAverageSubjectRating(int subjectID) {
 		checkState();
-		out.println("GET_AVERAGESUBJECTRATING");
+		out.println("GET_AVERAGESUBJECTRATING " + subjectID);
 		out.flush();
 		return in.nextFloat();
 	}
