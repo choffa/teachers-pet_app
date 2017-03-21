@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Connection implements Closeable, AutoCloseable {
+public class Connection implements Closeable {
 
 	private static final int PORT = 4728;
 	private static final String HOST = "doktor.pvv.org";
