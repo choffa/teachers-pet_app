@@ -116,6 +116,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public ArrayList<Lecture> getLectures() {
 		checkState();
 		out.println("GET_ALLLECTURES");
+		out.flush();
 		return readLectureInput();
 	}
 
@@ -128,6 +129,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public ArrayList<Lecture> getLectures(String professorID) {
 		checkState();
 		out.println("GET_LECTURE " + professorID);
+		out.flush();
 		return readLectureInput();
 	}
 
@@ -160,6 +162,7 @@ public class Connection implements Closeable, AutoCloseable {
 		checkLectureInput(professorID, courseID, start, end, room);
 		out.println("SET_LECTURE " + professorID + " " + courseID + " " + date + " " + start + " "
 			+ end + " " + room);
+		out.flush();
 		//Should the server respond with boolean?
 	}
 
@@ -200,6 +203,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public void sendSpeedRating(int lectureID, String studentID, int rating) throws IllegalArgumentException {
 		if (rating < 1 | rating > 5) { throw new IllegalArgumentException(); }
 		out.println("SET_SPEEDRATING " + lectureID + " " + studentID);
+		out.flush();
 		//Should the server respond with boolean?
 	}
 
@@ -212,6 +216,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public float getAverageSpeedRating(int lectureID) {
 		checkState();
 		out.println("GET_AVERAGESPEEDRATING " + lectureID);
+		out.flush();
 		return in.nextFloat();
 	}
 
@@ -227,6 +232,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public ArrayList<Subject> getSubjects(int lectureID) {
 		checkState();
 		out.println("GET_SUBJECTS");
+		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
 		while (in.next() == "NEXT"){
 			res.add(new Subject(in.nextInt(), in.next()));
@@ -243,6 +249,7 @@ public class Connection implements Closeable, AutoCloseable {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 		out.println("SET_SUBJECT " + lectureID);
+		out.flush();
 	}
 
 	private void checkSubjectInput(String name){
@@ -259,6 +266,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public void createUser(String username, String password) {
 		checkState();
 		out.println("SET_USER " + username + " " + password);
+		out.flush();
 	}
 
 	/**
@@ -269,6 +277,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public boolean checkUsername(String username) {
 		checkState();
 		out.println("CHECK_USER " + username);
+		out.flush();
 		return in.nextBoolean();
 	}
 
@@ -280,6 +289,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public int getTempoVotesInLecture(int LectureID) {
 		checkState();
 		out.println("GET_NUMBEROFUSERS"+" "+LectureID);
+		out.flush();
 		return readUsersInput();
 	}
 
@@ -292,6 +302,7 @@ public class Connection implements Closeable, AutoCloseable {
 	public boolean validateUser(String username, String password) {
 		checkState();
 		out.println("VALIDATE " + username + " " + password);
+		out.flush();
 		return in.nextBoolean();
 	}
 
