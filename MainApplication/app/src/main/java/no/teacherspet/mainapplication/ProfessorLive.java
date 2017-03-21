@@ -1,9 +1,7 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -70,7 +68,16 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
-        finish();
+        /* Sets the Back button to create a new instance of a view - didn't work as intended, but might be interesting later.
+        Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
+        startActivityForResult(myIntent, 0);
+        */
+        try {
+            conn.close();
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
