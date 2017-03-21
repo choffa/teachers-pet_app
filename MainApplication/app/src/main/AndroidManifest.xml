@@ -13,6 +13,8 @@
         <activity android:name=".CreateLecture"></activity>
         <activity android:name=".TimeSetter"></activity>
         <activity android:name=".DateSetter"></activity>
+        <activity android:name=".EditLecture"></activity>
+        <activity android:name=".LectureStatistics"></activity>
         <activity android:name=".StudentRating">
         </activity>
         <activity android:name=".ProfessorLectureList">
