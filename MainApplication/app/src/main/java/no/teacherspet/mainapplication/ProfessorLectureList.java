@@ -2,7 +2,9 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -55,7 +57,6 @@ public class ProfessorLectureList extends AppCompatActivity {
                     }catch (IOException e){
                         Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
                     }
-
                 }
             });
 
@@ -100,4 +101,10 @@ public class ProfessorLectureList extends AppCompatActivity {
     public static String getName() {
         return ProfessorLectureList.Name;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
+    }
+
 }

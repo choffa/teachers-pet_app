@@ -74,12 +74,11 @@ public class ProfessorLive extends AppCompatActivity {
         */
         try {
             conn.close();
+            finish();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        finish();
         return true;
-
     }
 
     /**

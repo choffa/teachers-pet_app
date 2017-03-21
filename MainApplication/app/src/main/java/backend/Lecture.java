@@ -3,10 +3,6 @@ package backend;
 import java.util.Date;
 import java.util.Random;
 
-/**
- * Created by magnus on 03.03.2017.
- */
-
 public class Lecture {
     private String professorID;
     private int start;
@@ -57,7 +53,7 @@ public class Lecture {
 
     @Override
     public String toString() {
-        return this.courseID +"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + this.date.getYear() + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
+        return this.courseID +"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + (this.date.getYear()+1900) + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
     }
 
     public int getID(){

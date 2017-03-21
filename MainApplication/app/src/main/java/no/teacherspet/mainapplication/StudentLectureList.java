@@ -2,7 +2,9 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,4 +67,10 @@ public class StudentLectureList extends AppCompatActivity {
     public static int getID() {
         return StudentLectureList.ID;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
+    }
+
 }
