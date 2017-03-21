@@ -39,6 +39,7 @@ public class ProfessorLogin extends AppCompatActivity{
                         if (RoleSelect.professors.containsKey(md5(UserName.getText().toString()))) {
                             if (RoleSelect.professors.get(md5(UserName.getText().toString())).equals(SHA1(Password.getText().toString()))) {
                                 RoleSelect.isValidated = true;
+                                RoleSelect.ProfessorID=UserName.getText().toString();
                                 Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
                                 startActivity(showLectures);
                             } else {

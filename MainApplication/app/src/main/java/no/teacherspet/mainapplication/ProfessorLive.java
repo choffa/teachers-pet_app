@@ -1,9 +1,7 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -74,6 +72,11 @@ public class ProfessorLive extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
         startActivityForResult(myIntent, 0);
         */
+        try {
+            conn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         finish();
         return true;
 

@@ -24,7 +24,7 @@ import frontend.Connection;
 public class ProfessorLectureList extends AppCompatActivity {
 
  //   static ArrayList<String> listItems=new ArrayList<>();
-    static ArrayList<Lecture> lecturesArray;
+    static ArrayList<Lecture> lecturesArray=new ArrayList<>();
     public static ArrayAdapter<Lecture> adapter;
     private int start;
     private int end;
