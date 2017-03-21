@@ -54,16 +54,63 @@ public class ProfessorLectureList extends AppCompatActivity {
        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
                Name = L.getCourseID();
-               Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
+               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())){
+                   case 0:
+                       myIntent=new Intent(getApplicationContext(),LectureStatistics.class);
+                       break;
+                   case 1:
+                       myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
+                       break;
+                   case 2:
+                       myIntent=new Intent(getApplicationContext(),EditLecture.class);
+                       break;
+               }
+
                ProfessorLive.setID(ID);
                startActivity(myIntent);
            }
        });
     }
 
+    /**
+     * returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
+     * @param lectureDate
+     * @param start
+     * @param end
+     * @return
+     */
+    private int beforeNowAfter(Date lectureDate, int start, int end){
+        Date now = new Date();
+        if(lectureDate.getYear()<now.getYear()){
+            return 0;
+        }else if(lectureDate.getYear()>now.getYear()){
+            return 2;
+        }else{
+            if(lectureDate.getMonth()<now.getMonth()){
+                return 0;
+            }else if(lectureDate.getMonth()>now.getMonth()){
+                return 2;
+            }else{
+                if(lectureDate.getDate()<now.getDate()){
+                    return 0;
+                }else if(lectureDate.getDate()>now.getDate()){
+                    return 2;
+                }else{
+                    if(end<=now.getHours()&&now.getMinutes()>15){
+                        return 0;
+                    }else if(start>now.getHours()){
+                        return 2;
+                    }else{
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
 
     public void addItems(View v){
       //  listItems.add(Name);
