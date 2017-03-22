@@ -23,7 +23,7 @@ import frontend.Connection;
 public class ProfessorLive extends AppCompatActivity {
 
     private static int ID;
-    Connection conn;
+    Connection c;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
@@ -37,7 +37,7 @@ public class ProfessorLive extends AppCompatActivity {
         actionBar.setTitle(ProfessorLectureList.getName());
         setID(ProfessorLectureList.getID());
         try {
-            conn = new Connection();
+            c = new Connection();
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -54,7 +54,7 @@ public class ProfessorLive extends AppCompatActivity {
         startActivityForResult(myIntent, 0);
         */
         try {
-            conn.close();
+            c.close();
             finish();
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,8 +63,7 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public void updateButtonClick(View v){
-        conn.getAverageSpeedRating(ID);
-        update(conn.getAverageSpeedRating(ID));
+        update(c.getAverageSpeedRating(ID));
         /*
         float avg = (float) (Math.random()*40)+10;
         avg = (float) Math.floor(avg);
@@ -139,6 +138,7 @@ public class ProfessorLive extends AppCompatActivity {
         }
         RelativeLayout layout;
         TextView text;
+        TextView studNum;
         ActionBar actionBar;
         actionBar = getSupportActionBar();
         layout = (RelativeLayout) findViewById(R.id.profRelLayout);
@@ -146,6 +146,8 @@ public class ProfessorLive extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(darker(Color.parseColor(translateColor(average)), (float) 0.8)));
         text = (TextView) findViewById(R.id.treKommaFem);
         text.setText(String.format("%.1f",average-3));
+        studNum= (TextView) findViewById(R.id.current_rating_num);
+        studNum.setText(Integer.toString(c.getTempoVotesInLecture(ID)));
     }
 
 }

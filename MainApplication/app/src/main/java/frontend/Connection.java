@@ -208,7 +208,7 @@ public class Connection implements Closeable {
 	 */
 	public void sendSpeedRating(int lectureID, String studentID, int rating) throws IllegalArgumentException {
 		if (rating < 1 | rating > 5) { throw new IllegalArgumentException(); }
-		out.println("SET_SPEEDRATING " + lectureID + " " + studentID);
+		out.println("SET_SPEEDRATING " + lectureID + " " + rating + " " + studentID );
 		out.flush();
 		//Should the server respond with boolean?
 	}
