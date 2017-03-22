@@ -57,6 +57,7 @@ public class StudentRating extends AppCompatActivity {
                         //RoleSelect.getStud().setButton(radioButtonID);
                         View radioButton = tempo.findViewById(radioButtonID);
                         int rating = tempo.indexOfChild(radioButton) + 1;
+                        c.sendSpeedRating(StudentLectureList.getID(),RoleSelect.StudentId,rating);
                         changes.add(rating);
                         if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
                             changes.add(RoleSelect.saves.get(StudentLectureList.getID()).get(1));
@@ -95,7 +96,12 @@ public class StudentRating extends AppCompatActivity {
         /* Unnecessary as it creates a new instance of the RoleSelect page
         Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
         startActivityForResult(myIntent, 0); */
-        finish();
+        try {
+            c.close();
+            finish();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
 
     }

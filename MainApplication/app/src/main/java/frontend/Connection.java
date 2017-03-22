@@ -1,8 +1,9 @@
 package frontend;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import backend.Lecture;
 public class Connection implements Closeable {
 
 	private final int PORT = 4728;
-	private final String HOST = "localhost";
+	private final String HOST = "doktor.pvv.org";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
