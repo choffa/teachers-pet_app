@@ -30,13 +30,15 @@ public class StudentLectureList extends AppCompatActivity {
     private static String Name;
     private Connection c;
 
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures_student);
-            c=new Connection();
+            c = new Connection();
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
             ListView list_view = (ListView) findViewById(android.R.id.list);
-            lecturesArray=c.getLectures();
+            lecturesArray = c.getLectures();
             adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
             list_view.setAdapter(adapter);
 
@@ -50,8 +52,8 @@ public class StudentLectureList extends AppCompatActivity {
                     startActivity(myIntent);
                 }
             });
-        }catch (IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt med lasting av siden",Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Noe gikk galt med lasting av siden", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -60,7 +62,7 @@ public class StudentLectureList extends AppCompatActivity {
         return StudentLectureList.L;
     }
 
-    public static String getName(){
+    public static String getName() {
         return StudentLectureList.Name;
     }
 
@@ -68,9 +70,16 @@ public class StudentLectureList extends AppCompatActivity {
         return StudentLectureList.ID;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        finish();
-        return true;
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try {
+            c.close();
+            finish();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
 
+
+    }
 }

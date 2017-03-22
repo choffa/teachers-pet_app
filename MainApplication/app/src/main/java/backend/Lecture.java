@@ -49,6 +49,14 @@ public class Lecture {
         this.professorID = professorID;
     }
 
+    public Lecture(String professorID , String courseID, int start, int end, String room, Date date) {
+        this.start = start;
+        this.end = end;
+        this.courseID = courseID;
+        this.room = room;
+        this.date = date;
+        this.professorID = professorID;
+    }
     @Override
     public String toString() {
         return this.courseID +"\t | \t" + this.date.getDate() + ":" + (this.date.getMonth()+1) + ":" + (this.date.getYear()+1900) + "\t | \t" + this.room + "\n"+Integer.toString(this.start)+":15-"+Integer.toString(this.end)+":00";
