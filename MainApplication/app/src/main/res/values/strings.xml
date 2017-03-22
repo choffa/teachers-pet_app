@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Teacher\'s Pet</string>
     <string name="startup">Teacher\'s Pet</string>
+    <string name="name_of_lecture">Name of lecture</string>
+    <string name="courseIDHint">Write courseID here:</string>
+    <string name="room_for_lecture">Room for lecture</string>
+    <string name="write_roomnumber_here">Write roomnumber here:</string>
+    <string name="set_lecture_date">Set Lecture Date</string>
+    <string name="set_start_time">Set Start Time</string>
+    <string name="set_end_time">Set End Time</string>
+    <string name="done">done</string>
+    <string name="cancel">Cancel</string>
 </resources>

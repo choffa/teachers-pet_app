@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="no.teacherspet.mainapplication">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_doggo3"
@@ -10,12 +12,19 @@
         android:theme="@style/AppTheme"
         android:logo="@drawable/ic_doggo3"
         >
+        <activity android:name=".CreateAccount" android:label="Create your Teacher's Pet account"></activity>
         <activity android:name=".CreateLecture"></activity>
         <activity android:name=".TimeSetter"></activity>
         <activity android:name=".DateSetter"></activity>
+        <activity android:name=".EditLecture"></activity>
+        <activity android:name=".LectureStatistics"></activity>
         <activity android:name=".StudentRating">
         </activity>
+        <activity android:name=".ProfessorLogin">
+        </activity>
         <activity android:name=".ProfessorLectureList">
+        </activity>
+        <activity android:name=".CreateOrLogIn">
         </activity>
         <activity android:name=".ProfessorLive" android:screenOrientation="portrait">
         </activity>
