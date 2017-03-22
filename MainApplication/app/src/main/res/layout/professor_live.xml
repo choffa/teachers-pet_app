@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/treKommaFem"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="62dp"
+        android:layout_marginTop="29dp"
+        android:onClick="updateButtonClick"
         android:text="Update" />
 
     <CheckedTextView
@@ -46,5 +47,36 @@
         android:layout_marginTop="15dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"/>
+
+    <TextView
+        android:id="@+id/current_num_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/updateLiveBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:text="Current number of ratings:"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/current_rating_num"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/current_num_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:hint="#"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+
+    <Button
+        android:id="@+id/changeToStatBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:onClick="changeToStat"
+        android:text="Statistics" />
 
 </RelativeLayout>

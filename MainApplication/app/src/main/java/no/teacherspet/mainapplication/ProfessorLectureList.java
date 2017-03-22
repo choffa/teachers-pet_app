@@ -54,19 +54,19 @@ public class ProfessorLectureList extends AppCompatActivity {
        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Intent myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
+               Intent myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
                Name = L.getCourseID();
                switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())){
                    case 0:
-                       myIntent=new Intent(getApplicationContext(),LectureStatistics.class);
+                       myIntent=new Intent(ProfessorLectureList.this,LectureStatistics.class);
                        break;
                    case 1:
-                       myIntent=new Intent(getApplicationContext(),ProfessorLive.class);
+                       myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
                        break;
                    case 2:
-                       myIntent=new Intent(getApplicationContext(),EditLecture.class);
+                       myIntent=new Intent(ProfessorLectureList.this,EditLecture.class);
                        break;
                }
 

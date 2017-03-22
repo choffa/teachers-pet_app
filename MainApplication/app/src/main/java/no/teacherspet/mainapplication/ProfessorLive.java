@@ -24,10 +24,8 @@ import frontend.Connection;
 
 public class ProfessorLive extends AppCompatActivity {
 
-    private static int ID;
-
+    private static int ID = ProfessorLectureList.getID();
     Connection conn;
-
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
@@ -36,9 +34,6 @@ public class ProfessorLive extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
-        Button updateBtn;
-        updateBtn = (Button) findViewById(R.id.updateLiveBtn);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
@@ -48,32 +43,31 @@ public class ProfessorLive extends AppCompatActivity {
             e.printStackTrace();
             return;
         }
-        updateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                /* Testcode: gives random input to the live view
-                float avg = (float) (Math.random()*40)+10;
-                avg = (float) Math.floor(avg);
-                avg = avg/10;
-                update(avg);
-                */
-
-                //while(hasWindowFocus()){
-                    conn.getAverageSpeedRating(ProfessorLectureList.getID());
-                    update(conn.getAverageSpeedRating(ProfessorLectureList.getID()));
-                //}
-            }
-        });
 
 
     }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         return true;
     }
 
+    public void updateButtonClick(View v){
+        conn.getAverageSpeedRating(ID);
+        update(conn.getAverageSpeedRating(ID));
+        /*
+        float avg = (float) (Math.random()*40)+10;
+        avg = (float) Math.floor(avg);
+        avg = avg/10;
+        update(avg);
+        */
+    }
+    public void changeToStat(View v){
+        Intent myIntent=new Intent(ProfessorLive.this,LectureStatistics.class);
+        startActivity(myIntent);
+    }
     /**
      * Translates a float between 1 and 5 to RGB code in hex scaling from blue to red.
      * @param average Float between 1 and 5
