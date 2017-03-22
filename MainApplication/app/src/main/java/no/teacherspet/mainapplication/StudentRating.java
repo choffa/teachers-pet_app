@@ -45,11 +45,14 @@ public class StudentRating extends AppCompatActivity {
             //Sets the radiobuttons to send the new info to the server on every click.
             tempo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
-                @Override
-                public void onCheckedChanged(RadioGroup tempo, int checkedId) {
-                    if (!isValidTime()) {
-                        Toast.makeText(getApplicationContext(), "Denne forelesningen er over", Toast.LENGTH_LONG).show();
-                        finish();
+
+
+            @Override
+            public void onCheckedChanged(RadioGroup tempo, int checkedId) {
+                if(!isValidTime()){
+                    Toast.makeText(getApplicationContext(),"This lecture is not active",Toast.LENGTH_LONG).show();
+                    finish();
+
                     } else {
                         ArrayList<Integer> changes = new ArrayList<Integer>();
                         radioButtonID = tempo.getCheckedRadioButtonId();
@@ -81,15 +84,29 @@ public class StudentRating extends AppCompatActivity {
     }
 
     private boolean isValidTime(){
-        Lecture parent = StudentLectureList.getL();
-        Date now = new Date();
-        Date lectureEnd = new Date(parent.getDate().getYear(), parent.getDate().getMonth(), parent.getDate().getDay(), parent.getEnd(), 30);
-        if(now.after(lectureEnd)){
-            return false;
-        }
-        else{
-            return true;
-        }
+            Lecture lecture = StudentLectureList.getL();
+            Date lectureDate = lecture.getDate();
+            int start = lecture.getStart();
+            int end = lecture.getEnd();
+
+            Date now = new Date();
+            if(lectureDate.getYear()<now.getYear()||lectureDate.getYear()>now.getYear()){
+                return false;
+            }else{
+                if(lectureDate.getMonth()<now.getMonth()||lectureDate.getMonth()>now.getMonth()){
+                    return false;
+                }else{
+                    if(lectureDate.getDate()<now.getDate()||lectureDate.getDate()>now.getDate()){
+                        return false;
+                    }else{
+                        if((end==now.getHours()&&now.getMinutes()>30)||end<now.getHours()||start>now.getHours()){
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                }
+            }
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

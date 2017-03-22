@@ -60,35 +60,88 @@ public class ProfessorLectureList extends AppCompatActivity {
                 }
             });
 
-            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                /**
-                 * controls which element in the listview gets pressed.
-                 */
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Lecture L = (Lecture) list_view.getItemAtPosition(position);
-                    ID = L.getID();
-                    Name = L.getCourseID();
-                    Intent myIntent = new Intent(getApplicationContext(), ProfessorLive.class);
-                    ProfessorLive.setID(ID);
-                    try {
+
+            }
+        });
+
+       list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+               Intent myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
+               Lecture L= (Lecture) list_view.getItemAtPosition(position);
+               ID=L.getID();
+               Name = L.getCourseID();
+               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())){
+                   case 0:
+                       myIntent=new Intent(ProfessorLectureList.this,LectureStatistics.class);
+                       break;
+                   case 1:
+                       myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
+                       break;
+                   case 2:
+                       myIntent=new Intent(ProfessorLectureList.this,EditLecture.class);
+                       break;
+               }
+
+               ProfessorLive.setID(ID);
+               try {
                         c.close();
                         startActivity(myIntent);
                     }catch (IOException e){
                         Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling",Toast.LENGTH_LONG).show();
                     }
-                }
-            });
-        }catch(IOException e){
+           }
+       });
+    }catch(IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
             finish();
         }
+
+    /**
+     * returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
+     * @param lectureDate
+     * @param start
+     * @param end
+     * @return
+     */
+    private int beforeNowAfter(Date lectureDate, int start, int end){
+        Date now = new Date();
+        if(lectureDate.getYear()<now.getYear()){
+            return 0;
+        }else if(lectureDate.getYear()>now.getYear()){
+            return 2;
+        }else{
+            if(lectureDate.getMonth()<now.getMonth()){
+                return 0;
+            }else if(lectureDate.getMonth()>now.getMonth()){
+                return 2;
+            }else{
+                if(lectureDate.getDate()<now.getDate()){
+                    return 0;
+                }else if(lectureDate.getDate()>now.getDate()){
+                    return 2;
+                }else{
+                    if(end==now.getHours()&&now.getMinutes()>15){
+                        return 0;
+                    }else if(end<now.getHours()){
+                        return 0;
+                    }else if(start>now.getHours()){
+                        return 2;
+                    }else{
+                        return 1;
+                    }
+                }
+            }
+        }
     }
+
+
 
     /**
      * adds an item to the listview
      * @param v: the view that the item will be added to.
      */
+
     public void addItems(View v){
       //  listItems.add(Name);
         lecturesArray.add(new Lecture(Name,start,end,room,date));
