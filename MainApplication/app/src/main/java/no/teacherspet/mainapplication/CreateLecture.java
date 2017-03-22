@@ -13,7 +13,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.Date;
 
-import backend.Lecture;
 import frontend.Connection;
 
 
@@ -79,8 +78,8 @@ public class CreateLecture extends AppCompatActivity {
                         try {
                             //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
                             ProfessorLectureList.adapter.notifyDataSetChanged();
-                            c.createLecture(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
-                            ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
+                            c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
+                            //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
                             c.close();
                             finish();
                         }catch (IOException e){

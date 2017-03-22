@@ -42,6 +42,8 @@ public class ProfessorLectureList extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures);
             c = new Connection();
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
             lecturesArray=c.getLectures(RoleSelect.ProfessorID);
             ListView list_view = (ListView) findViewById(android.R.id.list);
             adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
@@ -59,10 +61,6 @@ public class ProfessorLectureList extends AppCompatActivity {
                     }
                 }
             });
-
-
-            }
-        });
 
        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
@@ -96,6 +94,7 @@ public class ProfessorLectureList extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
             finish();
         }
+    }
 
     /**
      * returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
@@ -155,9 +154,17 @@ public class ProfessorLectureList extends AppCompatActivity {
         return ProfessorLectureList.Name;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        finish();
-        return true;
-    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try{
+            c.close();
+            finish();
+            return true;
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return false;
+        }
 
+
+    }
 }

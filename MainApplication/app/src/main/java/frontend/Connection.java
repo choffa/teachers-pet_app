@@ -13,7 +13,7 @@ import backend.Lecture;
 public class Connection implements Closeable {
 
 	private static final int PORT = 4728;
-	private static final String HOST = "doktor.pvv.org";
+	private static final String HOST = "10.22.3.206";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
@@ -138,13 +138,19 @@ public class Connection implements Closeable {
 		ArrayList<Lecture> res = new ArrayList<>();
 		while (in.next().compareTo("NEXT") == 0){
 			int lectureID = in.nextInt();
-			String professorID = in.next();
-			String courseID = in.next();
-			Date date = new Date(in.next());
+			String date = in.next();
 			int start = in.nextInt();
 			int end = in.nextInt();
+			String professorID = in.next();
 			String room = in.next();
-			res.add(new Lecture(lectureID, professorID, courseID, start, end, room, date));
+			String courseID = in.next();
+			String[] components = date.split("-");
+			Date d= new Date();
+			d.setYear(Integer.parseInt(components[0])-1900);
+			d.setMonth(Integer.parseInt(components[1])-1);
+			d.setDate(Integer.parseInt(components[2]));
+
+			res.add(new Lecture(lectureID, professorID, courseID, start, end, room, d));
 		}
 		return res;
 	}
@@ -160,7 +166,7 @@ public class Connection implements Closeable {
 	public void createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
 		checkLectureInput(professorID, courseID, start, end, room);
-		out.println("SET_LECTURE " + professorID + " " + courseID + " " + date + " " + start + " "
+		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + room);
 		out.flush();
 		//Should the server respond with boolean?

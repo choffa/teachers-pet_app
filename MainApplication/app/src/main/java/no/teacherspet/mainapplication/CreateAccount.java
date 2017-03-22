@@ -54,7 +54,7 @@ public class CreateAccount extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                        if (/*RoleSelect.professors.containsKey(email.getText().toString())*/c.checkUsername(email.getText().toString())) {
+                        if (c.checkUsername(md5(email.getText().toString()))) {
                             Toast.makeText(getApplicationContext(), "This e-mail is already used", Toast.LENGTH_LONG).show();
                         } else {
                             try {
@@ -75,6 +75,8 @@ public class CreateAccount extends AppCompatActivity {
 
                 }catch (IOException e){
                     Toast.makeText(getApplicationContext(),"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
                 }
             }
         });
