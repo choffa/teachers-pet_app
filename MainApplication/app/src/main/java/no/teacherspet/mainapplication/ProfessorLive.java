@@ -24,7 +24,7 @@ import frontend.Connection;
 
 public class ProfessorLive extends AppCompatActivity {
 
-    private static int ID = ProfessorLectureList.getID();
+    private static int ID;
     Connection conn;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
@@ -37,6 +37,7 @@ public class ProfessorLive extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
+        setID(ProfessorLectureList.getID());
         try {
             conn = new Connection();
         } catch (IOException e) {
