@@ -100,7 +100,9 @@ public class ProfessorLectureList extends AppCompatActivity {
                 }else if(lectureDate.getDate()>now.getDate()){
                     return 2;
                 }else{
-                    if(end<=now.getHours()&&now.getMinutes()>15){
+                    if(end==now.getHours()&&now.getMinutes()>15){
+                        return 0;
+                    }else if(end<now.getHours()){
                         return 0;
                     }else if(start>now.getHours()){
                         return 2;
