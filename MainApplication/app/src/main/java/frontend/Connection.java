@@ -13,7 +13,7 @@ import backend.Lecture;
 public class Connection implements Closeable {
 
 	private static final int PORT = 4728;
-	private static final String HOST = "10.22.3.206";
+	private static final String HOST = "doktor.pvv.org";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
