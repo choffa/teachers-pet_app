@@ -56,7 +56,7 @@ public class CreateLecture extends AppCompatActivity {
         public void onClick(View v) {
             switch(v.getId()){
 
-                case(R.id.dateBtn):
+                case(R.id.datebtn):
                     dateSelect();
                     break;
 
@@ -71,7 +71,7 @@ public class CreateLecture extends AppCompatActivity {
                     timeSelect();
 
                     break;
-                case(R.id.doneBtn):
+                case(R.id.donebtn):
                     if(lecture==null || room==null || start==-1 || end==-1 || date == null){
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
@@ -160,9 +160,9 @@ public class CreateLecture extends AppCompatActivity {
             room = (EditText) findViewById(R.id.roomtxt);
             startTime = (Button) findViewById(R.id.startbtn);
             endTime = (Button) findViewById(R.id.endbtn);
-            done = (Button) findViewById(R.id.ferdigbtn);
+            done = (Button) findViewById(R.id.donebtn);
             cancel = (Button) findViewById(R.id.cancelbtn);
-            dateBtn = (Button) findViewById(R.id.dateBtn);
+            dateBtn = (Button) findViewById(R.id.datebtn);
             startTime.setOnClickListener(handler);
             endTime.setOnClickListener(handler);
             done.setOnClickListener(handler);

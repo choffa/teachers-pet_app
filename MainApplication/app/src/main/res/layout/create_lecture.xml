@@ -39,7 +39,7 @@
         android:textSize="30sp" />
 
     <Button
-        android:id="@+id/dateBtn"
+        android:id="@+id/datebtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/set_lecture_date" />
@@ -60,10 +60,10 @@
         android:text="@string/done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/doneBtn" />
+        android:id="@+id/donebtn" />
 
     <Button
-        android:id="@+id/cancelBtn"
+        android:id="@+id/cancelbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/cancel" />

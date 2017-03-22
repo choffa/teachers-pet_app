@@ -12,8 +12,8 @@ import backend.Lecture;
 
 public class Connection implements Closeable {
 
-	private final int PORT = 4728;
-	private final String HOST = "doktor.pvv.org";
+	private static final int PORT = 4728;
+	private static final String HOST = "doktor.pvv.org";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
@@ -28,10 +28,20 @@ public class Connection implements Closeable {
 	 * @throws IOException
 	 */
 	public Connection() throws IOException {
+		this(new Socket(HOST, PORT));
+	}
+
+	/**
+	 * Mostly for testing purposes, this constructor allows you to set the object Socket to a
+	 * specified socket
+	 * @param socket - The socket to bind the object to
+	 * @throws IOException
+	 */
+	public Connection(Socket socket) throws IOException {
 		isClosed = false;
-		socket = new Socket(HOST, PORT);
-		out = new PrintWriter(socket.getOutputStream());
-		in = new Scanner(socket.getInputStream());
+		this.socket = socket;
+		this.out = new PrintWriter(socket.getOutputStream());
+		this.in = new Scanner(socket.getInputStream());
 	}
 
 	/**
@@ -39,7 +49,6 @@ public class Connection implements Closeable {
 	 *
 	 * @throws IOException
 	 */
-	@Override
 	public void close() throws IOException {
 		if (isClosed) {
 			return;
@@ -91,7 +100,7 @@ public class Connection implements Closeable {
 	 */
 	public float getAverageSubjectRating(int subjectID) {
 		checkState();
-		out.println("GET_AVERAGESUBJECTRATING");
+		out.println("GET_AVERAGESUBJECTRATING " + subjectID);
 		out.flush();
 		return in.nextFloat();
 	}
@@ -107,6 +116,7 @@ public class Connection implements Closeable {
 	public ArrayList<Lecture> getLectures() {
 		checkState();
 		out.println("GET_ALLLECTURES");
+		out.flush();
 		return readLectureInput();
 	}
 
@@ -119,6 +129,7 @@ public class Connection implements Closeable {
 	public ArrayList<Lecture> getLectures(String professorID) {
 		checkState();
 		out.println("GET_LECTURE " + professorID);
+		out.flush();
 		return readLectureInput();
 	}
 
@@ -151,6 +162,7 @@ public class Connection implements Closeable {
 		checkLectureInput(professorID, courseID, start, end, room);
 		out.println("SET_LECTURE " + professorID + " " + courseID + " " + date + " " + start + " "
 			+ end + " " + room);
+		out.flush();
 		//Should the server respond with boolean?
 	}
 
@@ -191,6 +203,7 @@ public class Connection implements Closeable {
 	public void sendSpeedRating(int lectureID, String studentID, int rating) throws IllegalArgumentException {
 		if (rating < 1 | rating > 5) { throw new IllegalArgumentException(); }
 		out.println("SET_SPEEDRATING " + lectureID + " " + studentID);
+		out.flush();
 		//Should the server respond with boolean?
 	}
 
@@ -203,6 +216,7 @@ public class Connection implements Closeable {
 	public float getAverageSpeedRating(int lectureID) {
 		checkState();
 		out.println("GET_AVERAGESPEEDRATING " + lectureID);
+		out.flush();
 		return in.nextFloat();
 	}
 
@@ -218,6 +232,7 @@ public class Connection implements Closeable {
 	public ArrayList<Subject> getSubjects(int lectureID) {
 		checkState();
 		out.println("GET_SUBJECTS");
+		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
 		while (in.next() == "NEXT"){
 			res.add(new Subject(in.nextInt(), in.next()));
@@ -234,6 +249,7 @@ public class Connection implements Closeable {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 		out.println("SET_SUBJECT " + lectureID);
+		out.flush();
 	}
 
 	private void checkSubjectInput(String name){
@@ -250,6 +266,7 @@ public class Connection implements Closeable {
 	public void createUser(String username, String password) {
 		checkState();
 		out.println("SET_USER " + username + " " + password);
+		out.flush();
 	}
 
 	/**
@@ -260,6 +277,7 @@ public class Connection implements Closeable {
 	public boolean checkUsername(String username) {
 		checkState();
 		out.println("CHECK_USER " + username);
+		out.flush();
 		return in.nextBoolean();
 	}
 
@@ -271,6 +289,7 @@ public class Connection implements Closeable {
 	public int getTempoVotesInLecture(int LectureID) {
 		checkState();
 		out.println("GET_NUMBEROFUSERS"+" "+LectureID);
+		out.flush();
 		return readUsersInput();
 	}
 
@@ -283,6 +302,7 @@ public class Connection implements Closeable {
 	public boolean validateUser(String username, String password) {
 		checkState();
 		out.println("VALIDATE " + username + " " + password);
+		out.flush();
 		return in.nextBoolean();
 	}
 

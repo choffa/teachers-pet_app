@@ -1,7 +1,6 @@
 package backend;
 
 import java.util.Date;
-import java.util.Random;
 
 public class Lecture {
     private String professorID;
@@ -32,8 +31,7 @@ public class Lecture {
     }
 
     /**
-     *
-     * @param lectureID int Lecture ID, get from server
+     *  @param lectureID int Lecture ID, get from server
      * @param professorID String professorID
      * @param courseID String courseID of class
      * @param start int Start hour
