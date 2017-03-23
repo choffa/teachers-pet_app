@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -21,17 +22,21 @@ import frontend.Connection;
 
 
 public class ProfessorLive extends AppCompatActivity {
-
+    private int mInterval = 2000;
+    private Handler mHandler;
     private static int ID;
     Connection c;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
+    //View thisView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
+        //thisView=this.findViewBy
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
@@ -42,10 +47,33 @@ public class ProfessorLive extends AppCompatActivity {
             e.printStackTrace();
             return;
         }
+        mHandler = new Handler();
+        startRepeatingTask();
 
 
     }
 
+
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                update(c.getAverageSpeedRating(ID));
+            } finally {
+                // 100% guarantee that this always happens, even if
+                // your update method throws an exception
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            }
+        }
+    };
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
+    }
+
+    void stopRepeatingTask() {
+        mHandler.removeCallbacks(mStatusChecker);
+    }
 
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -63,6 +91,7 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public void updateButtonClick(View v){
+
         update(c.getAverageSpeedRating(ID));
         /*
         float avg = (float) (Math.random()*40)+10;
@@ -158,6 +187,7 @@ public class ProfessorLive extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onDestroy();
+        stopRepeatingTask();
     }
 
 
