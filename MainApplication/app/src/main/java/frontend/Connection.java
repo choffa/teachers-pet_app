@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Lecture;
@@ -42,6 +43,7 @@ public class Connection implements Closeable {
 		this.socket = socket;
 		this.out = new PrintWriter(socket.getOutputStream());
 		this.in = new Scanner(socket.getInputStream());
+		in.useLocale(Locale.ENGLISH);
 	}
 
 	/**

@@ -151,4 +151,14 @@ public class CreateAccount extends AppCompatActivity {
         byte[] md5Hash=md.digest();
         return convertToHex(md5Hash);
     }
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
 }
