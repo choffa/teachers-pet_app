@@ -27,11 +27,14 @@ public class ProfessorLive extends AppCompatActivity {
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
+    //View thisView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
+        //thisView=this.findViewBy
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
@@ -42,6 +45,7 @@ public class ProfessorLive extends AppCompatActivity {
             e.printStackTrace();
             return;
         }
+
 
 
     }
@@ -63,6 +67,7 @@ public class ProfessorLive extends AppCompatActivity {
     }
 
     public void updateButtonClick(View v){
+
         update(c.getAverageSpeedRating(ID));
         /*
         float avg = (float) (Math.random()*40)+10;

@@ -30,7 +30,7 @@ public class LectureStatistics extends AppCompatActivity {
         finish();
         return true;
     }
-
+/*
     @Override
     public void onDestroy(){
         try {
@@ -40,5 +40,5 @@ public class LectureStatistics extends AppCompatActivity {
         }
         super.onDestroy();
     }
-
+*/
 }
