@@ -174,5 +174,14 @@ public class CreateLecture extends AppCompatActivity {
             finish();
         }
     }
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
 
 }

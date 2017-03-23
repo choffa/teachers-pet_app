@@ -6,11 +6,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import java.io.IOException;
+
+import frontend.Connection;
+
 /**
  * Created by eirik on 21.03.2017.
  */
 
 public class EditLecture extends AppCompatActivity {
+    private Connection c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,16 @@ public class EditLecture extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         return true;
+    }
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 
 }
