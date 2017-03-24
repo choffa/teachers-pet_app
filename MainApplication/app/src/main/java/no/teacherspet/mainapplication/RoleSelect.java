@@ -114,4 +114,9 @@ public class RoleSelect extends AppCompatActivity {
         return buf.toString();
     }
 
+    public void logOut(View view) {
+        isValidated = false;
+        ProfessorID="";
+        Toast.makeText(getApplicationContext(),"You are now logged out",Toast.LENGTH_LONG).show();
+    }
 }
