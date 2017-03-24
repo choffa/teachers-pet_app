@@ -45,7 +45,7 @@ public class CreateOrLogIn extends AppCompatActivity{
 
             }
         };
-        setTitle("Do you wish to create a user or login");
+
         createAccount=(Button) findViewById(R.id.createbtn);
         login=(Button) findViewById(R.id.loginbtn);
         back=(Button) findViewById(R.id.backbtn);
