@@ -182,12 +182,13 @@ public class ProfessorLive extends AppCompatActivity {
     @Override
     public void onDestroy(){
         try {
+            stopRepeatingTask();
             c.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         super.onDestroy();
-        stopRepeatingTask();
+
     }
 
 
