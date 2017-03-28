@@ -1,10 +1,15 @@
 package frontend;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
+
+import backend.Lecture;
 
 public class Connection implements Closeable {
 
@@ -38,6 +43,7 @@ public class Connection implements Closeable {
 		this.socket = socket;
 		this.out = new PrintWriter(socket.getOutputStream());
 		this.in = new Scanner(socket.getInputStream());
+		in.useLocale(Locale.ENGLISH);
 	}
 
 	/**
@@ -134,13 +140,19 @@ public class Connection implements Closeable {
 		ArrayList<Lecture> res = new ArrayList<>();
 		while (in.next().compareTo("NEXT") == 0){
 			int lectureID = in.nextInt();
-			String professorID = in.next();
-			String courseID = in.next();
-			Date date = new Date(in.next());
+			String date = in.next();
 			int start = in.nextInt();
 			int end = in.nextInt();
+			String professorID = in.next();
 			String room = in.next();
-			res.add(new Lecture(lectureID, professorID, courseID, date, start, end, room));
+			String courseID = in.next();
+			String[] components = date.split("-");
+			Date d= new Date();
+			d.setYear(Integer.parseInt(components[0])-1900);
+			d.setMonth(Integer.parseInt(components[1])-1);
+			d.setDate(Integer.parseInt(components[2]));
+
+			res.add(new Lecture(lectureID, professorID, courseID, start, end, room, d));
 		}
 		return res;
 	}
@@ -156,7 +168,7 @@ public class Connection implements Closeable {
 	public void createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
 		checkLectureInput(professorID, courseID, start, end, room);
-		out.println("SET_LECTURE " + professorID + " " + courseID + " " + date + " " + start + " "
+		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + room);
 		out.flush();
 		//Should the server respond with boolean?
@@ -198,7 +210,7 @@ public class Connection implements Closeable {
 	 */
 	public void sendSpeedRating(int lectureID, String studentID, int rating) throws IllegalArgumentException {
 		if (rating < 1 | rating > 5) { throw new IllegalArgumentException(); }
-		out.println("SET_SPEEDRATING " + lectureID + " " + studentID);
+		out.println("SET_SPEEDRATING " + lectureID + " " + rating + " " + studentID );
 		out.flush();
 		//Should the server respond with boolean?
 	}
@@ -245,7 +257,7 @@ public class Connection implements Closeable {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 		checkSubjectInput(name);
-		out.println("SET_SUBJECT " + lectureID);
+		out.println("SET_SUBJECT " + lectureID + " " + name);
 		out.flush();
 	}
 
