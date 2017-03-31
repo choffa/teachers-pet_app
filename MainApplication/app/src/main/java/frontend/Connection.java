@@ -83,7 +83,7 @@ public class Connection implements Closeable {
 	 * @param rating    The actual rating of the subject, this is a number between 1 and 5 (inclusive)
 	 * @throws IllegalArgumentException This is thrown if the ranking is wrong
 	 */
-	public void sendSubjectRating(int subjectID, int studentID, int rating, String comment)
+	public void sendSubjectRating(int subjectID, String studentID, int rating, String comment)
 			throws IllegalArgumentException {
 		checkState();
 		if (rating < 1 || rating > 5) {
@@ -253,10 +253,11 @@ public class Connection implements Closeable {
 	 *
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
-	public void createSubject(int lectureID) {
+	public void createSubject(int lectureID, String name) {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
-		out.println("SET_SUBJECT " + lectureID);
+		checkSubjectInput(name);
+		out.println("SET_SUBJECT " + lectureID + " " + name);
 		out.flush();
 	}
 
