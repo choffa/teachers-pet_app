@@ -44,7 +44,7 @@ public class ConnectionTest {
     private static final String subjectResponse = "END";
     private static final String subjectName = "EULERS_THEROEM";
     private static final String badSubjectName = "EULERS THEOREM";
-    private static final String comment = "THISISNICE";
+    private static final String comment = "THIS_IS_A_VALID_NICE_COMMENT";
     private static final String room = "R4";
     private static final String badRoom = "R4 134";
     private static final String courseID = "TDT4100";
@@ -196,8 +196,8 @@ public class ConnectionTest {
     @Test
     public void createSubject() throws IOException {
         setUp("");
-        String expectedCommands = "SET_SUBJECT " + lectureID + " " + subjectName + "\r\n";
-        c.createSubject(lectureID, subjectName);
+        String expectedCommands = "SET_SUBJECT " + lectureID + " " + subjectName + + " " + comment + "\r\n";
+        c.createSubject(lectureID, subjectName, comment);
 
         assertEquals(expectedCommands, out.toString());
     }
@@ -205,7 +205,7 @@ public class ConnectionTest {
     @Test(expected = IllegalArgumentException.class)
     public void badNameCreateSubject() throws IOException {
         setUp("");
-        c.createSubject(lectureID, badSubjectName);
+        c.createSubject(lectureID, badSubjectName, comment);
     }
 
     @Test
