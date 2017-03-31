@@ -123,4 +123,5 @@ public class InitiateSubjects extends AppCompatActivity{
         CreateLecture.setSubjectsArray(subjectArray);
         finish();
     }
+
 }

@@ -193,7 +193,11 @@ public class CreateLecture extends AppCompatActivity {
     public void onDestroy(){
         try {
             c.close();
-            InitiateSubjects.subjectArray = new ArrayList<>();
+            InitiateSubjects.subjectArray.clear();
+            date = null;
+            start = -1;
+            end = -1;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
