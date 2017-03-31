@@ -4,17 +4,15 @@
     android:layout_height="match_parent">
 
     <Button
-        android:text="I am a student"
+        android:text="@string/i_am_a_student"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/studBtn"
-        android:onClick="selectStudent"/>
+        android:id="@+id/studBtn" />
 
     <Button
-        android:text="I am a professor"
+        android:text="@string/i_am_a_professor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profBtn"
-        android:onClick="selectProfessor"/>
+        android:id="@+id/profBtn" />
 
 </LinearLayout>

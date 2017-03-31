@@ -10,4 +10,6 @@
     <string name="set_end_time">Set End Time</string>
     <string name="done">done</string>
     <string name="cancel">Cancel</string>
+    <string name="i_am_a_student">I am a student</string>
+    <string name="i_am_a_professor">I am a professor</string>
 </resources>

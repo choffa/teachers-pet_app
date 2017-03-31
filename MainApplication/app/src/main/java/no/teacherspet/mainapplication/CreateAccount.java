@@ -91,13 +91,12 @@ public class CreateAccount extends AppCompatActivity {
         try {
             if (password.getText().toString().equals(password_confirm.getText().toString())) {
                 if (c.checkUsername(md5(email.getText().toString()))) {
-                    //Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_LONG).show();
+                    makeToast("This e-mail is already used");
                     isDone=false;
                 } else {
                     try {
                         RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
                         c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                        //Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString()), Toast.LENGTH_LONG).show();
                         c.close();
                         isDone=true;
                         finish();
@@ -108,7 +107,7 @@ public class CreateAccount extends AppCompatActivity {
                     }
                 }
             } else {
-                //Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_LONG).show();
+                makeToast("Passwords must match");
                 isDone=false;
             }
 
@@ -149,5 +148,10 @@ public class CreateAccount extends AppCompatActivity {
         md.update(idBytes,0,idBytes.length);
         byte[] md5Hash=md.digest();
         return convertToHex(md5Hash);
+    }
+
+    public boolean makeToast(String message){
+        Toast.makeText(CreateAccount.this,message,Toast.LENGTH_LONG);
+        return true;
     }
 }

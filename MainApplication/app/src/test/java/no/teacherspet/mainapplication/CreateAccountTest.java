@@ -1,11 +1,9 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Context;
 import android.test.ActivityUnitTestCase;
 import android.text.Editable;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +12,7 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mock;
 
 import frontend.Connection;
+
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -25,11 +24,8 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(JUnit4.class)
 public class CreateAccountTest extends ActivityUnitTestCase<CreateAccount>{
+    @Mock
     private CreateAccount createAccount;
-    @Mock
-    Context mContext=mock(Context.class);
-    @Mock
-    Toast mToast;
     @Mock
     private Button doneButton = mock(Button.class);
     @Mock
@@ -44,8 +40,7 @@ public class CreateAccountTest extends ActivityUnitTestCase<CreateAccount>{
     Connection c = mock(Connection.class);
     @Before
     public void setUp() throws Exception {
-        mToast=mock(Toast.class);
-        createAccount=new CreateAccount();
+        createAccount=mock(CreateAccount.class);
         createAccount.email= this.email;
         createAccount.password= this.password;
         createAccount.password_confirm= this.password_confirm;
@@ -54,11 +49,13 @@ public class CreateAccountTest extends ActivityUnitTestCase<CreateAccount>{
 
     @Test
     public void passwordShouldNotMatch(){
+
         when(c.checkUsername(anyString())).thenReturn(false);
         Editable e = mock(Editable.class);
         when(e.toString()).thenReturn("test");
         Editable otherE = mock(Editable.class);
         when(otherE.toString()).thenReturn("Somethingelse");
+        when(createAccount.makeToast(anyString())).thenReturn(true);
         when(email.getText()).thenReturn(e);
         when(password.getText()).thenReturn(e);
         when(password_confirm.getText()).thenReturn(otherE);
@@ -73,12 +70,14 @@ public class CreateAccountTest extends ActivityUnitTestCase<CreateAccount>{
         when(email.getText()).thenReturn(e);
         when(password.getText()).thenReturn(e);
         when(password_confirm.getText()).thenReturn(e);
+        when(createAccount.makeToast(anyString())).thenReturn(true);
         createAccount.onCreateBtnClick();
         assertEquals(true,createAccount.isDone);
     }
     @Test
     public void usernameTaken(){
         when(c.checkUsername(anyString())).thenReturn(true);
+        when(createAccount.makeToast(anyString())).thenReturn(true);
         doneButton.performClick();
         assertEquals(false,createAccount.isDone);
     }
@@ -115,10 +114,6 @@ public class CreateAccountTest extends ActivityUnitTestCase<CreateAccount>{
         assertEquals(converted1,converted2);
         assertNotSame(converted1,wrongConverted);
         assertNotSame(converted1,randomConverted);
-    }
-    @Test
-    public void onOptionsItemSelected() throws Exception {
-        CreateAccount cA = new CreateAccount();
     }
 
 }
