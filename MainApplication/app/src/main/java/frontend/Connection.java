@@ -255,6 +255,7 @@ public class Connection implements Closeable {
 	 */
 	public void createSubject(int lectureID, String name, String comment) {
 		//TODO: Create method for creating subject associated with specific lecture
+		comment.replace(" ", "_%_");
 		checkState();
 		checkSubjectInput(name);
 		out.println("SET_SUBJECT " + lectureID + " " + name + " " + comment);

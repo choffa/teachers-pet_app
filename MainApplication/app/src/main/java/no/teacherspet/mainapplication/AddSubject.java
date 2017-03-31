@@ -1,5 +1,6 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by eirik on 31.03.2017.
@@ -18,6 +20,7 @@ public class AddSubject extends AppCompatActivity {
     String comment;
     TextView nameTextview;
     TextView commentTextview;
+    Intent intent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class AddSubject extends AppCompatActivity {
         commentTextview = (TextView) findViewById(R.id.comments_textview);
         nameTextview.setText(name);
         commentTextview.setText(comment);
+        intent = getIntent();
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -47,11 +51,27 @@ public class AddSubject extends AppCompatActivity {
     }
 
     public void finishedClick(View view) {
-        InitiateSubjects.setName(nameTextview.getText().toString());
-        InitiateSubjects.setComment(commentTextview.getText().toString());
-        InitiateSubjects.addToSubjectArray();
-        InitiateSubjects.adapter.notifyDataSetChanged();
-        finish();
+        if(intent!=null){
+            String origin = intent.getStringExtra("origin");
+            if(origin.equals("InitiateSubjects")){
+                InitiateSubjects.setName(nameTextview.getText().toString());
+                InitiateSubjects.setComment(commentTextview.getText().toString());
+                InitiateSubjects.addToSubjectArray();
+                InitiateSubjects.adapter.notifyDataSetChanged();
+                finish();
+            }else if (origin.equals("EditLecture")){
+                EditLecture.setName(nameTextview.getText().toString());
+                EditLecture.setComment(commentTextview.getText().toString());
+                EditLecture.addToSubjectArray();
+                EditLecture.adapter.notifyDataSetChanged();
+                finish();
+            }else{
+                Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(AddSubject.this, "Intent is NULL", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     public void cancelClick(View view) {

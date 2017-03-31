@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/showEditPage"
+    <Button
+        android:id="@+id/add_subject_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_weight="0.06"
-        android:text="This is the edit page"
-        android:textSize="24sp" />
-</RelativeLayout>
+        android:onClick="addNewSubjectClick"
+        android:text="Add new subject" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.05">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/subject_listview"
+                android:layout_width="match_parent"
+                android:layout_height="416dp" />
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/finishedBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="finishedClick"
+        android:text="Finished" />
+</LinearLayout>

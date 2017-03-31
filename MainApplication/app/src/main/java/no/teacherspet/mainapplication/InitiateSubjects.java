@@ -93,6 +93,7 @@ public class InitiateSubjects extends AppCompatActivity{
 
     public void startOnClickMethod(){
         Intent myIntent=new Intent(InitiateSubjects.this,AddSubject.class);
+        myIntent.putExtra("origin", "InitiateSubjects");
         startActivity(myIntent);
 
     }
