@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/name_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name of subject"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/comments_textview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:ems="10"
+        android:hint="Comments"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/finishedBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="finishedClick"
+        android:text="Done" />
+
+    <Button
+        android:id="@+id/cancelBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="cancelClick"
+        android:text="Cancel" />
+</LinearLayout>

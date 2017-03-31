@@ -3,7 +3,9 @@ package no.teacherspet.mainapplication;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +13,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import frontend.Connection;
+import frontend.Subject;
+import frontend.SubjectInfo;
 
 
 public class CreateLecture extends AppCompatActivity {
@@ -24,6 +29,7 @@ public class CreateLecture extends AppCompatActivity {
     EditText room;
     static Button startTime;
     static Button endTime;
+    private static ArrayList<Subject> subjectsArray = new ArrayList<>();
     Button done;
     Button cancel;
     static Button dateBtn;
@@ -152,6 +158,8 @@ public class CreateLecture extends AppCompatActivity {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.create_lecture);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
             c = new Connection();
             lectName = (TextView) findViewById(R.id.lecture_header);
             roomName = (TextView) findViewById(R.id.room_header);
@@ -174,14 +182,34 @@ public class CreateLecture extends AppCompatActivity {
             finish();
         }
     }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        InitiateSubjects.subjectArray = new ArrayList<>();
+        return true;
+    }
+
     @Override
     public void onDestroy(){
         try {
             c.close();
+            InitiateSubjects.subjectArray = new ArrayList<>();
         } catch (IOException e) {
             e.printStackTrace();
         }
         super.onDestroy();
     }
 
+    public static ArrayList<Subject> getSubjectsArray() {
+        return subjectsArray;
+    }
+
+    public static void setSubjectsArray(ArrayList<Subject> subjectsArray) {
+        CreateLecture.subjectsArray = subjectsArray;
+    }
+
+    public void addSubjectClick(View view) {
+        Intent intent = new Intent(CreateLecture.this, InitiateSubjects.class);
+        startActivity(intent);
+    }
 }

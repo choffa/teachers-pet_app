@@ -243,7 +243,7 @@ public class Connection implements Closeable {
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
 		while (in.next() == "NEXT"){
-			res.add(new Subject(in.nextInt(), in.next()));
+			res.add(new Subject(in.nextInt(), in.next(), in.next()));
 		}
 		return res;
 	}
@@ -253,11 +253,12 @@ public class Connection implements Closeable {
 	 *
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
-	public void createSubject(int lectureID, String name) {
+	public void createSubject(int lectureID, String name, String comment) {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 		checkSubjectInput(name);
-		out.println("SET_SUBJECT " + lectureID + " " + name);
+		out.println("SET_SUBJECT " + lectureID + " " + name + " " + comment);
+		out.print(comment);
 		out.flush();
 	}
 

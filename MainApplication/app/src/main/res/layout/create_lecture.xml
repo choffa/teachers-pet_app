@@ -57,6 +57,13 @@
         android:hint="@string/set_end_time" />
 
     <Button
+        android:id="@+id/subjectBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="addSubjectClick"
+        android:text="Add/Edit Subjects" />
+
+    <Button
         android:text="@string/done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
