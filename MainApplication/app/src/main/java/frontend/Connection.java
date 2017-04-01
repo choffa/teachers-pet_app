@@ -243,7 +243,7 @@ public class Connection implements Closeable {
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
 		while (in.next() == "NEXT"){
-			res.add(new Subject(in.nextInt(), in.next(), in.next()));
+			res.add(new Subject(in.nextInt(), in.next(), in.next().replace("_%_"," ")));
 		}
 		return res;
 	}
