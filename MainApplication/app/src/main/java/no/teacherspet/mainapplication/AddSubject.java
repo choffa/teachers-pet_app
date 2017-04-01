@@ -95,4 +95,5 @@ public class AddSubject extends AppCompatActivity {
     public void cancelClick(View view) {
         finish();
     }
+
 }

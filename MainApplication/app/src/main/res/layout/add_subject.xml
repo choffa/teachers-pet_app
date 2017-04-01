@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:orientation="vertical">
 
     <EditText
         android:id="@+id/name_textview"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="78dp"
         android:ems="10"
         android:hint="Name of subject"
         android:inputType="text" />
 
     <EditText
         android:id="@+id/comments_textview"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_width="300dp"
+        android:layout_height="191dp"
+        android:layout_alignStart="@+id/name_textview"
+        android:layout_below="@+id/name_textview"
         android:ems="10"
         android:hint="Comments"
         android:inputType="textMultiLine" />
@@ -23,6 +30,9 @@
         android:id="@+id/finishedBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/comments_textview"
+        android:layout_alignStart="@+id/comments_textview"
+        android:layout_below="@+id/comments_textview"
         android:onClick="finishedClick"
         android:text="Done" />
 
@@ -30,6 +40,9 @@
         android:id="@+id/cancelBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/finishedBtn"
+        android:layout_alignStart="@+id/finishedBtn"
+        android:layout_below="@+id/finishedBtn"
         android:onClick="cancelClick"
         android:text="Cancel" />
-</LinearLayout>
+</RelativeLayout>
