@@ -165,21 +165,13 @@ public class Connection implements Closeable {
 	 * @param room  The room that the lecture takes place
 	 * @param subjectsArray
 	 */
-	public void createLecture(String professorID, String courseID, Date date, int start, int end, String room, ArrayList<Subject> subjectsArray) {
+	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
 		checkLectureInput(professorID, courseID, start, end, room);
 		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + room);
 		out.flush();
-		if(!subjectsArray.isEmpty()||subjectsArray !=null){
-			//TODO finn lectureID som denne createLecture gir
-			/*
-			for (Subject s: subjectsArray) {
-				createSubject(lectureID,s.getName(),s.getComment());
-			}
-			*/
-		}
-		//Should the server respond with boolean?
+		return in.nextInt();
 	}
 
 	/**
@@ -189,11 +181,11 @@ public class Connection implements Closeable {
 	 *
 	 * @param lecture	The Lecture object to create instance for
 	 */
-/*	public void createLecture(Lecture lecture){
-		createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
+	public int createLecture(Lecture lecture){
+		return createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
 				lecture.getEnd(), lecture.getRoom());
 	}
-*/
+
 	private void checkLectureInput(String professorID, String courseID, int start, int end, String room){
 		boolean flag = false;
 		if (professorID.contains(" ") || courseID.contains(" ") || room.contains(" ")){
