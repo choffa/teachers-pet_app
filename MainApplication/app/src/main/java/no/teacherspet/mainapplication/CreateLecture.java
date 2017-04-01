@@ -77,14 +77,14 @@ public class CreateLecture extends AppCompatActivity {
 
                     break;
                 case(R.id.donebtn):
-                    if(lecture==null || room==null || start==-1 || end==-1 || date == null){
+                    if(lecture==null || room==null || start==-1 || end==-1 || date == null || lectName.getText()==null || roomName.getText()== null){
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
                         try {
                             //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
-                            ProfessorLectureList.adapter.notifyDataSetChanged();
-                            c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
+                            //ProfessorLectureList.adapter.notifyDataSetChanged();
+                            c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString(), subjectsArray);
                             //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
                             c.close();
                             finish();
