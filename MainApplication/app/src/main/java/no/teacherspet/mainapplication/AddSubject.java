@@ -21,6 +21,8 @@ public class AddSubject extends AppCompatActivity {
     TextView nameTextview;
     TextView commentTextview;
     Intent intent;
+    String origin;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,13 +30,30 @@ public class AddSubject extends AppCompatActivity {
         setContentView(R.layout.add_subject);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        name = InitiateSubjects.getName();
-        comment = InitiateSubjects.getComment();
+        intent = getIntent();
+        if(intent!=null) {
+            origin = intent.getStringExtra("origin");
+            switch (origin) {
+                case "InitiateSubjects":
+                    name = InitiateSubjects.getName();
+                    comment = InitiateSubjects.getComment();
+                    break;
+                case "EditLecture":
+                    name = EditLecture.getName();
+                    comment = EditLecture.getComment();
+                    break;
+                default:
+                    Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        }else{
+                Toast.makeText(AddSubject.this, "Intent is NULL", Toast.LENGTH_LONG).show();
+            }
         nameTextview = (TextView) findViewById(R.id.name_textview);
         commentTextview = (TextView) findViewById(R.id.comments_textview);
         nameTextview.setText(name);
         commentTextview.setText(comment);
-        intent = getIntent();
+
     }
 
     public boolean onOptionsItemSelected(MenuItem item){
@@ -52,7 +71,6 @@ public class AddSubject extends AppCompatActivity {
 
     public void finishedClick(View view) {
         if(intent!=null){
-            String origin = intent.getStringExtra("origin");
             if(origin.equals("InitiateSubjects")){
                 InitiateSubjects.setName(nameTextview.getText().toString());
                 InitiateSubjects.setComment(commentTextview.getText().toString());

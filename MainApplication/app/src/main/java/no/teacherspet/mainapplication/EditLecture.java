@@ -76,7 +76,7 @@ public class EditLecture extends AppCompatActivity{
     }
 
     public static void setID(int ID) {
-        InitiateSubjects.ID = ID;
+        EditLecture.ID = ID;
     }
 
     public static void setName(String name) {
