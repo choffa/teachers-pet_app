@@ -1,5 +1,8 @@
 language: android
 
+before_install:
+  - cd MainApplication
+
 android:
   components:
 
