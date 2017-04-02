@@ -1,12 +1,12 @@
 language: android
 
 android:
-    components:
+  components:
 
-        # SDK version
-	- android-24
+    # SDK version
+    - android-24
 
-	#Emulators
-	- sys-img-armeabi-v7a-android-24
+    #Emulators
+    - sys-img-armeabi-v7a-android-24
         
-	# Other stuff can be added here, see travis-ci.org for details
+    # Other stuff can be added here, see travis-ci.org for details
