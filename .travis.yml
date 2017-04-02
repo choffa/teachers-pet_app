@@ -2,9 +2,6 @@ language: android
 
 jdk: oraclejdk8
 
-before_install:
-  - cd MainApplication
-
 android:
   components:
 
@@ -30,3 +27,6 @@ android:
     - android-sdk-preview-license-.+
     - android-sdk-license-.+
     - google-gd-license-.+
+
+before_install:
+  - cd MainApplication
