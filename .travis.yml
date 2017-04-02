@@ -25,3 +25,8 @@ android:
     - sys-img-armeabi-v7a-android-24
         
     # Other stuff can be added here, see travis-ci.org for details
+
+  licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gd-license-.+
