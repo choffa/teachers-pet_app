@@ -9,12 +9,17 @@ android:
   components:
 
     # SDK version
-    - android-23
-    - build-tools-23.0.3
+    - android-24
+    - build-tools-24.0.3
 
     #Tools
     - tools
     - platform-tools
+    
+    #Extras
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - extra-android-support
 
     #Emulators
     - sys-img-armeabi-v7a-android-24
