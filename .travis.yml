@@ -1,0 +1,11 @@
+language: android
+
+android:
+    components:
+
+        # SDK version
+	- android-24
+
+	#Emulators
+	- sys-img-armeabi-v7a-android-24
+
