@@ -8,13 +8,13 @@ before_install:
 android:
   components:
 
-    # SDK version
-    - android-24
-    - build-tools-24.0.3
-
     #Tools
     - tools
     - platform-tools
+    - build-tools-24.0.3
+
+    # SDK version
+    - android-24
     
     #Extras
     - extra-google-m2repository
