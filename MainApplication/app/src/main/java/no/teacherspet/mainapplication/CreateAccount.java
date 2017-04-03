@@ -26,6 +26,7 @@ public class CreateAccount extends AppCompatActivity {
     private EditText password;
     private EditText password_confirm;
     private Connection c;
+    boolean noConnection;
 
     /**
      * Creates the activity and initiates buttons, textfields etc.
@@ -34,55 +35,57 @@ public class CreateAccount extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
+        noConnection = false;
         try {
             c = new Connection();
-        setTitle("Create a new account");
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        btn = (Button) findViewById(R.id.account_createbtn);
-        email= (EditText) findViewById(R.id.email);
-        email.setText("");
-        password= (EditText) findViewById(R.id.password);
-        password.setText("");
-        password_confirm= (EditText) findViewById(R.id.password_confirmation);
-        password_confirm.setText("");
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            /**
-             * This method handles the confirm button and checks if the current input is valid
-             */
-            public void onClick(View v) {
-                try {
-                    if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                        if (c.checkUsername(md5(email.getText().toString()))) {
-                            Toast.makeText(getApplicationContext(), "This e-mail is already used", Toast.LENGTH_LONG).show();
-                        } else {
-                            try {
-                                RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                                c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                                Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString()), Toast.LENGTH_LONG).show();
-                                c.close();
-                                finish();
-                            } catch (NoSuchAlgorithmException e) {
-                                e.printStackTrace();
-                            } catch (UnsupportedEncodingException e) {
-                                e.printStackTrace();
+            setTitle("Create a new account");
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            btn = (Button) findViewById(R.id.account_createbtn);
+            email= (EditText) findViewById(R.id.email);
+            email.setText("");
+            password= (EditText) findViewById(R.id.password);
+            password.setText("");
+            password_confirm= (EditText) findViewById(R.id.password_confirmation);
+            password_confirm.setText("");
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                /**
+                 * This method handles the confirm button and checks if the current input is valid
+                 */
+                public void onClick(View v) {
+                    try {
+                        if (password.getText().toString().equals(password_confirm.getText().toString())) {
+                            if (c.checkUsername(md5(email.getText().toString()))) {
+                                Toast.makeText(getApplicationContext(), "This e-mail is already used", Toast.LENGTH_LONG).show();
+                            } else {
+                                try {
+                                    RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
+                                    c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
+                                    Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString()), Toast.LENGTH_LONG).show();
+                                    c.close();
+                                    finish();
+                                } catch (NoSuchAlgorithmException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Passwords must match", Toast.LENGTH_LONG).show();
                         }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Passwords must match", Toast.LENGTH_LONG).show();
-                    }
 
-                }catch (IOException e){
-                    Toast.makeText(getApplicationContext(),"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
+                    }catch (IOException e){
+                        Toast.makeText(getApplicationContext(),"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
         }
         catch (IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
+            noConnection = true;
             finish();
         }
     }
@@ -155,7 +158,9 @@ public class CreateAccount extends AppCompatActivity {
     @Override
     public void onDestroy(){
         try {
-            c.close();
+            if(!noConnection) {
+                c.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

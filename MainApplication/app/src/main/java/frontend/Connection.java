@@ -163,7 +163,6 @@ public class Connection implements Closeable {
 	 * @param start The time the lecture starts
 	 * @param end   The end time the lecture ends
 	 * @param room  The room that the lecture takes place
-	 * @param subjectsArray
 	 */
 	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
@@ -171,7 +170,8 @@ public class Connection implements Closeable {
 		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + room);
 		out.flush();
-		return in.nextInt();
+		int res = in.nextInt();
+		return res;
 	}
 
 	/**

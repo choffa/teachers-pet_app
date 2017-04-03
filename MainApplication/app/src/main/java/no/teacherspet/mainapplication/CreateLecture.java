@@ -84,8 +84,14 @@ public class CreateLecture extends AppCompatActivity {
                         try {
                             //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
                             //ProfessorLectureList.adapter.notifyDataSetChanged();
-                            c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString(), subjectsArray);
+                            int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
                             //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
+                            int counter=0;
+                            for (Subject s : subjectsArray) {
+                                Toast.makeText(getApplicationContext(),"Into the foreach", Toast.LENGTH_LONG).show();
+                                c.createSubject(lectureID,s.getName(),s.getComment());
+                                Toast.makeText(getApplicationContext(),"iteration "+counter, Toast.LENGTH_LONG).show();
+                            }
                             c.close();
                             finish();
                         }catch (IOException e){

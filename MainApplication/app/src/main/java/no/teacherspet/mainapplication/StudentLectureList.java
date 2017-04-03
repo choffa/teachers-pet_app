@@ -29,11 +29,13 @@ public class StudentLectureList extends AppCompatActivity {
     private static Lecture L;
     private static String Name;
     private Connection c;
+    boolean noConnection;
 
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures_student);
+            noConnection = false;
             c = new Connection();
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -54,6 +56,7 @@ public class StudentLectureList extends AppCompatActivity {
             });
         } catch (IOException e) {
             Toast.makeText(getApplicationContext(), "Noe gikk galt med lasting av siden", Toast.LENGTH_LONG).show();
+            noConnection = true;
             finish();
         }
     }
@@ -71,14 +74,8 @@ public class StudentLectureList extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        try {
-            c.close();
-            finish();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
 
 
     }
@@ -86,7 +83,9 @@ public class StudentLectureList extends AppCompatActivity {
     @Override
     public void onDestroy(){
         try {
-            c.close();
+            if(!noConnection) {
+                c.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
