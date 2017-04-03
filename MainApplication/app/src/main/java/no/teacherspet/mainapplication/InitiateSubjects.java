@@ -91,6 +91,9 @@ public class InitiateSubjects extends AppCompatActivity{
         return true;
     }
 
+    /**
+     * Change to AddSubject view with origin put as InitiateSubjects
+     */
     public void startOnClickMethod(){
         Intent myIntent=new Intent(InitiateSubjects.this,AddSubject.class);
         myIntent.putExtra("origin", "InitiateSubjects");
@@ -99,7 +102,11 @@ public class InitiateSubjects extends AppCompatActivity{
     }
 
 
-
+    /**
+     * Handles the Add New Subject button
+     * Resets the static fields before starting startOnClickMethod.
+     * @param view
+     */
     public void addNewSubjectClick(View view) {
         setID(-1);
         setName(null);
@@ -107,6 +114,9 @@ public class InitiateSubjects extends AppCompatActivity{
         startOnClickMethod();
     }
 
+    /**
+     * Adds new subject to the array, or edits an existing one, depending on action taken.
+     */
     public static void addToSubjectArray(){
         if(ID ==-1){
             subjectArray.add(new Subject(Name,Comment));

@@ -69,6 +69,10 @@ public class AddSubject extends AppCompatActivity {
         AddSubject.ID = ID;
     }
 
+    /**
+     * Onclick for the "Finished"-button. Sets the static Name and Comment fields in the origin view, and adds the subject to the subjectArray in the origin.
+     * @param view
+     */
     public void finishedClick(View view) {
         if(intent!=null){
             if(origin.equals("InitiateSubjects")){

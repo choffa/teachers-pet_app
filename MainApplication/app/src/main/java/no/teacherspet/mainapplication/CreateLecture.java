@@ -111,7 +111,11 @@ public class CreateLecture extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * Updates the text on the button after setting a new value
+     * @param buttonID the String representation of the button ID.
+     * @param text the new info for the button
+     */
     @SuppressLint("SetTextI18n")
     public static void setButtonText(String buttonID, String text){
         switch (buttonID){
@@ -218,6 +222,10 @@ public class CreateLecture extends AppCompatActivity {
         CreateLecture.subjectsArray = subjectsArray;
     }
 
+    /**
+     * Handles the Add Subject button.
+     * @param view
+     */
     public void addSubjectClick(View view) {
         Intent intent = new Intent(CreateLecture.this, InitiateSubjects.class);
         startActivity(intent);
