@@ -22,7 +22,7 @@ import static org.junit.Assert.assertThat;
  * Created by magnus on 03.04.2017.
  */
 
-public class TestTimeSetter {
+public class TestTimeSetter{
 
     @Rule
     public final ActivityTestRule<CreateLecture> main = new ActivityTestRule<>(CreateLecture.class);

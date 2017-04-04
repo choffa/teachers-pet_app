@@ -21,13 +21,12 @@ import frontend.Connection;
  */
 
 public class CreateAccount extends AppCompatActivity {
-    protected Button btn;
-    protected EditText email;
-    protected EditText password;
-    protected EditText password_confirm;
-    protected Connection c;
-    public boolean isDone;
-    private boolean hascrashed;
+    private Button btn;
+    private EditText email;
+    private EditText password;
+    private EditText password_confirm;
+    private Connection c;
+    boolean noConnection;
 
     /**
      * Creates the activity and initiates buttons, textfields etc.
@@ -35,10 +34,10 @@ public class CreateAccount extends AppCompatActivity {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.account_creation);
+        noConnection = false;
         try {
-            setContentView(R.layout.account_creation);
-            c=new Connection();
-            hascrashed=false;
+            c = new Connection();
             setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -52,13 +51,9 @@ public class CreateAccount extends AppCompatActivity {
         }
         catch (IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
-            hascrashed=true;
+            noConnection = true;
             finish();
         }
-    }
-
-    protected Connection createConnection()throws IOException{
-        return new Connection();
     }
 
     /**
@@ -99,14 +94,12 @@ public class CreateAccount extends AppCompatActivity {
         try {
             if (password.getText().toString().equals(password_confirm.getText().toString())) {
                 if (c.checkUsername(md5(email.getText().toString()))) {
-                    makeToast("This e-mail is already used");
-                    isDone=false;
+                    Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
                 } else {
                     try {
                         RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
                         c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
                         c.close();
-                        isDone=true;
                         finish();
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
@@ -115,8 +108,7 @@ public class CreateAccount extends AppCompatActivity {
                     }
                 }
             } else {
-                makeToast("Passwords must match");
-                isDone=false;
+                Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_SHORT).show();
             }
 
         }catch (IOException e){
@@ -160,21 +152,13 @@ public class CreateAccount extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
-        if(hascrashed){
-            super.onDestroy();
-        }
-        else {
-            try {
+        try {
+            if(!noConnection) {
                 c.close();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            super.onDestroy();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    public boolean makeToast(String message){
-        Toast.makeText(CreateAccount.this,message,Toast.LENGTH_LONG);
-        return true;
+        super.onDestroy();
     }
 }

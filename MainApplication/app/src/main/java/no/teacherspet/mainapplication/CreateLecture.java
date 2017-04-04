@@ -3,7 +3,9 @@ package no.teacherspet.mainapplication;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,19 +13,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import frontend.Connection;
+import frontend.Subject;
 
 
 public class CreateLecture extends AppCompatActivity {
 
     TextView lectName;
+    Thread thread;
     TextView roomName;
     EditText lecture;
     EditText room;
     static Button startTime;
     static Button endTime;
+    private static ArrayList<Subject> subjectsArray = new ArrayList<>();
     Button done;
     Button cancel;
     static Button dateBtn;
@@ -71,15 +77,23 @@ public class CreateLecture extends AppCompatActivity {
 
                     break;
                 case(R.id.donebtn):
-                    if(lecture==null || room==null || start==-1 || end==-1 || date == null){
+                    if(lecture==null || room==null || start==-1 || end==-1 || date == null || lectName.getText()==null || roomName.getText()== null){
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
                         try {
                             //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
-                            ProfessorLectureList.adapter.notifyDataSetChanged();
-                            c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
+                            //ProfessorLectureList.adapter.notifyDataSetChanged();
+                            Toast.makeText(CreateLecture.this, "about to create the lecture", Toast.LENGTH_SHORT).show();
+                            int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
                             //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
+                            Toast.makeText(CreateLecture.this, "Lecture created", Toast.LENGTH_SHORT).show();
+                            int counter=0;
+                            for (Subject s : subjectsArray) {
+                                c.createSubject(lectureID,s.getName(),s.getComment());
+                                counter++;
+                                Toast.makeText(getApplicationContext(),"iteration "+counter, Toast.LENGTH_SHORT).show();
+                            }
                             c.close();
                             finish();
                         }catch (IOException e){
@@ -99,7 +113,11 @@ public class CreateLecture extends AppCompatActivity {
         }
     };
 
-
+    /**
+     * Updates the text on the button after setting a new value
+     * @param buttonID the String representation of the button ID.
+     * @param text the new info for the button
+     */
     @SuppressLint("SetTextI18n")
     public static void setButtonText(String buttonID, String text){
         switch (buttonID){
@@ -151,7 +169,9 @@ public class CreateLecture extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.create_lecture);
-            Thread thread=new Thread(new Runnable() {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            thread=new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -180,14 +200,42 @@ public class CreateLecture extends AppCompatActivity {
             start = -1;
             end = -1;
     }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        InitiateSubjects.subjectArray = new ArrayList<>();
+        return true;
+    }
+
     @Override
     public void onDestroy(){
         try {
             c.close();
+            InitiateSubjects.subjectArray.clear();
+            date = null;
+            start = -1;
+            end = -1;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         super.onDestroy();
     }
 
+    public static ArrayList<Subject> getSubjectsArray() {
+        return subjectsArray;
+    }
+
+    public static void setSubjectsArray(ArrayList<Subject> subjectsArray) {
+        CreateLecture.subjectsArray = subjectsArray;
+    }
+
+    /**
+     * Handles the Add Subject button.
+     * @param view
+     */
+    public void addSubjectClick(View view) {
+        Intent intent = new Intent(CreateLecture.this, InitiateSubjects.class);
+        startActivity(intent);
+    }
 }

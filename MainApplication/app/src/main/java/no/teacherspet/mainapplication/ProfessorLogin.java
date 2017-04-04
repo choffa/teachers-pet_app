@@ -26,10 +26,12 @@ public class ProfessorLogin extends AppCompatActivity{
     EditText Password;
     Button loginBtn;
     private Connection c;
+    boolean noConnection;
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.professor_login);
+            noConnection = false;
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             c = new Connection();
@@ -61,6 +63,7 @@ public class ProfessorLogin extends AppCompatActivity{
             });
         }catch (IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
+            noConnection = true;
             finish();
         }
     }
@@ -108,7 +111,9 @@ public class ProfessorLogin extends AppCompatActivity{
     @Override
     public void onDestroy(){
         try {
-            c.close();
+            if(!noConnection) {
+                c.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

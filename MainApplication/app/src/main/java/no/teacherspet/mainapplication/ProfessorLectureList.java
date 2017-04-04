@@ -81,7 +81,7 @@ public class ProfessorLectureList extends AppCompatActivity {
         }
     }
 
-    public void createBtnClicked(){
+    public void createBtnClicked(View v){
             try {
                 Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
                 startActivity(creatingLecture);
