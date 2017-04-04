@@ -15,7 +15,7 @@
         android:id="@+id/createbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="addItems"
+        android:onClick="createBtnClicked"
         android:text="Create Lecture"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"

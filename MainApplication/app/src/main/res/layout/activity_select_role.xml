@@ -1,18 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <Button
-        android:text="@string/i_am_a_student"
-        android:layout_width="match_parent"
+        android:id="@+id/studBtn"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/studBtn" />
+        android:layout_above="@+id/profBtn"
+        android:layout_alignLeft="@+id/profBtn"
+        android:layout_alignStart="@+id/profBtn"
+        android:layout_marginBottom="30dp"
+        android:gravity="center"
+        android:onClick="selectStudent"
+        android:text="I am a student" />
 
     <Button
-        android:text="@string/i_am_a_professor"
-        android:layout_width="match_parent"
+        android:id="@+id/profBtn"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:id="@+id/profBtn" />
+        android:onClick="selectProfessor"
+        android:text="I am a professor"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="201dp" />
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:alpha="0.5"
+        app:srcCompat="@drawable/ic_doggo3" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="logOut"
+        android:text="Log Out" />
+
+</RelativeLayout>

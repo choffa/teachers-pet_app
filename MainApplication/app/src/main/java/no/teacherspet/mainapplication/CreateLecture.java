@@ -149,10 +149,20 @@ public class CreateLecture extends AppCompatActivity {
     }
 
     protected void onCreate(Bundle savedInstanceState) {
-        try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.create_lecture);
-            c = new Connection();
+            Thread thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c = new Connection();
+                    }
+                    catch (IOException e){
+                        Toast.makeText(CreateLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
             lectName = (TextView) findViewById(R.id.lecture_header);
             roomName = (TextView) findViewById(R.id.room_header);
             lecture = (EditText) findViewById(R.id.nametxt);
@@ -169,10 +179,15 @@ public class CreateLecture extends AppCompatActivity {
             dateBtn.setOnClickListener(handler);
             start = -1;
             end = -1;
-        }catch(IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
-            finish();
+    }
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        super.onDestroy();
     }
 
 }

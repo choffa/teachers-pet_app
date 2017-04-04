@@ -35,52 +35,37 @@ public class ProfessorLectureList extends AppCompatActivity {
     private Date date;
     private static int ID;
     Button btn;
-    private Connection c;
+    protected Connection c;
 
     protected void onCreate(Bundle savedInstanceState){
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures);
-            c = new Connection();
+            c = createConnection();
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             lecturesArray=c.getLectures(RoleSelect.ProfessorID);
             ListView list_view = (ListView) findViewById(android.R.id.list);
             adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
             list_view.setAdapter(adapter);
-            btn = (Button) findViewById(R.id.createbtn);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
-                        startActivity(creatingLecture);
-                        c.close();
-                    }catch (IOException e){
-                        Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-       list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Intent myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
                Name = L.getCourseID();
-               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())){
+               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())) {
                    case 0:
-                       myIntent=new Intent(ProfessorLectureList.this,LectureStatistics.class);
+                       myIntent = new Intent(ProfessorLectureList.this, LectureStatistics.class);
                        break;
                    case 1:
-                       myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
+                       myIntent = new Intent(ProfessorLectureList.this, ProfessorLive.class);
                        break;
                    case 2:
-                       myIntent=new Intent(ProfessorLectureList.this,EditLecture.class);
+                       myIntent = new Intent(ProfessorLectureList.this, EditLecture.class);
                        break;
                }
-
                ProfessorLive.setID(ID);
                try {
                         c.close();
@@ -95,6 +80,18 @@ public class ProfessorLectureList extends AppCompatActivity {
             finish();
         }
     }
+
+    public void createBtnClicked(){
+            try {
+                Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
+                startActivity(creatingLecture);
+                c.close();
+            }catch (IOException e){
+                Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
+            }
+    }
+
+    public Connection createConnection()throws IOException{return new Connection();}
 
     /**
      * returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
@@ -167,4 +164,15 @@ public class ProfessorLectureList extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
 }

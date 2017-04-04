@@ -2,7 +2,9 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,6 +30,8 @@ public class ProfessorLogin extends AppCompatActivity{
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.professor_login);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
             c = new Connection();
             UserName = (EditText) findViewById(R.id.login_name);
             Password = (EditText) findViewById(R.id.login_password);
@@ -88,4 +92,27 @@ public class ProfessorLogin extends AppCompatActivity{
         }
         return buf.toString();
     }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        try {
+            c.close();
+            finish();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
 }

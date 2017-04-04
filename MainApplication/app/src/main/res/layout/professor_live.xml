@@ -7,26 +7,24 @@
     android:id="@+id/profRelLayout">
 
     <TextView
-        android:hint="#"
+        android:id="@+id/treKommaFem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="#"
         android:textColor="#000000"
         android:textSize="150sp"
-        android:id="@+id/treKommaFem"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="146dp" />
+        android:layout_marginTop="62dp" />
 
     <ImageView
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        app:srcCompat="@drawable/ic_doggo3"
         android:id="@+id/imageView2"
-        android:layout_alignTop="@+id/checkedTextView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp" />
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/ic_doggo3" />
 
     <Button
         android:id="@+id/updateLiveBtn"
@@ -37,16 +35,6 @@
         android:layout_marginTop="29dp"
         android:onClick="updateButtonClick"
         android:text="Update" />
-
-    <CheckedTextView
-        android:text="FagKode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="50sp"
-        android:id="@+id/checkedTextView"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"/>
 
     <TextView
         android:id="@+id/current_num_header"
@@ -64,6 +52,7 @@
         android:layout_height="40dp"
         android:layout_below="@+id/current_num_header"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="13dp"
         android:hint="#"
         android:textAlignment="center"

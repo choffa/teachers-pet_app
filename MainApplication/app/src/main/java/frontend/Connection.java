@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Lecture;
@@ -13,7 +14,7 @@ import backend.Lecture;
 public class Connection implements Closeable {
 
 	private static final int PORT = 4728;
-	private static final String HOST = "10.22.3.206";
+	private static final String HOST = "doktor.pvv.org";
 	private Socket socket;
 	private PrintWriter out;
 	private Scanner in;
@@ -42,6 +43,7 @@ public class Connection implements Closeable {
 		this.socket = socket;
 		this.out = new PrintWriter(socket.getOutputStream());
 		this.in = new Scanner(socket.getInputStream());
+		in.useLocale(Locale.ENGLISH);
 	}
 
 	/**

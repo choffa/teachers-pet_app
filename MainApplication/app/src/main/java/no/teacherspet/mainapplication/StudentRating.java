@@ -122,4 +122,15 @@ public class StudentRating extends AppCompatActivity {
         return true;
 
     }
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
 }

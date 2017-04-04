@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class CreateAccount extends AppCompatActivity {
     protected EditText password_confirm;
     protected Connection c;
     public boolean isDone;
+    private boolean hascrashed;
 
     /**
      * Creates the activity and initiates buttons, textfields etc.
@@ -33,9 +35,10 @@ public class CreateAccount extends AppCompatActivity {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.account_creation);
         try {
-            c = new Connection();
+            setContentView(R.layout.account_creation);
+            c=new Connection();
+            hascrashed=false;
             setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -49,8 +52,13 @@ public class CreateAccount extends AppCompatActivity {
         }
         catch (IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
+            hascrashed=true;
             finish();
         }
+    }
+
+    protected Connection createConnection()throws IOException{
+        return new Connection();
     }
 
     /**
@@ -86,7 +94,7 @@ public class CreateAccount extends AppCompatActivity {
         return convertToHex(sha1hash);
     }
 
-    public void onCreateBtnClick(){
+    public void onCreateBtnClick(View v){
 
         try {
             if (password.getText().toString().equals(password_confirm.getText().toString())) {
@@ -148,6 +156,21 @@ public class CreateAccount extends AppCompatActivity {
         md.update(idBytes,0,idBytes.length);
         byte[] md5Hash=md.digest();
         return convertToHex(md5Hash);
+    }
+
+    @Override
+    public void onDestroy(){
+        if(hascrashed){
+            super.onDestroy();
+        }
+        else {
+            try {
+                c.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            super.onDestroy();
+        }
     }
 
     public boolean makeToast(String message){

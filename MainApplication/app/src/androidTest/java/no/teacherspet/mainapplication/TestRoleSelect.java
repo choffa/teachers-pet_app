@@ -11,6 +11,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -27,7 +28,9 @@ public class TestRoleSelect{
     @Rule
     public final ActivityTestRule<RoleSelect> main = new ActivityTestRule<>(RoleSelect.class);
 
-    Instrumentation.ActivityMonitor monitor = getInstrumentation().addMonitor(StudentLectureList.class.getName(),null,false);
+    Instrumentation.ActivityMonitor studentMonitor = getInstrumentation().addMonitor(StudentLectureList.class.getName(),null,false);
+    Instrumentation.ActivityMonitor professorMonitor = getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);
+    Instrumentation.ActivityMonitor loginMonitor = getInstrumentation().addMonitor(CreateOrLogIn.class.getName(),null,false);
     RoleSelect rs;
     @Before
     public void setUp(){
@@ -39,11 +42,28 @@ public class TestRoleSelect{
         onView(withId(R.id.studBtn)).check(ViewAssertions.matches(isDisplayed()));
     }
     @Test
-    public void shouldGoToStudentLectureList(){
+    public void shouldGoToStudentLectureList()throws Exception{
         onView(withText(R.string.i_am_a_student)).perform(click());
-        Activity lectureList=getInstrumentation().waitForMonitorWithTimeout(monitor,5000);
+        Activity lectureList=getInstrumentation().waitForMonitorWithTimeout(studentMonitor,5000);
         assertNotNull(lectureList);
         lectureList.finish();
+    }
+    @Test
+    public void shouldGoToLogin(){
+        rs.isValidated=false;
+        onView(withId(R.id.profBtn)).perform(click());
+        Activity login=getInstrumentation().waitForMonitorWithTimeout(loginMonitor,5000);
+        assertNotNull(login);
+        login.finish();
+    }
+    @Test
+    public void shouldGoToProfessorLectures() throws Exception{
+        rs.isValidated=true;
+        rs.ProfessorID="TestProfessor";
+        onView(withId(R.id.profBtn)).perform(click());
+        Activity prof=getInstrumentation().waitForMonitorWithTimeout(professorMonitor,5000);
+        assertNotNull(prof);
+        prof.finish();
     }
 
 }

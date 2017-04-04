@@ -28,13 +28,13 @@ public class StudentLectureList extends AppCompatActivity {
     private static int ID;
     private static Lecture L;
     private static String Name;
-    private Connection c;
+    protected static Connection c;
 
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures_student);
-            c = new Connection();
+            c = createConnection();
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             ListView list_view = (ListView) findViewById(android.R.id.list);
@@ -82,4 +82,16 @@ public class StudentLectureList extends AppCompatActivity {
 
 
     }
+    public static Connection createConnection()throws IOException{return new Connection();}
+
+    @Override
+    public void onDestroy(){
+        try {
+            c.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
 }
