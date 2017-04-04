@@ -77,7 +77,7 @@ public class CreateLecture extends AppCompatActivity {
 
                     break;
                 case(R.id.donebtn):
-                    if(lecture==null || room==null || start==-1 || end==-1 || date == null || lectName.getText()==null || roomName.getText()== null){
+                    if(lecture==null || room==null || start==-1 || end==-1 || date == null || lecture.getText().length()<1 || room.getText().length()<1){
                         Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
                     }
                     else {
