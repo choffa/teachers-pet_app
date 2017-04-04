@@ -1,5 +1,7 @@
 package frontend;
 
+import android.widget.Toast;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +12,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Lecture;
+import no.teacherspet.mainapplication.AddSubject;
 
 public class Connection implements Closeable {
 
@@ -83,7 +86,7 @@ public class Connection implements Closeable {
 	 * @param rating    The actual rating of the subject, this is a number between 1 and 5 (inclusive)
 	 * @throws IllegalArgumentException This is thrown if the ranking is wrong
 	 */
-	public void sendSubjectRating(int subjectID, int studentID, int rating, String comment)
+	public void sendSubjectRating(int subjectID, String studentID, int rating, String comment)
 			throws IllegalArgumentException {
 		checkState();
 		if (rating < 1 || rating > 5) {
@@ -159,19 +162,19 @@ public class Connection implements Closeable {
 
 	/**
 	 * A method for creating a new lecture in the database
-	 *
-	 * @param date  The date that the lecture takes place
+	 *  @param date  The date that the lecture takes place
 	 * @param start The time the lecture starts
 	 * @param end   The end time the lecture ends
 	 * @param room  The room that the lecture takes place
 	 */
-	public void createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
+	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
 		checkLectureInput(professorID, courseID, start, end, room);
 		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + room);
 		out.flush();
-		//Should the server respond with boolean?
+		int res = in.nextInt();
+		return res;
 	}
 
 	/**
@@ -181,8 +184,8 @@ public class Connection implements Closeable {
 	 *
 	 * @param lecture	The Lecture object to create instance for
 	 */
-	public void createLecture(Lecture lecture){
-		createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
+	public int createLecture(Lecture lecture){
+		return createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
 				lecture.getEnd(), lecture.getRoom());
 	}
 
@@ -239,11 +242,11 @@ public class Connection implements Closeable {
 	 */
 	public ArrayList<Subject> getSubjects(int lectureID) {
 		checkState();
-		out.println("GET_SUBJECTS");
+		out.println("GET_SUBJECTS "+lectureID);
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
-		while (in.next() == "NEXT"){
-			res.add(new Subject(in.nextInt(), in.next()));
+		while (in.next().equals("NEXT")){
+			res.add(new Subject(in.nextInt(), in.next().replaceAll("£"," "), in.next().replaceAll("£"," ")));
 		}
 		return res;
 	}
@@ -253,10 +256,20 @@ public class Connection implements Closeable {
 	 *
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
-	public void createSubject(int lectureID) {
+	public void createSubject(int lectureID, String name, String comment) {
 		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
-		out.println("SET_SUBJECT " + lectureID);
+
+		if(name.isEmpty()){
+			name = "NULL";
+		}
+		if(comment.isEmpty()){
+			comment = "NULL";
+		}
+		String resName = name.replaceAll(" ", "£");
+		String resComment = comment.replaceAll(" ", "£");
+		checkSubjectInput(resName);
+		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();
 	}
 
