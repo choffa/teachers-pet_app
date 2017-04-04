@@ -35,7 +35,7 @@ public class EditLecture extends AppCompatActivity{
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lecture_edit);
             c = new Connection();
-            //subjectArray = c.getSubjects(ProfessorLectureList.getID());
+            subjectArray = c.getSubjects(ProfessorLectureList.getID());
             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             list_view = (ListView) findViewById(R.id.subject_listview);

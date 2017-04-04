@@ -1,5 +1,7 @@
 package frontend;
 
+import android.widget.Toast;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +12,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Lecture;
+import no.teacherspet.mainapplication.AddSubject;
 
 public class Connection implements Closeable {
 
@@ -255,11 +258,18 @@ public class Connection implements Closeable {
 	 */
 	public void createSubject(int lectureID, String name, String comment) {
 		//TODO: Create method for creating subject associated with specific lecture
-		comment.replace(" ", "_%_");
 		checkState();
-		checkSubjectInput(name);
-		out.println("SET_SUBJECT " + lectureID + " " + name + " " + comment);
-		out.print(comment);
+
+		if(name.isEmpty()){
+			name = "NULL";
+		}
+		if(comment.isEmpty()){
+			comment = "NULL";
+		}
+		String resName = name.replaceAll(" ", "£");
+		String resComment = comment.replaceAll(" ", "£");
+		checkSubjectInput(resName);
+		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();
 	}
 
