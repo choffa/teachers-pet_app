@@ -242,11 +242,11 @@ public class Connection implements Closeable {
 	 */
 	public ArrayList<Subject> getSubjects(int lectureID) {
 		checkState();
-		out.println("GET_SUBJECTS");
+		out.println("GET_SUBJECTS "+lectureID);
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
-		while (in.next() == "NEXT"){
-			res.add(new Subject(in.nextInt(), in.next(), in.next().replace("_%_"," ")));
+		while (in.next().equals("NEXT")){
+			res.add(new Subject(in.nextInt(), in.next().replaceAll("£"," "), in.next().replaceAll("£"," ")));
 		}
 		return res;
 	}
