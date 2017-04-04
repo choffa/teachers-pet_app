@@ -8,10 +8,10 @@ android:
     #Tools
     - tools
     - platform-tools
-    - build-tools-24.0.3
+    - build-tools-25.0.3
 
     # SDK version
-    - android-24
+    - android-25
     
     #Extras
     - extra-google-m2repository
@@ -19,7 +19,7 @@ android:
     - extra-android-support
 
     #Emulators
-    - sys-img-armeabi-v7a-android-24
+    - sys-img-armeabi-v7a-android-25
         
     # Other stuff can be added here, see travis-ci.org for details
 
