@@ -251,6 +251,12 @@ public class Connection implements Closeable {
 		return res;
 	}
 
+	public void updateSubject(int subjectID, String name, String comment){
+		checkState();
+		out.println("UPDATE_SUBJECT " + subjectID + " " + name + " " + comment);
+		out.flush();
+	}
+
 	/**
 	 * A method for creating a new subject associated to a lecture in the database
 	 *
