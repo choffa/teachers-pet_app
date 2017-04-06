@@ -246,7 +246,12 @@ public class Connection implements Closeable {
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
 		while (in.next().equals("NEXT")){
-			res.add(new Subject(in.nextInt(), in.next().replaceAll("£"," "), in.next().replaceAll("£"," ")));
+			int subInt = in.nextInt();
+			String subName = in.next();
+			subName.replaceAll("£", " ").replaceAll("NULL","");
+			String subComment = in.next();
+			subComment.replaceAll("£", " ").replaceAll("¥","\n").replaceAll("NULL","");
+			res.add(new Subject(subInt,subName,subComment));
 		}
 		return res;
 	}
@@ -274,6 +279,7 @@ public class Connection implements Closeable {
 		}
 		String resName = name.replaceAll(" ", "£");
 		String resComment = comment.replaceAll(" ", "£");
+		resComment.replaceAll("\n","¥");
 		checkSubjectInput(resName);
 		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();
