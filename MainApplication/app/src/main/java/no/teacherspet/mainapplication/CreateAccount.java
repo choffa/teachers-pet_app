@@ -56,13 +56,13 @@ public class CreateAccount extends AppCompatActivity {
                 public void onClick(View v) {
                     try {
                         if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                            if (c.checkUsername(md5(email.getText().toString()))) {
+                            if (c.checkUsername(md5(email.getText().toString().trim()))) {
                                 Toast.makeText(getApplicationContext(), "This e-mail is already used", Toast.LENGTH_LONG).show();
                             } else {
                                 try {
-                                    RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                                    c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                                    Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString()), Toast.LENGTH_LONG).show();
+                                    RoleSelect.professors.put(md5(email.getText().toString().trim()), SHA1(password.getText().toString()));
+                                    c.createUser(md5(email.getText().toString().trim()), SHA1(password.getText().toString()));
+                                    Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString().trim()), Toast.LENGTH_LONG).show();
                                     c.close();
                                     finish();
                                 } catch (NoSuchAlgorithmException e) {

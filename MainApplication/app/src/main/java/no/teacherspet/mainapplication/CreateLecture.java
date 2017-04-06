@@ -84,15 +84,14 @@ public class CreateLecture extends AppCompatActivity {
                         try {
                             //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
                             //ProfessorLectureList.adapter.notifyDataSetChanged();
-                            Toast.makeText(CreateLecture.this, "about to create the lecture", Toast.LENGTH_SHORT).show();
-                            int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
+                            int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString().trim(),date, start, end, room.getText().toString().trim());
                             //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
                             Toast.makeText(CreateLecture.this, "Lecture created", Toast.LENGTH_SHORT).show();
                             int counter=0;
                             for (Subject s : subjectsArray) {
                                 c.createSubject(lectureID,s.getName(),s.getComment());
                                 counter++;
-                                Toast.makeText(getApplicationContext(),"iteration "+counter, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"Added subject "+counter, Toast.LENGTH_SHORT).show();
                             }
                             c.close();
                             finish();
