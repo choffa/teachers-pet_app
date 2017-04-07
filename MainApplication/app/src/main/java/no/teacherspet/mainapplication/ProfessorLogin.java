@@ -47,6 +47,7 @@ public class ProfessorLogin extends AppCompatActivity{
                                 RoleSelect.isValidated = true;
                                 RoleSelect.ProfessorID=md5(UserName.getText().toString().trim());
                                 Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
+                                finish();
                                 startActivity(showLectures);
                             } else {
                                 Toast.makeText(getApplicationContext(), "The password is wrong", Toast.LENGTH_LONG).show();

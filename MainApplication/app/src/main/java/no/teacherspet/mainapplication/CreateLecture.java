@@ -225,12 +225,10 @@ public class CreateLecture extends AppCompatActivity {
         }
             });
         thread.start();
-            InitiateSubjects.subjectArray.clear();
-            date = null;
-            start = -1;
-            end = -1;
-
-
+        InitiateSubjects.subjectArray.clear();
+        date = null;
+        start = -1;
+        end = -1;
         super.onDestroy();
     }
 

@@ -1,11 +1,11 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,8 +21,7 @@ import frontend.Connection;
  */
 
 public class CreateAccount extends AppCompatActivity {
-    private Button btn;
-    private EditText email;
+    private EditText userName;
     private EditText password;
     private EditText password_confirm;
     private Connection c;
@@ -53,9 +52,8 @@ public class CreateAccount extends AppCompatActivity {
             setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
-            btn = (Button) findViewById(R.id.account_createbtn);
-            email= (EditText) findViewById(R.id.email);
-            email.setText("");
+            userName= (EditText) findViewById(R.id.email);
+            userName.setText("");
             password= (EditText) findViewById(R.id.password);
             password.setText("");
             password_confirm= (EditText) findViewById(R.id.password_confirmation);
@@ -100,17 +98,19 @@ public class CreateAccount extends AppCompatActivity {
     }
 
     public void onCreateBtnClick(View v){
-
         try {
             if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                if (c.checkUsername(md5(email.getText().toString()))) {
+                if (c.checkUsername(md5(userName.getText().toString()))) {
                     Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
                 } else {
                     try {
-                        RoleSelect.professors.put(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                        c.createUser(md5(email.getText().toString()), SHA1(password.getText().toString()));
-                        c.close();
+                        RoleSelect.professors.put(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        c.createUser(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        RoleSelect.isValidated=true;
+                        RoleSelect.ProfessorID=this.userName.getText().toString();
                         finish();
+                        Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
+                        startActivity(intent);
                     } catch (NoSuchAlgorithmException e) {
                         e.printStackTrace();
                     } catch (UnsupportedEncodingException e) {

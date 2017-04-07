@@ -8,8 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import java.io.IOException;
-
 /**
  * Created by magnus on 17.03.2017.
  */
@@ -35,12 +33,13 @@ public class CreateOrLogIn extends AppCompatActivity{
                         finish();
                         break;
                     case(R.id.loginbtn):
-                        Intent login=new Intent(getApplicationContext(),ProfessorLogin.class);
+                        Intent login=new Intent(CreateOrLogIn.this,ProfessorLogin.class);
                         startActivity(login);
                         break;
                     case(R.id.createbtn):
-                        Intent createAcc=new Intent(getApplicationContext(),CreateAccount.class);
+                        Intent createAcc=new Intent(CreateOrLogIn.this,CreateAccount.class);
                         startActivity(createAcc);
+                        break;
                 }
 
             }
@@ -53,6 +52,14 @@ public class CreateOrLogIn extends AppCompatActivity{
         login.setOnClickListener(handler);
         back.setOnClickListener(handler);
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(RoleSelect.isValidated){
+            finish();
+        }
+    }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;

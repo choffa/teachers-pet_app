@@ -60,7 +60,7 @@ public class RoleSelect extends AppCompatActivity {
             startActivity(showProfessorLectures);
         }
         else{
-            Intent loginScreen = new Intent(getApplicationContext(),CreateOrLogIn.class);
+            Intent loginScreen = new Intent(RoleSelect.this,CreateOrLogIn.class);
             startActivity(loginScreen);
         }
     }
