@@ -62,7 +62,7 @@ public class ProfessorLogin extends AppCompatActivity{
                 }
             });
         }catch (IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Error occured while loading page",Toast.LENGTH_LONG).show();
             noConnection = true;
             finish();
         }

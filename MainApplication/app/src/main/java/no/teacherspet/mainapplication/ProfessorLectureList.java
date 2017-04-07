@@ -36,6 +36,7 @@ public class ProfessorLectureList extends AppCompatActivity {
     private static int ID;
     Button btn;
     private Connection c;
+    ListView list_view;
 
     protected void onCreate(Bundle savedInstanceState){
         try {
@@ -44,21 +45,17 @@ public class ProfessorLectureList extends AppCompatActivity {
             c = new Connection();
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
-            lecturesArray=c.getLectures(RoleSelect.ProfessorID);
-            ListView list_view = (ListView) findViewById(android.R.id.list);
+            list_view = (ListView) findViewById(android.R.id.list);
             adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
+            update();
             list_view.setAdapter(adapter);
+
             btn = (Button) findViewById(R.id.createbtn);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
-                        startActivity(creatingLecture);
-                        c.close();
-                    }catch (IOException e){
-                        Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
-                    }
+                    Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
+                    startActivity(creatingLecture);
                 }
             });
 
@@ -82,16 +79,11 @@ public class ProfessorLectureList extends AppCompatActivity {
                }
 
                ProfessorLive.setID(ID);
-               try {
-                        c.close();
-                        startActivity(myIntent);
-                    }catch (IOException e){
-                        Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling",Toast.LENGTH_LONG).show();
-                    }
+               startActivity(myIntent);
            }
        });
     }catch(IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Error occured while loading page",Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -155,16 +147,19 @@ public class ProfessorLectureList extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        try{
-            c.close();
-            finish();
-            return true;
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
+    }
 
+    private void update(){
+        lecturesArray.clear();
+        lecturesArray.addAll(c.getLectures(RoleSelect.ProfessorID));
+        adapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        update();
 
     }
 
