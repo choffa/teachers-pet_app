@@ -27,6 +27,7 @@ public class CreateAccount extends AppCompatActivity {
     private EditText password_confirm;
     private Connection c;
     boolean noConnection;
+    Thread thread;
 
     /**
      * Creates the activity and initiates buttons, textfields etc.
@@ -36,8 +37,19 @@ public class CreateAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
         noConnection = false;
-        try {
-            c = new Connection();
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = createConnection();
+                }
+                catch (IOException e){
+                    Toast.makeText(CreateAccount.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+            });
+            thread.start();
             setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -49,11 +61,9 @@ public class CreateAccount extends AppCompatActivity {
             password_confirm= (EditText) findViewById(R.id.password_confirmation);
             password_confirm.setText("");
         }
-        catch (IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
-            noConnection = true;
-            finish();
-        }
+
+    public Connection createConnection() throws IOException{
+        return new Connection();
     }
 
     /**
@@ -152,13 +162,17 @@ public class CreateAccount extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
-        try {
-            if(!noConnection) {
-                c.close();
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    c.close();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
+        thread.start();
         super.onDestroy();
     }
 }

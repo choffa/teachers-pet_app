@@ -175,7 +175,7 @@ public class CreateLecture extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        c = new Connection();
+                        c = createConnection();
                     }
                     catch (IOException e){
                         Toast.makeText(CreateLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
@@ -183,6 +183,7 @@ public class CreateLecture extends AppCompatActivity {
                     }
                 }
             });
+            thread.start();
             lectName = (TextView) findViewById(R.id.lecture_header);
             roomName = (TextView) findViewById(R.id.room_header);
             lecture = (EditText) findViewById(R.id.nametxt);
@@ -201,6 +202,10 @@ public class CreateLecture extends AppCompatActivity {
             end = -1;
     }
 
+    public Connection createConnection() throws IOException{
+        return new Connection();
+    }
+
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         InitiateSubjects.subjectArray = new ArrayList<>();
@@ -209,16 +214,23 @@ public class CreateLecture extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
-        try {
-            c.close();
+            thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                    c.close();
+                }catch (IOException e) {
+                    e.printStackTrace();
+            }
+        }
+            });
+        thread.start();
             InitiateSubjects.subjectArray.clear();
             date = null;
             start = -1;
             end = -1;
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         super.onDestroy();
     }
 
