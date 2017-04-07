@@ -73,6 +73,7 @@ public class StudentRating extends AppCompatActivity {
                             RoleSelect.saves.remove(StudentLectureList.getID());
                         }
                         RoleSelect.saves.put(lectureID, changes);
+                        Toast.makeText(StudentRating.this, "Rating sent", Toast.LENGTH_SHORT).show();
                         hello.setText(Integer.toString(RoleSelect.saves.get(lectureID).get(1)) + " , " + Integer.toString(RoleSelect.saves.get(lectureID).get(2)));
                     }
                 }
