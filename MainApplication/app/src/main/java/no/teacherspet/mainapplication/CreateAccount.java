@@ -48,6 +48,7 @@ public class CreateAccount extends AppCompatActivity {
             password.setText("");
             password_confirm= (EditText) findViewById(R.id.password_confirmation);
             password_confirm.setText("");
+
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 /**
