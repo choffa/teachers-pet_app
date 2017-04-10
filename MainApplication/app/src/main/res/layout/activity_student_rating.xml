@@ -5,21 +5,36 @@
     android:id="@+id/activity_student_rating"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="no.teacherspet.mainapplication.StudentRating">
 
+    <TextView
+        android:id="@+id/tempoHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Tempo"
+        android:textColor="#000000"
+        android:textSize="36sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint='"HELLO!"' />
+
     <RadioGroup
+        android:id="@+id/tempoRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tempoRadioGroup"
-        android:orientation="horizontal"
-        android:layout_marginTop="98dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tempoHeader"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/verySlow"
@@ -71,25 +86,50 @@
             android:gravity="center_horizontal|bottom"
             android:text="Very Fast" />
 
-        </RadioGroup>
+    </RadioGroup>
 
-    <TextView
-        android:text="Tempo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:id="@+id/tempoHeader"
-        android:textSize="36sp"
-        android:textColor="#000000" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/tempoRadioGroup"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="103dp"
-        android:id="@+id/textView2"
-        android:hint='"HELLO!"' />
+        android:requiresFadingEdge="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            tools:listitem="@layout/row" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/list"
+            android:layout_centerHorizontal="true"
+            android:ems="10"
+            android:hint="Add a comment"
+            android:inputType="textMultiLine"
+            android:lines="5" />
+
+        <Button
+            android:id="@+id/sendComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="35dp"
+            android:layout_toEndOf="@+id/editText"
+            android:onClick="sendComment"
+            android:text="Send Comment"
+            android:textSize="10sp" />
+    </RelativeLayout>
+</ScrollView>
+
 </RelativeLayout>

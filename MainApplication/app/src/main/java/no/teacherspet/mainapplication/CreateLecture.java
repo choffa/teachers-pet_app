@@ -18,7 +18,6 @@ import java.util.Date;
 
 import frontend.Connection;
 import frontend.Subject;
-import frontend.SubjectInfo;
 
 
 public class CreateLecture extends AppCompatActivity {

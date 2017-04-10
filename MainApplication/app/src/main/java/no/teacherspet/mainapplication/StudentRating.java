@@ -1,11 +1,22 @@
 package no.teacherspet.mainapplication;
 
+import android.app.ListActivity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,16 +27,22 @@ import java.util.HashMap;
 
 import backend.Lecture;
 import frontend.Connection;
+import frontend.Subject;
 
-public class StudentRating extends AppCompatActivity {
+public class StudentRating extends AppCompatActivity{
 
     byte rating;
     int radioButtonID;
     private static int lectureID;
     RadioGroup tempo;
+    ArrayList<Subject> subjects;
+    ArrayList<String> subjectNames= new ArrayList<>();
+    ArrayList<String> subjectComments = new ArrayList<>();
+    ArrayList<Integer> subjectIDs = new ArrayList<>();
     private Connection c;
     HashMap<String,ArrayList<Integer>> savedLectures=new HashMap<>();
     TextView hello; //Textfield only for debugging purposes: shows the last two values
+    ListView ratingList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +50,21 @@ public class StudentRating extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             lectureID = StudentLectureList.getID();
             c = new Connection();
+            subjects = c.getSubjects(StudentLectureList.getID());
+            ArrayList list = new ArrayList();
+            for (Subject s:subjects) {
+                subjectNames.add(s.getName());
+                subjectComments.add(s.getComment());
+                subjectIDs.add(s.getId());
+                list.add(new RowModel(s));
+            }
             setContentView(R.layout.activity_student_rating);
+            ratingList = (ListView) findViewById(android.R.id.list);
+
+            ratingList.setAdapter(new RatingAdapter(list));
+            RelativeLayout.LayoutParams mParam = (RelativeLayout.LayoutParams) ratingList.getLayoutParams();
+            mParam.height = (calculateHeight(ratingList));
+            ratingList.setLayoutParams(mParam);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(StudentLectureList.getName());
@@ -84,6 +115,96 @@ public class StudentRating extends AppCompatActivity {
         }
     }
 
+
+    private RowModel getModel(int position) {
+        return (RowModel) ((RatingAdapter) ratingList.getAdapter()).getItem(position);
+    }
+
+    public void sendComment(View view) {
+    }
+
+    class RatingAdapter extends ArrayAdapter {
+        RatingAdapter(ArrayList list) {
+            super(StudentRating.this, R.layout.row, list);
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            ViewWrapper wrapper;
+            RatingBar rate;
+            if (row == null) {
+                LayoutInflater inflater = getLayoutInflater();
+                row = inflater.inflate(R.layout.row, parent, false);
+                wrapper = new ViewWrapper(row);
+                row.setTag(wrapper);
+                rate = wrapper.getRatingBar();
+                RatingBar.OnRatingBarChangeListener l =
+                        new RatingBar.OnRatingBarChangeListener() {
+                            public void onRatingChanged(RatingBar ratingBar,
+                                                        float rating, boolean fromTouch) {
+                                Integer myPosition = (Integer) ratingBar.getTag();
+                                RowModel model = getModel(myPosition);
+                                model.rating = rating;
+                                Subject currentSub = subjects.get(myPosition);
+                                c.sendSubjectRating(currentSub.getId(),RoleSelect.StudentId, Math.round(rating) ,null);
+                                RelativeLayout parent = (RelativeLayout) ratingBar.getParent();
+                                TextView label = (TextView) parent.findViewById(R.id.label);
+                                label.setText(model.toString());
+                            }
+                        };
+                rate.setOnRatingBarChangeListener(l);
+            } else {
+                wrapper = (ViewWrapper) row.getTag();
+                rate = wrapper.getRatingBar();
+            }
+
+            RowModel model = getModel(position);
+            int str = row.getHeight();
+            wrapper.getLabel().setText(model.toString());
+            rate.setTag(new Integer(position));
+            rate.setRating(model.rating);
+            return (row);
+        }
+    }
+
+    class RowModel {
+        String subjectName;
+        float rating = 3.0f;
+        String comment;
+
+        RowModel(Subject subject) {
+            this.subjectName = subject.getName();
+            this.comment = subject.getComment();
+            //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getID)
+        }
+
+        public String toString() {
+            if (rating >= 5.0) {
+                return (subjectName.toUpperCase());
+            }
+            if (rating <=1){
+                return "Shit, son!";
+            }
+            return (subjectName);
+        }
+    }
+
+    private int calculateHeight(ListView list) {
+
+        int height = 0;
+
+        for (int i = 0; i < list.getCount(); i++) {
+            View childView = list.getAdapter().getView(i, null, list);
+            childView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+            height+= childView.getMeasuredHeight();
+        }
+
+        //dividers height
+        height += list.getDividerHeight() * list.getCount();
+
+        return height;
+    }
+
     private boolean isValidTime(){
             Lecture lecture = StudentLectureList.getL();
             Date lectureDate = lecture.getDate();
@@ -109,6 +230,8 @@ public class StudentRating extends AppCompatActivity {
                 }
             }
     }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item){
         /* Unnecessary as it creates a new instance of the RoleSelect page
