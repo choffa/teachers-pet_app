@@ -151,6 +151,10 @@ public class StudentRating extends AppCompatActivity{
                         };
                 rate.setOnRatingBarChangeListener(l);
                 showCommentsFAB = wrapper.getCommentFAB();
+                String currentComment = subjectComments.get(position);
+                if(currentComment.isEmpty()||currentComment.equals("NULL")||currentComment==null) {
+                    showCommentsFAB.hide();
+                }
                 FloatingActionButton.OnClickListener fabl = new FloatingActionButton.OnClickListener() {
 
                     @Override

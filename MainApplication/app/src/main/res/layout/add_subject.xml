@@ -12,10 +12,9 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="78dp"
-        android:capitalize="words"
         android:ems="10"
         android:hint="Name of subject"
-        android:inputType="text"
+        android:inputType="text|textCapWords"
         android:maxLength="30" />
 
     <EditText
@@ -24,10 +23,9 @@
         android:layout_height="191dp"
         android:layout_alignStart="@+id/name_textview"
         android:layout_below="@+id/name_textview"
-        android:capitalize="sentences"
         android:ems="10"
         android:hint="Comments"
-        android:inputType="textMultiLine" />
+        android:inputType="textCapSentences|textMultiLine" />
 
     <Button
         android:id="@+id/finishedBtn"
