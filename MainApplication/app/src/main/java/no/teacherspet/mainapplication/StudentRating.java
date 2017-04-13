@@ -1,5 +1,7 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ public class StudentRating extends AppCompatActivity{
     byte rating;
     int radioButtonID;
     private static int lectureID;
+    static Subject currentSub;
     RadioGroup tempo;
     ArrayList<Subject> subjects;
     ArrayList<String> subjectNames= new ArrayList<>();
@@ -127,6 +130,7 @@ public class StudentRating extends AppCompatActivity{
             View row = convertView;
             ViewWrapper wrapper;
             RatingBar rate;
+            FloatingActionButton showCommentsFAB;
             if (row == null) {
                 LayoutInflater inflater = getLayoutInflater();
                 row = inflater.inflate(R.layout.student_rating_row, parent, false);
@@ -140,12 +144,25 @@ public class StudentRating extends AppCompatActivity{
                                 Integer myPosition = (Integer) ratingBar.getTag();
                                 RowModel model = getModel(myPosition);
                                 model.rating = rating;
-                                Subject currentSub = subjects.get(myPosition);
-                                c.sendSubjectRating(currentSub.getId(),RoleSelect.StudentId, Math.round(rating) ,"");
-                                Toast.makeText(StudentRating.this, "You have rated " +currentSub.getName() + " a " + Math.round(rating)+"/5", Toast.LENGTH_SHORT).show();
+                                currentSub = subjects.get(myPosition);
+                                c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "");
+                                Toast.makeText(StudentRating.this, "You have rated " + currentSub.getName() + " a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
                             }
                         };
                 rate.setOnRatingBarChangeListener(l);
+                showCommentsFAB = wrapper.getCommentFAB();
+                FloatingActionButton.OnClickListener fabl = new FloatingActionButton.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Integer myPosition = (Integer) v.getTag();
+                        currentSub = subjects.get(position);
+                        startActivity(new Intent(StudentRating.this, CommentsPopup.class));
+                    }
+                };
+                showCommentsFAB.setOnClickListener(fabl);
+
+
             } else {
                 wrapper = (ViewWrapper) row.getTag();
                 rate = wrapper.getRatingBar();

@@ -9,6 +9,7 @@ class ViewWrapper {
     View base;
 	RatingBar rate=null;
 	TextView label=null;
+	FloatingActionButton comment=null;
 	
 	ViewWrapper(View base) {
 		this.base=base;
@@ -26,6 +27,13 @@ class ViewWrapper {
 			label=(TextView)base.findViewById(R.id.label);
 		}
 		return(label);
+	}
+
+	FloatingActionButton getCommentFAB(){
+		if (comment==null){
+			comment=(FloatingActionButton) base.findViewById(R.id.showCommentBtn);
+		}
+		return (comment);
 	}
 	
 }
