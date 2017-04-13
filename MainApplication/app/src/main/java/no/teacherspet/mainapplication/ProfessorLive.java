@@ -77,16 +77,7 @@ public class ProfessorLive extends AppCompatActivity {
 
 
     public boolean onOptionsItemSelected(MenuItem item){
-        /* Sets the Back button to create a new instance of a view - didn't work as intended, but might be interesting later.
-        Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
-        startActivityForResult(myIntent, 0);
-        */
-        try {
-            c.close();
-            finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        finish();
         return true;
     }
 

@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            tools:listitem="@layout/row" />
+            tools:listitem="@layout/student_rating_row" />
 
         <EditText
             android:id="@+id/editText"

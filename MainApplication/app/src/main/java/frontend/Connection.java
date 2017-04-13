@@ -89,8 +89,8 @@ public class Connection implements Closeable {
 	public void sendSubjectRating(int subjectID, String studentID, int rating, String comment)
 			throws IllegalArgumentException {
 		checkState();
-		if (rating < 1 || rating > 5) {
-			throw new IllegalArgumentException("Rating must be between 1 and 5");
+		if (rating < 0 || rating > 5) {
+			throw new IllegalArgumentException("Rating must be between 0 and 5");
 		}
 
 		out.println("SET_SUBJECTRATING " + subjectID + " " + studentID + " " + rating + " " + comment);
@@ -107,7 +107,8 @@ public class Connection implements Closeable {
 		checkState();
 		out.println("GET_AVERAGESUBJECTRATING " + subjectID);
 		out.flush();
-		return in.nextFloat();
+		float res = in.nextFloat();
+		return res;
 	}
 
 	//------------------------------------------------------------------------

@@ -1,18 +1,13 @@
 package no.teacherspet.mainapplication;
 
-import android.app.ListActivity;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
@@ -125,7 +120,7 @@ public class StudentRating extends AppCompatActivity{
 
     class RatingAdapter extends ArrayAdapter {
         RatingAdapter(ArrayList list) {
-            super(StudentRating.this, R.layout.row, list);
+            super(StudentRating.this, R.layout.student_rating_row, list);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -134,7 +129,7 @@ public class StudentRating extends AppCompatActivity{
             RatingBar rate;
             if (row == null) {
                 LayoutInflater inflater = getLayoutInflater();
-                row = inflater.inflate(R.layout.row, parent, false);
+                row = inflater.inflate(R.layout.student_rating_row, parent, false);
                 wrapper = new ViewWrapper(row);
                 row.setTag(wrapper);
                 rate = wrapper.getRatingBar();
@@ -146,10 +141,8 @@ public class StudentRating extends AppCompatActivity{
                                 RowModel model = getModel(myPosition);
                                 model.rating = rating;
                                 Subject currentSub = subjects.get(myPosition);
-                                c.sendSubjectRating(currentSub.getId(),RoleSelect.StudentId, Math.round(rating) ,null);
-                                RelativeLayout parent = (RelativeLayout) ratingBar.getParent();
-                                TextView label = (TextView) parent.findViewById(R.id.label);
-                                label.setText(model.toString());
+                                c.sendSubjectRating(currentSub.getId(),RoleSelect.StudentId, Math.round(rating) ,"");
+                                Toast.makeText(StudentRating.this, "You have rated " +currentSub.getName() + " a " + Math.round(rating)+"/5", Toast.LENGTH_SHORT).show();
                             }
                         };
                 rate.setOnRatingBarChangeListener(l);
@@ -179,12 +172,7 @@ public class StudentRating extends AppCompatActivity{
         }
 
         public String toString() {
-            if (rating >= 5.0) {
-                return (subjectName.toUpperCase());
-            }
-            if (rating <=1){
-                return "Shit, son!";
-            }
+
             return (subjectName);
         }
     }
