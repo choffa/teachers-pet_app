@@ -9,7 +9,8 @@
         android:hint="Login"
         android:layout_below="@+id/login_password"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp" />
+        android:layout_marginTop="65dp"
+        android:onClick="loginPressed"/>
 
     <EditText
         android:id="@+id/login_name"

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,19 +33,29 @@ public class ProfessorLectureList extends AppCompatActivity {
     private String room;
     private Date date;
     private static int ID;
-    Button btn;
+    Thread thread;
     protected Connection c;
 
     protected void onCreate(Bundle savedInstanceState){
-        try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures);
-            c = createConnection();
+            thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c = new Connection();
+                    } catch (IOException e) {
+                        Toast.makeText(ProfessorLectureList.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+            thread.start();
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             lecturesArray=c.getLectures(RoleSelect.ProfessorID);
             ListView list_view = (ListView) findViewById(android.R.id.list);
-            adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lecturesArray);
             list_view.setAdapter(adapter);
             list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
@@ -75,10 +84,6 @@ public class ProfessorLectureList extends AppCompatActivity {
                     }
            }
        });
-    }catch(IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
-            finish();
-        }
     }
 
     public void createBtnClicked(View v){
@@ -90,8 +95,6 @@ public class ProfessorLectureList extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
             }
     }
-
-    public Connection createConnection()throws IOException{return new Connection();}
 
     /**
      * returns 0 if lecture is done, 1 if ongoing, 2 if not yet started

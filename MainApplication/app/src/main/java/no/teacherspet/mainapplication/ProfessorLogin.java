@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,9 +23,10 @@ import frontend.Connection;
 public class ProfessorLogin extends AppCompatActivity{
     EditText UserName;
     EditText Password;
-    Button loginBtn;
     private Connection c;
     boolean noConnection;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
@@ -37,35 +37,31 @@ public class ProfessorLogin extends AppCompatActivity{
             c = new Connection();
             UserName = (EditText) findViewById(R.id.login_name);
             Password = (EditText) findViewById(R.id.login_password);
-            loginBtn = (Button) findViewById(R.id.loginbtn);
-            loginBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
-                            if (c.validateUser(md5(UserName.getText().toString().trim()),SHA1(Password.getText().toString()))) {
-                                RoleSelect.isValidated = true;
-                                RoleSelect.ProfessorID=md5(UserName.getText().toString().trim());
-                                Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
-                                finish();
-                                startActivity(showLectures);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "The password is wrong", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "There does not exist any registered users with this username", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
         }catch (IOException e){
             Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
             noConnection = true;
             finish();
+        }
+    }
+    public void loginPressed(View v){
+        try {
+            if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
+                if (c.validateUser(md5(UserName.getText().toString().trim()),SHA1(Password.getText().toString()))) {
+                    RoleSelect.isValidated = true;
+                    RoleSelect.ProfessorID=md5(UserName.getText().toString().trim());
+                    Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
+                    finish();
+                    startActivity(showLectures);
+                } else {
+                    Toast.makeText(getApplicationContext(), "The password is wrong", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "There does not exist any registered users with this username", Toast.LENGTH_LONG).show();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
     }
 
@@ -96,6 +92,7 @@ public class ProfessorLogin extends AppCompatActivity{
         }
         return buf.toString();
     }
+
     public boolean onOptionsItemSelected(MenuItem item) {
         try {
             c.close();
@@ -105,8 +102,6 @@ public class ProfessorLogin extends AppCompatActivity{
             e.printStackTrace();
             return false;
         }
-
-
     }
 
     @Override

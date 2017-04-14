@@ -25,18 +25,16 @@ public class ProfessorLive extends AppCompatActivity {
     private int mInterval = 2000;
     private Handler mHandler;
     private static int ID;
-    Connection c;
+    protected Connection c;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
-    //View thisView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
-        //thisView=this.findViewBy
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());

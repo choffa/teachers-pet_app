@@ -3,11 +3,9 @@ package no.teacherspet.mainapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings.Secure;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.provider.Settings.Secure;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
@@ -33,10 +31,6 @@ public class RoleSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         isValidated=false;
         setContentView(R.layout.activity_select_role);
-        Button StudBtn= (Button) findViewById(R.id.studBtn);
-        Button ProfBtn= (Button) findViewById(R.id.profBtn);
-        StudBtn.setOnClickListener(handler);
-        ProfBtn.setOnClickListener(handler);
         try {
             StudentId = md5(Secure.getString(getContentResolver(),Secure.ANDROID_ID));
         } catch (NoSuchAlgorithmException e) {
@@ -54,7 +48,7 @@ public class RoleSelect extends AppCompatActivity {
     /**
      * Sends to the ProfessorLive view
      */
-    public void selectProfessor(){
+    public void selectProfessor(View v){
         if(isValidated){
             Intent showProfessorLectures=new Intent(getApplicationContext(),ProfessorLectureList.class);
             startActivity(showProfessorLectures);
@@ -68,30 +62,17 @@ public class RoleSelect extends AppCompatActivity {
     /**
      * Sends to the StudentRating view
      */
-    public void selectStudent(){
+    public void selectStudent(View v){
 
         Intent intent= new Intent(RoleSelect.this,StudentLectureList.class);
         startActivity(intent);
     }
+    public void logOut(View v) {
+        isValidated = false;
+        ProfessorID="";
+        Toast.makeText(getApplicationContext(),"You are now logged out",Toast.LENGTH_LONG).show();
+    }
 
-    /**
-     * Checks weither the user clicks the professor or the student button.
-     */
-    View.OnClickListener handler= new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch(v.getId()){
-                case R.id.studBtn:
-
-                    selectStudent();
-                    break;
-                case R.id.profBtn:
-
-                    selectProfessor();
-                    break;
-            }
-        }
-    };
 
     private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md=MessageDigest.getInstance("MD5");
@@ -112,11 +93,5 @@ public class RoleSelect extends AppCompatActivity {
             } while (two_halfs++ < 1);
         }
         return buf.toString();
-    }
-
-    public void logOut(View view) {
-        isValidated = false;
-        ProfessorID="";
-        Toast.makeText(getApplicationContext(),"You are now logged out",Toast.LENGTH_LONG).show();
     }
 }
