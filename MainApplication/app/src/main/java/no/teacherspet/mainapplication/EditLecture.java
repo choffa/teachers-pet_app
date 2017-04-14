@@ -23,7 +23,9 @@ import frontend.Subject;
 public class EditLecture extends AppCompatActivity{
     public static ArrayList<Subject> subjectArray = new ArrayList<>();
     public static ArrayAdapter<Subject> adapter;
-    static int ID = -1;
+    private static boolean[] changes;
+    private int originalSize;
+    static int Position = -1;
     static String Name;
     static String Comment;
     ListView list_view;
@@ -53,6 +55,8 @@ public class EditLecture extends AppCompatActivity{
                 e.printStackTrace();
             }
             subjectArray = c.getSubjects(ProfessorLectureList.getID());
+            originalSize =subjectArray.size();
+            changes = new boolean[originalSize+10];
             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             list_view = (ListView) findViewById(R.id.subject_listview);
@@ -64,19 +68,23 @@ public class EditLecture extends AppCompatActivity{
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     Subject SI= (Subject) list_view.getItemAtPosition(position);
-                    ID = position;
+                    Position = position;
                     Name = SI.getName();
                     Comment = SI.getComment();
-                    AddSubject.setID(ID);
+                    AddSubject.setID(Position);
                     startOnClickMethod();
 
 
                 }
             });
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "Error occured while loading page", Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
-    public static int getID() {
-        return ID;
+    public static int getPosition() {
+        return Position;
     }
 
     public static String getName() {
@@ -87,8 +95,8 @@ public class EditLecture extends AppCompatActivity{
         return Comment;
     }
 
-    public static void setID(int ID) {
-        EditLecture.ID = ID;
+    public static void setPosition(int position) {
+        EditLecture.Position = position;
     }
 
     public static void setName(String name) {
@@ -99,50 +107,68 @@ public class EditLecture extends AppCompatActivity{
         Comment = comment;
     }
 
-    public void addItems(View v){
-        //  listItems.add(Name);
-        subjectArray.add(new Subject(Name,Comment));
-        adapter.notifyDataSetChanged();
-    }
-
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
-
-
     }
 
+    /**
+     * Starts up the AddSubject Activity.
+     */
     public void startOnClickMethod(){
         Intent myIntent=new Intent(EditLecture.this,AddSubject.class);
         myIntent.putExtra("origin", "EditLecture");
         EditLecture.this.startActivity(myIntent);
-
     }
 
 
-
+    /**
+     * Handles the "Add New Subject" button.
+     * @param view The button-view.
+     */
     public void addNewSubjectClick(View view) {
-        setID(-1);
+        setPosition(-1);
         setName(null);
         setComment(null);
         startOnClickMethod();
     }
 
+    /**
+     * Creates new subject or edits existing one locally with the static Name, Comment and Position fields.
+     */
     public static void addToSubjectArray(){
-        if(ID ==-1){
+        if(Position ==-1){
             subjectArray.add(new Subject(Name,Comment));
-            // int lastIndex = subjectArray.size()-1;
-            // subjectArray.get(lastIndex).setLocalID(lastIndex);
+            int changesSize = subjectArray.size();
+            if(changesSize==changes.length){
+
+                boolean [] changesTemp = new boolean[changesSize+5];
+                System.arraycopy(changes,0,changesTemp,0,changesSize-1);
+                changes =changesTemp;
+            }
+            changes[changesSize-1] = true;
         }else{
-            Subject curSub= subjectArray.get(ID);
+            Subject curSub= subjectArray.get(Position);
             curSub.setName(Name);
             curSub.setComment(Comment);
+            changes[Position]=true;
         }
-        //adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Handles the "Finish" button press. Updates all updates subjects, and creates all new subjects.
+     * @param view the button view
+     */
     public void finishedClick(View view) {
-        CreateLecture.setSubjectsArray(subjectArray);
+        int counter=0;
+        for (Subject s:subjectArray) {
+            if(changes[counter]&&counter<originalSize){
+                c.updateSubject(s.getId(),s.getName(),s.getComment());
+            }else if(changes[counter]){
+                c.createSubject(ProfessorLectureList.getID(),s.getName(),s.getComment());
+            }
+            counter++;
+        }
         finish();
     }
 

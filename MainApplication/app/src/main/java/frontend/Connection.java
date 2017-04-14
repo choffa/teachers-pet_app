@@ -89,8 +89,8 @@ public class Connection implements Closeable {
 	public void sendSubjectRating(int subjectID, String studentID, int rating, String comment)
 			throws IllegalArgumentException {
 		checkState();
-		if (rating < 1 || rating > 5) {
-			throw new IllegalArgumentException("Rating must be between 1 and 5");
+		if (rating < 0 || rating > 5) {
+			throw new IllegalArgumentException("Rating must be between 0 and 5");
 		}
 
 		out.println("SET_SUBJECTRATING " + subjectID + " " + studentID + " " + rating + " " + comment);
@@ -107,7 +107,8 @@ public class Connection implements Closeable {
 		checkState();
 		out.println("GET_AVERAGESUBJECTRATING " + subjectID);
 		out.flush();
-		return in.nextFloat();
+		float res = in.nextFloat();
+		return res;
 	}
 
 	//------------------------------------------------------------------------
@@ -147,8 +148,8 @@ public class Connection implements Closeable {
 			int start = in.nextInt();
 			int end = in.nextInt();
 			String professorID = in.next();
-			String room = in.next();
-			String courseID = in.next();
+			String room = in.next().replaceAll("£"," ");
+			String courseID = in.next().replaceAll("£", " ");
 			String[] components = date.split("-");
 			Date d= new Date();
 			d.setYear(Integer.parseInt(components[0])-1900);
@@ -169,9 +170,11 @@ public class Connection implements Closeable {
 	 */
 	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
-		checkLectureInput(professorID, courseID, start, end, room);
-		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
-			+ end + " " + room);
+		String resCourseID = courseID.replaceAll(" ", "£");
+		String resRoom = room.replaceAll(" ", "£");
+		checkLectureInput(professorID, resCourseID, start, end, resRoom);
+		out.println("SET_LECTURE " + professorID + " " + resCourseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
+			+ end + " " + resRoom);
 		out.flush();
 		int res = in.nextInt();
 		return res;
@@ -248,9 +251,9 @@ public class Connection implements Closeable {
 		while (in.next().equals("NEXT")){
 			int subInt = in.nextInt();
 			String subName = in.next();
-			subName.replaceAll("£", " ").replaceAll("NULL","");
+			subName = subName.replaceAll("£", " ").replaceAll("NULL","");
 			String subComment = in.next();
-			subComment.replaceAll("£", " ").replaceAll("¥","\n").replaceAll("NULL","");
+			subComment = subComment.replaceAll("£", " ").replaceAll("¥","\n").replaceAll("NULL","");
 			res.add(new Subject(subInt,subName,subComment));
 		}
 		return res;
@@ -268,7 +271,6 @@ public class Connection implements Closeable {
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
 	public void createSubject(int lectureID, String name, String comment) {
-		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 
 		if(name.isEmpty()){
@@ -279,7 +281,7 @@ public class Connection implements Closeable {
 		}
 		String resName = name.replaceAll(" ", "£");
 		String resComment = comment.replaceAll(" ", "£");
-		resComment.replaceAll("\n","¥");
+		resComment = resComment.replaceAll("\n","¥");
 		checkSubjectInput(resName);
 		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();

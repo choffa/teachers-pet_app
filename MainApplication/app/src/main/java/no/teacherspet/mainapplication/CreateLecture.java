@@ -122,27 +122,18 @@ public class CreateLecture extends AppCompatActivity {
                     break;
                 case(R.id.donebtn):
                     if(lecture==null || room==null || start==-1 || end==-1 || date == null || lecture.getText().length()<1 || room.getText().length()<1){
-                        Toast.makeText(getApplicationContext(), "Du mangler noe for å opprette en forelesning",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Fields lack input",Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        try {
-                            //                     ProfessorLectureList.listItems.add(lecture.getText().toString());
-                            //ProfessorLectureList.adapter.notifyDataSetChanged();
-                            Toast.makeText(CreateLecture.this, "about to create the lecture", Toast.LENGTH_SHORT).show();
-                            int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString(),date, start, end, room.getText().toString());
-                            //ProfessorLectureList.lecturesArray.add(new Lecture(lecture.getText().toString(), start, end, room.getText().toString(), date));
-                            Toast.makeText(CreateLecture.this, "Lecture created", Toast.LENGTH_SHORT).show();
-                            int counter=0;
-                            for (Subject s : subjectsArray) {
-                                c.createSubject(lectureID,s.getName(),s.getComment());
-                                counter++;
-                                Toast.makeText(getApplicationContext(),"iteration "+counter, Toast.LENGTH_SHORT).show();
-                            }
-                            c.close();
-                            finish();
-                        }catch (IOException e){
-                            Toast.makeText(getApplicationContext(),"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
+                        int lectureID = c.createLecture(RoleSelect.ProfessorID,lecture.getText().toString().trim(),date, start, end, room.getText().toString().trim());
+                        Toast.makeText(CreateLecture.this, "Lecture created", Toast.LENGTH_SHORT).show();
+                        int counter=0;
+                        for (Subject s : subjectsArray) {
+                            c.createSubject(lectureID,s.getName(),s.getComment());
+                            counter++;
                         }
+                        Toast.makeText(CreateLecture.this, counter+" subjects added", Toast.LENGTH_SHORT).show();
+                        finish();
                     }
                     break;
                 case(R.id.cancelbtn):
@@ -159,7 +150,7 @@ public class CreateLecture extends AppCompatActivity {
 
     /**
      * Updates the text on the button after setting a new value
-     * @param buttonID the String representation of the button ID.
+     * @param buttonID the String representation of the button Position.
      * @param text the new info for the button
      */
     @SuppressLint("SetTextI18n")
@@ -209,8 +200,6 @@ public class CreateLecture extends AppCompatActivity {
         startActivity(getCalendar);
 
     }
-
-
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         InitiateSubjects.subjectArray = new ArrayList<>();

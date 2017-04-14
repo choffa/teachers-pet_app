@@ -35,6 +35,7 @@ public class ProfessorLectureList extends AppCompatActivity {
     private static int ID;
     Thread thread;
     protected Connection c;
+    ListView list_view;
 
     protected void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
@@ -81,12 +82,7 @@ public class ProfessorLectureList extends AppCompatActivity {
                        break;
                }
                ProfessorLive.setID(ID);
-               try {
-                        c.close();
-                        startActivity(myIntent);
-                    }catch (IOException e){
-                        Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling",Toast.LENGTH_LONG).show();
-                    }
+               startActivity(myIntent);
            }
        });
     }
@@ -160,16 +156,19 @@ public class ProfessorLectureList extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        try{
-            c.close();
-            finish();
-            return true;
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
+    }
 
+    private void update(){
+        lecturesArray.clear();
+        lecturesArray.addAll(c.getLectures(RoleSelect.ProfessorID));
+        adapter.notifyDataSetChanged();
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        update();
 
     }
 
