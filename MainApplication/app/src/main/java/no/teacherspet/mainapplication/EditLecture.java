@@ -23,6 +23,8 @@ import frontend.Subject;
 public class EditLecture extends AppCompatActivity{
     public static ArrayList<Subject> subjectArray = new ArrayList<>();
     public static ArrayAdapter<Subject> adapter;
+    private static boolean[] changes;
+    private int originalSize;
     static int ID = -1;
     static String Name;
     static String Comment;
@@ -36,6 +38,8 @@ public class EditLecture extends AppCompatActivity{
             setContentView(R.layout.lecture_edit);
             c = new Connection();
             subjectArray = c.getSubjects(ProfessorLectureList.getID());
+            originalSize =subjectArray.size();
+            changes = new boolean[originalSize+10]; //Remember to add more!
             android.support.v7.app.ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             list_view = (ListView) findViewById(R.id.subject_listview);
@@ -96,8 +100,6 @@ public class EditLecture extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
-
-
     }
 
     public void startOnClickMethod(){
@@ -119,18 +121,35 @@ public class EditLecture extends AppCompatActivity{
     public static void addToSubjectArray(){
         if(ID ==-1){
             subjectArray.add(new Subject(Name,Comment));
+            int changesSize = subjectArray.size();
+            if(changesSize==changes.length){
+
+                boolean [] changesTemp = new boolean[changesSize+5]; //Remember to add more!
+                System.arraycopy(changes,0,changesTemp,0,changesSize-1);
+                changes =changesTemp;
+            }
+            changes[changesSize-1] = true;
             // int lastIndex = subjectArray.size()-1;
             // subjectArray.get(lastIndex).setLocalID(lastIndex);
         }else{
             Subject curSub= subjectArray.get(ID);
             curSub.setName(Name);
             curSub.setComment(Comment);
+            changes[ID]=true;
         }
         //adapter.notifyDataSetChanged();
     }
 
     public void finishedClick(View view) {
-        CreateLecture.setSubjectsArray(subjectArray);
+        int counter=0;
+        for (Subject s:subjectArray) {
+            if(changes[counter]&&counter<originalSize){
+                c.updateSubject(s.getId(),s.getName(),s.getComment());
+            }else if(changes[counter]){
+                c.createSubject(ProfessorLectureList.getID(),s.getName(),s.getComment());
+            }
+            counter++;
+        }
         finish();
     }
 
