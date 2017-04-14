@@ -10,4 +10,5 @@
     <string name="set_end_time">Set End Time</string>
     <string name="done">done</string>
     <string name="cancel">Cancel</string>
+    <string name="ok_icon">ok_icon</string>
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rounded_rectangle">
+
+    <TextView
+        android:id="@+id/subject_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Subject Name"
+        android:textSize="30sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/subject_name_textview"
+        android:layout_marginTop="10dp"
+        android:clipChildren="false"
+        android:clipToPadding="true">
+
+        <TextView
+            android:id="@+id/subject_comments_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+
+            android:text="Comments"
+            android:textAlignment="viewStart"
+            android:textSize="20sp" />
+    </ScrollView>
+
+</RelativeLayout>
