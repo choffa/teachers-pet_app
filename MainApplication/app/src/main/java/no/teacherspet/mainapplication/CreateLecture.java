@@ -105,7 +105,7 @@ public class CreateLecture extends AppCompatActivity {
 
     /**
      * Updates the text on the button after setting a new value
-     * @param buttonID the String representation of the button ID.
+     * @param buttonID the String representation of the button Position.
      * @param text the new info for the button
      */
     @SuppressLint("SetTextI18n")

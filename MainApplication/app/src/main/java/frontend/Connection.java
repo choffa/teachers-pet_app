@@ -271,7 +271,6 @@ public class Connection implements Closeable {
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
 	public void createSubject(int lectureID, String name, String comment) {
-		//TODO: Create method for creating subject associated with specific lecture
 		checkState();
 
 		if(name.isEmpty()){

@@ -26,7 +26,7 @@ public class Lecture {
         this.courseID = courseID;
         this.room = room;
         this.date = date;
-        //setID();
+        //setPosition();
         this.lectureID = (int) (Math.random()*500);
     }
 

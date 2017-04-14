@@ -189,7 +189,7 @@ public class StudentRating extends AppCompatActivity{
         RowModel(Subject subject) {
             this.subjectName = subject.getName();
             this.comment = subject.getComment();
-            //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getID)
+            //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getPosition)
         }
 
         public String toString() {
