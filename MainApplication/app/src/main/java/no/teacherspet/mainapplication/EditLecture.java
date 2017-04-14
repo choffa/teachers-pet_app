@@ -77,11 +77,8 @@ public class EditLecture extends AppCompatActivity{
 
                 }
             });
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Error occured while loading page", Toast.LENGTH_LONG).show();
-            finish();
         }
-    }
+
 
     public static int getPosition() {
         return Position;

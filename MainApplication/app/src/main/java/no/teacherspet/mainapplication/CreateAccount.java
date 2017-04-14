@@ -80,15 +80,14 @@ public class CreateAccount extends AppCompatActivity {
                         finish();
                         Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
                         startActivity(intent);
+                    } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
+                        e.printStackTrace();
                     } catch (IOException e){
                         Toast.makeText(getApplicationContext(),"Error occured while connecting to server",Toast.LENGTH_LONG).show();
                         noConnection = true;
                         finish();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
                     }
+
                 }
             } else {
                 Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_SHORT).show();
