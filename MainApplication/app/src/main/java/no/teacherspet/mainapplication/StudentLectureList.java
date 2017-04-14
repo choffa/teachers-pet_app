@@ -29,36 +29,48 @@ public class StudentLectureList extends AppCompatActivity {
     private static Lecture L;
     private static String Name;
     private Connection c;
+    protected Thread thread;
     boolean noConnection;
 
     protected void onCreate(Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.lectures_student);
-            noConnection = false;
-            c = new Connection();
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            ListView list_view = (ListView) findViewById(android.R.id.list);
-            lecturesArray = c.getLectures();
-            adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
-            list_view.setAdapter(adapter);
-
-            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    L = (Lecture) list_view.getItemAtPosition(position);
-                    ID = L.getID();
-                    Name = L.getCourseID();
-                    Intent myIntent = new Intent(getApplicationContext(), StudentRating.class);
-                    startActivity(myIntent);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.lectures_student);
+        noConnection = false;
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                } catch (IOException e) {
+                    Toast.makeText(StudentLectureList.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    noConnection = false;
+                    finish();
                 }
-            });
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Noe gikk galt med lasting av siden", Toast.LENGTH_LONG).show();
-            noConnection = true;
-            finish();
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        ListView list_view = (ListView) findViewById(android.R.id.list);
+        lecturesArray = c.getLectures();
+        adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
+        list_view.setAdapter(adapter);
+
+        list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                L = (Lecture) list_view.getItemAtPosition(position);
+                ID = L.getID();
+                Name = L.getCourseID();
+                Intent myIntent = new Intent(getApplicationContext(), StudentRating.class);
+                startActivity(myIntent);
+            }
+        });
     }
 
     public static Lecture getL() {
@@ -81,9 +93,9 @@ public class StudentLectureList extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         try {
-            if(!noConnection) {
+            if (!noConnection) {
                 c.close();
             }
         } catch (IOException e) {

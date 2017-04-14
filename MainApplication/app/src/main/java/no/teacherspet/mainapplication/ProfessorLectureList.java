@@ -51,7 +51,12 @@ public class ProfessorLectureList extends AppCompatActivity {
                 }
             });
             thread.start();
-            ActionBar actionBar = getSupportActionBar();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             lecturesArray=c.getLectures(RoleSelect.ProfessorID);
             ListView list_view = (ListView) findViewById(android.R.id.list);

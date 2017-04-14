@@ -25,23 +25,36 @@ public class ProfessorLogin extends AppCompatActivity{
     EditText Password;
     private Connection c;
     boolean noConnection;
+    protected Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.professor_login);
+        noConnection = false;
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(ProfessorLogin.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    noConnection=true;
+                    finish();
+                }
+            }
+        });
+        thread.start();
         try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.professor_login);
-            noConnection = false;
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            c = new Connection();
-            UserName = (EditText) findViewById(R.id.login_name);
-            Password = (EditText) findViewById(R.id.login_password);
-        }catch (IOException e){
-            Toast.makeText(getApplicationContext(),"Noe gikk galt under lasting av siden",Toast.LENGTH_LONG).show();
-            noConnection = true;
-            finish();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        UserName = (EditText) findViewById(R.id.login_name);
+        Password = (EditText) findViewById(R.id.login_password);
     }
     public void loginPressed(View v){
         try {

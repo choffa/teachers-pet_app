@@ -11,15 +11,15 @@ import android.widget.Toast;
 public class TimeSetter extends AppCompatActivity {
     TimePicker clock;
 
-    public void onCreate(Bundle SavedInstanceState){
+    public void onCreate(Bundle SavedInstanceState) {
 
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.timesetter);
         clock = (TimePicker) findViewById(R.id.timePicker);
         clock.setIs24HourView(true);
-        if(CreateLecture.getIsStart()&&CreateLecture.getStart()!=-1){
+        if (CreateLecture.getIsStart() && CreateLecture.getStart() != -1) {
             clock.setCurrentHour(CreateLecture.getStart());
-        }else if(!CreateLecture.getIsStart()&&CreateLecture.getEnd()!=-1){
+        } else if (!CreateLecture.getIsStart() && CreateLecture.getEnd() != -1) {
             clock.setCurrentHour(CreateLecture.getEnd());
         }
     }

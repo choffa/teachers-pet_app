@@ -32,7 +32,7 @@ public class CreateAccount extends AppCompatActivity {
      * Creates the activity and initiates buttons, textfields etc.
      * @param savedInstanceState: The previoud instance of the activity
      */
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
         noConnection = false;
@@ -49,7 +49,12 @@ public class CreateAccount extends AppCompatActivity {
             }
             });
             thread.start();
-            setTitle("Create a new account");
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             userName= (EditText) findViewById(R.id.email);

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -26,6 +27,7 @@ public class ProfessorLive extends AppCompatActivity {
     private Handler mHandler;
     private static int ID;
     protected Connection c;
+    protected Thread thread;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
@@ -39,11 +41,23 @@ public class ProfessorLive extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
         setID(ProfessorLectureList.getID());
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(ProfessorLive.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+        thread.start();
         try {
-            c = new Connection();
-        } catch (IOException e) {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            return;
         }
         mHandler = new Handler();
         startRepeatingTask();

@@ -73,6 +73,11 @@ public class CreateLecture extends AppCompatActivity {
             }
         });
         thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         lectName = (TextView) findViewById(R.id.lecture_header);
         roomName = (TextView) findViewById(R.id.room_header);
         lecture = (EditText) findViewById(R.id.nametxt);
