@@ -1,11 +1,11 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,73 +21,83 @@ import frontend.Connection;
  */
 
 public class CreateAccount extends AppCompatActivity {
-    private Button btn;
-    private EditText email;
+    private EditText userName;
     private EditText password;
     private EditText password_confirm;
     private Connection c;
     boolean noConnection;
+    Thread thread;
 
     /**
      * Creates the activity and initiates buttons, textfields etc.
      * @param savedInstanceState: The previoud instance of the activity
      */
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_creation);
         noConnection = false;
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(CreateAccount.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+            });
+            thread.start();
         try {
-            c = new Connection();
-            setTitle("Create a new account");
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        setTitle("Create a new account");
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
-            btn = (Button) findViewById(R.id.account_createbtn);
-            email= (EditText) findViewById(R.id.email);
-            email.setText("");
+            userName= (EditText) findViewById(R.id.email);
+            userName.setText("");
             password= (EditText) findViewById(R.id.password);
             password.setText("");
             password_confirm= (EditText) findViewById(R.id.password_confirmation);
             password_confirm.setText("");
+        }
 
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                /**
-                 * This method handles the confirm button and checks if the current input is valid
-                 */
-                public void onClick(View v) {
+
+    public void onCreateBtnClick(View v){
+        try {
+            if (password.getText().toString().equals(password_confirm.getText().toString())) {
+                if (c.checkUsername(md5(userName.getText().toString()))) {
+                    Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
+                } else {
                     try {
-                        if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                            if (c.checkUsername(md5(email.getText().toString().trim()))) {
-                                Toast.makeText(getApplicationContext(), "This e-mail is already used", Toast.LENGTH_LONG).show();
-                            } else {
-                                try {
-                                    RoleSelect.professors.put(md5(email.getText().toString().trim()), SHA1(password.getText().toString()));
-                                    c.createUser(md5(email.getText().toString().trim()), SHA1(password.getText().toString()));
-                                    Toast.makeText(getApplicationContext(), SHA1(password.getText().toString()) + ", " + md5(email.getText().toString().trim()), Toast.LENGTH_LONG).show();
-                                    c.close();
-                                    finish();
-                                } catch (NoSuchAlgorithmException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Passwords must match", Toast.LENGTH_LONG).show();
-                        }
-
-                    }catch (IOException e){
+                        RoleSelect.professors.put(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        c.createUser(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        RoleSelect.isValidated=true;
+                        RoleSelect.ProfessorID=this.userName.getText().toString();
+                        finish();
+                        Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
+                        startActivity(intent);
+                    } catch (IOException e){
                         Toast.makeText(getApplicationContext(),"Error occured while connecting to server",Toast.LENGTH_LONG).show();
+                        noConnection = true;
+                        finish();
                     } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                 }
-            });
-        }
-        catch (IOException e){
-            Toast.makeText(getApplicationContext(),"Error occured while loading page",Toast.LENGTH_LONG).show();
-            noConnection = true;
-            finish();
+            } else {
+                Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_SHORT).show();
+            }
+
+        }catch (IOException e){
+            Toast.makeText(CreateAccount.this,"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
     }
 
@@ -116,12 +126,27 @@ public class CreateAccount extends AppCompatActivity {
      * @throws NoSuchAlgorithmException
      * @throws UnsupportedEncodingException
      */
-    public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    protected static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] textBytes = text.getBytes("iso-8859-1");
         md.update(textBytes, 0, textBytes.length);
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
+    }
+
+    /**
+     * Converts a String using the md5 hash
+     * @param id: The String to be converted
+     * @return a hashed String
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
+    protected String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] idBytes=id.getBytes("iso-8859-1");
+        md.update(idBytes,0,idBytes.length);
+        byte[] md5Hash=md.digest();
+        return convertToHex(md5Hash);
     }
 
     /**
@@ -141,30 +166,19 @@ public class CreateAccount extends AppCompatActivity {
         }
     }
 
-    /**
-     * Converts a String using the md5 hash
-     * @param id: The String to be converted
-     * @return a hashed String
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
-    private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest md=MessageDigest.getInstance("MD5");
-        byte[] idBytes=id.getBytes("iso-8859-1");
-        md.update(idBytes,0,idBytes.length);
-        byte[] md5Hash=md.digest();
-        return convertToHex(md5Hash);
-    }
-
     @Override
     public void onDestroy(){
-        try {
-            if(!noConnection) {
-                c.close();
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    c.close();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
+        thread.start();
         super.onDestroy();
     }
 }

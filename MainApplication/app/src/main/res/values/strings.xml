@@ -10,5 +10,11 @@
     <string name="set_end_time">Set End Time</string>
     <string name="done">done</string>
     <string name="cancel">Cancel</string>
+    <string name="i_am_a_student">I am a student</string>
+    <string name="i_am_a_professor">I am a professor</string>
+    <string name="username">Username</string>
+    <string name="create_my_account">Create my account!</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="type_password_here">Type password here</string>
     <string name="ok_icon">ok_icon</string>
 </resources>

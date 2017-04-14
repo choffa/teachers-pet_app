@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
         android:ems="10"
-        android:hint="Type password here"
+        android:hint="@string/type_password_here"
         android:inputType="textPassword" />
 
     <EditText
@@ -37,16 +37,15 @@
         android:layout_below="@+id/password"
         android:layout_marginBottom="20dp"
         android:ems="10"
-        android:hint="Confirm password"
+        android:hint="@string/confirm_password"
         android:inputType="textPassword" />
-
-
 
     <Button
         android:id="@+id/account_createbtn"
+        android:onClick="onCreateBtnClick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create my account!"
+        android:text="@string/create_my_account"
         android:layout_below="@+id/password_confirmation"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>

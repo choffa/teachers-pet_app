@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -25,27 +26,38 @@ public class ProfessorLive extends AppCompatActivity {
     private int mInterval = 2000;
     private Handler mHandler;
     private static int ID;
-    Connection c;
+    protected Connection c;
+    protected Thread thread;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
-    //View thisView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
-        //thisView=this.findViewBy
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
         setID(ProfessorLectureList.getID());
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(ProfessorLive.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+        thread.start();
         try {
-            c = new Connection();
-        } catch (IOException e) {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            return;
         }
         mHandler = new Handler();
         startRepeatingTask();
