@@ -53,6 +53,45 @@ public class CreateLecture extends AppCompatActivity {
     public static void setDate(Date date){
         CreateLecture.date=date;
     }
+
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.create_lecture);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(CreateLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+        thread.start();
+        lectName = (TextView) findViewById(R.id.lecture_header);
+        roomName = (TextView) findViewById(R.id.room_header);
+        lecture = (EditText) findViewById(R.id.nametxt);
+        room = (EditText) findViewById(R.id.roomtxt);
+        startTime = (Button) findViewById(R.id.startbtn);
+        endTime = (Button) findViewById(R.id.endbtn);
+        done = (Button) findViewById(R.id.donebtn);
+        cancel = (Button) findViewById(R.id.cancelbtn);
+        dateBtn = (Button) findViewById(R.id.datebtn);
+        startTime.setOnClickListener(handler);
+        endTime.setOnClickListener(handler);
+        done.setOnClickListener(handler);
+        cancel.setOnClickListener(handler);
+        dateBtn.setOnClickListener(handler);
+        start = -1;
+        end = -1;
+    }
+
+
     View.OnClickListener handler = new View.OnClickListener() {
         @Override
         /**
@@ -166,70 +205,11 @@ public class CreateLecture extends AppCompatActivity {
 
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.create_lecture);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            thread=new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        c = createConnection();
-                    }
-                    catch (IOException e){
-                        Toast.makeText(CreateLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }
-            });
-            thread.start();
-            lectName = (TextView) findViewById(R.id.lecture_header);
-            roomName = (TextView) findViewById(R.id.room_header);
-            lecture = (EditText) findViewById(R.id.nametxt);
-            room = (EditText) findViewById(R.id.roomtxt);
-            startTime = (Button) findViewById(R.id.startbtn);
-            endTime = (Button) findViewById(R.id.endbtn);
-            done = (Button) findViewById(R.id.donebtn);
-            cancel = (Button) findViewById(R.id.cancelbtn);
-            dateBtn = (Button) findViewById(R.id.datebtn);
-            startTime.setOnClickListener(handler);
-            endTime.setOnClickListener(handler);
-            done.setOnClickListener(handler);
-            cancel.setOnClickListener(handler);
-            dateBtn.setOnClickListener(handler);
-            start = -1;
-            end = -1;
-    }
-
-    public Connection createConnection() throws IOException{
-        return new Connection();
-    }
 
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         InitiateSubjects.subjectArray = new ArrayList<>();
         return true;
-    }
-
-    @Override
-    public void onDestroy(){
-            thread=new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                    c.close();
-                }catch (IOException e) {
-                    e.printStackTrace();
-            }
-        }
-            });
-        thread.start();
-        InitiateSubjects.subjectArray.clear();
-        date = null;
-        start = -1;
-        end = -1;
-        super.onDestroy();
     }
 
     public static ArrayList<Subject> getSubjectsArray() {
@@ -247,5 +227,25 @@ public class CreateLecture extends AppCompatActivity {
     public void addSubjectClick(View view) {
         Intent intent = new Intent(CreateLecture.this, InitiateSubjects.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroy(){
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    c.close();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        InitiateSubjects.subjectArray.clear();
+        date = null;
+        start = -1;
+        end = -1;
+        super.onDestroy();
     }
 }

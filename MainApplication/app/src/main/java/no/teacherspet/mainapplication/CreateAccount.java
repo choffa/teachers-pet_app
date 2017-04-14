@@ -40,7 +40,7 @@ public class CreateAccount extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    c = createConnection();
+                    c = new Connection();
                 }
                 catch (IOException e){
                     Toast.makeText(CreateAccount.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
@@ -60,8 +60,36 @@ public class CreateAccount extends AppCompatActivity {
             password_confirm.setText("");
         }
 
-    public Connection createConnection() throws IOException{
-        return new Connection();
+
+    public void onCreateBtnClick(View v){
+        try {
+            if (password.getText().toString().equals(password_confirm.getText().toString())) {
+                if (c.checkUsername(md5(userName.getText().toString()))) {
+                    Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
+                } else {
+                    try {
+                        RoleSelect.professors.put(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        c.createUser(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        RoleSelect.isValidated=true;
+                        RoleSelect.ProfessorID=this.userName.getText().toString();
+                        finish();
+                        Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
+                        startActivity(intent);
+                    } catch (NoSuchAlgorithmException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_SHORT).show();
+            }
+
+        }catch (IOException e){
+            Toast.makeText(CreateAccount.this,"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -97,35 +125,19 @@ public class CreateAccount extends AppCompatActivity {
         return convertToHex(sha1hash);
     }
 
-    public void onCreateBtnClick(View v){
-        try {
-            if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                if (c.checkUsername(md5(userName.getText().toString()))) {
-                    Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
-                } else {
-                    try {
-                        RoleSelect.professors.put(md5(userName.getText().toString()), SHA1(password.getText().toString()));
-                        c.createUser(md5(userName.getText().toString()), SHA1(password.getText().toString()));
-                        RoleSelect.isValidated=true;
-                        RoleSelect.ProfessorID=this.userName.getText().toString();
-                        finish();
-                        Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
-                        startActivity(intent);
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                Toast.makeText(CreateAccount.this, "Passwords must match", Toast.LENGTH_SHORT).show();
-            }
-
-        }catch (IOException e){
-            Toast.makeText(CreateAccount.this,"Noe gikk galt med tilkoblingen til server",Toast.LENGTH_LONG).show();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Converts a String using the md5 hash
+     * @param id: The String to be converted
+     * @return a hashed String
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
+    protected String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest md=MessageDigest.getInstance("MD5");
+        byte[] idBytes=id.getBytes("iso-8859-1");
+        md.update(idBytes,0,idBytes.length);
+        byte[] md5Hash=md.digest();
+        return convertToHex(md5Hash);
     }
 
     /**
@@ -143,21 +155,6 @@ public class CreateAccount extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
-    }
-
-    /**
-     * Converts a String using the md5 hash
-     * @param id: The String to be converted
-     * @return a hashed String
-     * @throws NoSuchAlgorithmException
-     * @throws UnsupportedEncodingException
-     */
-    protected String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest md=MessageDigest.getInstance("MD5");
-        byte[] idBytes=id.getBytes("iso-8859-1");
-        md.update(idBytes,0,idBytes.length);
-        byte[] md5Hash=md.digest();
-        return convertToHex(md5Hash);
     }
 
     @Override
