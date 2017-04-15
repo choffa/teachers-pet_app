@@ -48,21 +48,21 @@ public class CreateAccount extends AppCompatActivity {
                 }
             }
             });
-            thread.start();
+        thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         setTitle("Create a new account");
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            userName= (EditText) findViewById(R.id.email);
-            userName.setText("");
-            password= (EditText) findViewById(R.id.password);
-            password.setText("");
-            password_confirm= (EditText) findViewById(R.id.password_confirmation);
-            password_confirm.setText("");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        userName= (EditText) findViewById(R.id.email);
+        userName.setText("");
+        password= (EditText) findViewById(R.id.password);
+        password.setText("");
+        password_confirm= (EditText) findViewById(R.id.password_confirmation);
+        password_confirm.setText("");
         }
 
 

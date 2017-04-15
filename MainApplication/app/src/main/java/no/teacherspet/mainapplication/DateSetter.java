@@ -13,6 +13,10 @@ import java.util.Locale;
 public class DateSetter extends AppCompatActivity {
     DatePicker calendar;
 
+    /**
+     * Creates the activity. Sets the calendar's date to the last date selected if it exists.
+     * @param SavedInstanceState
+     */
     public void onCreate(Bundle SavedInstanceState){
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.datesetter);
@@ -26,6 +30,11 @@ public class DateSetter extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the "Done"-button. Sets the static Date in CreateLecture to the selected date from the DatePicker,
+     * as well as updating the text on the Date button.
+     * @param v
+     */
     public void dateSetterDone(View v){
         CreateLecture.setDate(new Date(calendar.getYear(),calendar.getMonth(),calendar.getDayOfMonth()));
         Date date = CreateLecture.getDate();

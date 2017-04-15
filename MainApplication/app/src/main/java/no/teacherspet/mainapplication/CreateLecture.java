@@ -67,7 +67,7 @@ public class CreateLecture extends AppCompatActivity {
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(CreateLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateLecture.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -99,8 +99,8 @@ public class CreateLecture extends AppCompatActivity {
 
     View.OnClickListener handler = new View.OnClickListener() {
         @Override
-        /**
-         * Handles the different buttons and initiates the different activity methods
+        /*
+          Handles the different buttons and initiates the different activity methods
          */
         public void onClick(View v) {
             switch(v.getId()){
@@ -193,17 +193,8 @@ public class CreateLecture extends AppCompatActivity {
     private void dateSelect() {
         Intent getCalendar=new Intent(getApplicationContext(),DateSetter.class);
         startActivity(getCalendar);
-
-    }
-    public boolean onOptionsItemSelected(MenuItem item){
-        finish();
-        InitiateSubjects.subjectArray = new ArrayList<>();
-        return true;
     }
 
-    public static ArrayList<Subject> getSubjectsArray() {
-        return subjectsArray;
-    }
 
     public static void setSubjectsArray(ArrayList<Subject> subjectsArray) {
         CreateLecture.subjectsArray = subjectsArray;
@@ -216,6 +207,11 @@ public class CreateLecture extends AppCompatActivity {
     public void addSubjectClick(View view) {
         Intent intent = new Intent(CreateLecture.this, InitiateSubjects.class);
         startActivity(intent);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
     }
 
     @Override

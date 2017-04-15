@@ -17,9 +17,6 @@ import java.util.ArrayList;
 import backend.Lecture;
 import frontend.Connection;
 
-/**
- * Created by magnus on 22.02.2017.
- */
 
 public class StudentLectureList extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class StudentLectureList extends AppCompatActivity {
                 try {
                     c = new Connection();
                 } catch (IOException e) {
-                    Toast.makeText(StudentLectureList.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StudentLectureList.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
                     noConnection = false;
                     finish();
                 }
@@ -67,7 +64,7 @@ public class StudentLectureList extends AppCompatActivity {
                 L = (Lecture) list_view.getItemAtPosition(position);
                 ID = L.getID();
                 Name = L.getCourseID();
-                Intent myIntent = new Intent(getApplicationContext(), StudentRating.class);
+                Intent myIntent = new Intent(StudentLectureList.this, StudentRating.class);
                 startActivity(myIntent);
             }
         });
@@ -88,8 +85,6 @@ public class StudentLectureList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
-
-
     }
 
     @Override
