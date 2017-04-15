@@ -71,7 +71,6 @@ public class EditLecture extends AppCompatActivity{
                     Position = position;
                     Name = SI.getName();
                     Comment = SI.getComment();
-                    AddSubject.setID(Position);
                     startOnClickMethod();
 
 

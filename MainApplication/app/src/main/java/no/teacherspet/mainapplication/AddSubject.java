@@ -15,7 +15,7 @@ import android.widget.Toast;
  */
 
 public class AddSubject extends AppCompatActivity {
-    static int ID;
+
     String name;
     String comment;
     TextView nameTextview;
@@ -59,14 +59,6 @@ public class AddSubject extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         finish();
         return true;
-    }
-
-    public static int getID() {
-        return ID;
-    }
-
-    public static void setID(int ID) {
-        AddSubject.ID = ID;
     }
 
     /**

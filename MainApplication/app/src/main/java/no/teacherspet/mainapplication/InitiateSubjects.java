@@ -43,7 +43,6 @@ public class InitiateSubjects extends AppCompatActivity{
                 ID = position;
                 Name = SI.getName();
                 Comment = SI.getComment();
-                AddSubject.setID(ID);
                 startOnClickMethod();
 
 
