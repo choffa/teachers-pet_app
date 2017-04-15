@@ -1,10 +1,7 @@
 package no.teacherspet.mainapplication;
 
-import android.app.ActionBar;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +32,7 @@ public class InitiateSubjects extends AppCompatActivity{
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         list_view = (ListView) findViewById(R.id.subject_listview);
-        adapter = new ArrayAdapter<Subject>(this, android.R.layout.simple_list_item_1, subjectArray);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, subjectArray);
         list_view.setAdapter(adapter);
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {

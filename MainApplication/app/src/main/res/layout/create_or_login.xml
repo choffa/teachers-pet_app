@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:text="Back"
         android:layout_below="@+id/createbtn"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="backBtnPressed"/>
 
     <Button
         android:id="@+id/loginbtn"
@@ -21,7 +22,8 @@
         android:layout_alignRight="@+id/createbtn"
         android:layout_alignEnd="@+id/createbtn"
         android:layout_alignLeft="@+id/createbtn"
-        android:layout_alignStart="@+id/createbtn" />
+        android:layout_alignStart="@+id/createbtn"
+        android:onClick="gotoLoginPressed"/>
 
     <Button
         android:id="@+id/createbtn"
@@ -30,5 +32,6 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="30dp"
-        android:text="Create new user" />
+        android:text="Create new user"
+        android:onClick="createBtnPressed"/>
 </RelativeLayout>

@@ -30,13 +30,30 @@ public class EditLecture extends AppCompatActivity{
     static String Comment;
     ListView list_view;
     Connection c;
+    Thread thread;
 
 
     protected void onCreate(Bundle savedInstanceState) {
-        try{
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lecture_edit);
-            c = new Connection();
+            thread=new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c = new Connection();
+                    }
+                    catch (IOException e){
+                        Toast.makeText(EditLecture.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            });
+            thread.start();
+            try {
+                thread.join();
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
             subjectArray = c.getSubjects(ProfessorLectureList.getID());
             originalSize =subjectArray.size();
             changes = new boolean[originalSize+10];
@@ -60,12 +77,8 @@ public class EditLecture extends AppCompatActivity{
 
                 }
             });
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "Error occured while loading page", Toast.LENGTH_LONG).show();
-            finish();
         }
 
-    }
 
     public static int getPosition() {
         return Position;

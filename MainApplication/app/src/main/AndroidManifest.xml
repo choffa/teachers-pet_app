@@ -26,7 +26,7 @@
         </activity>
         <activity android:name=".ProfessorLectureList">
         </activity>
-        <activity android:name=".CreateOrLogIn" android:launchMode="singleInstance">
+        <activity android:name=".CreateOrLogIn">
         </activity>
         <activity android:name=".ProfessorLive" android:screenOrientation="portrait">
         </activity>

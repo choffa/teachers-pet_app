@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,58 +33,68 @@ public class ProfessorLectureList extends AppCompatActivity {
     private String room;
     private Date date;
     private static int ID;
-    Button btn;
-    private Connection c;
+    Thread thread;
+    protected Connection c;
     ListView list_view;
 
     protected void onCreate(Bundle savedInstanceState){
-        try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.lectures);
-            c = new Connection();
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            list_view = (ListView) findViewById(android.R.id.list);
-            adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
-            update();
-            list_view.setAdapter(adapter);
-
-            btn = (Button) findViewById(R.id.createbtn);
-            btn.setOnClickListener(new View.OnClickListener() {
+            thread=new Thread(new Runnable() {
                 @Override
-                public void onClick(View v) {
-                    Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
-                    startActivity(creatingLecture);
+                public void run() {
+                    try {
+                        c = new Connection();
+                    } catch (IOException e) {
+                        Toast.makeText(ProfessorLectureList.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             });
-
-       list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            lecturesArray=c.getLectures(RoleSelect.ProfessorID);
+            ListView list_view = (ListView) findViewById(android.R.id.list);
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lecturesArray);
+            list_view.setAdapter(adapter);
+            list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            @Override
            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                Intent myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
                Lecture L= (Lecture) list_view.getItemAtPosition(position);
                ID=L.getID();
                Name = L.getCourseID();
-               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())){
+               switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())) {
                    case 0:
-                       myIntent=new Intent(ProfessorLectureList.this,LectureStatistics.class);
+                       myIntent = new Intent(ProfessorLectureList.this, LectureStatistics.class);
                        break;
                    case 1:
-                       myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
+                       myIntent = new Intent(ProfessorLectureList.this, ProfessorLive.class);
                        break;
                    case 2:
-                       myIntent=new Intent(ProfessorLectureList.this,EditLecture.class);
+                       myIntent = new Intent(ProfessorLectureList.this, EditLecture.class);
                        break;
                }
-
                ProfessorLive.setID(ID);
                startActivity(myIntent);
            }
        });
-    }catch(IOException e){
-            Toast.makeText(getApplicationContext(),"Error occured while loading page",Toast.LENGTH_LONG).show();
-            finish();
-        }
+    }
+
+    public void createBtnClicked(View v){
+            try {
+                Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
+                startActivity(creatingLecture);
+                c.close();
+            }catch (IOException e){
+                Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
+            }
     }
 
     /**
