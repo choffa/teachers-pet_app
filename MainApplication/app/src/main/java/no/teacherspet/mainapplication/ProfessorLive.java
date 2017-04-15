@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import frontend.Connection;
 
@@ -48,7 +49,7 @@ public class ProfessorLive extends AppCompatActivity {
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(ProfessorLive.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfessorLive.this, "Error occurred when loading page.", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -61,52 +62,49 @@ public class ProfessorLive extends AppCompatActivity {
         }
         mHandler = new Handler();
         startRepeatingTask();
-
-
     }
 
-
+    /**
+     * Updates the activity every mInterval milliseconds.
+     */
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
             try {
                 update(c.getAverageSpeedRating(ID));
             } finally {
-                // 100% guarantee that this always happens, even if
-                // your update method throws an exception
                 mHandler.postDelayed(mStatusChecker, mInterval);
             }
         }
     };
 
+    /**
+     * Starts the live updates.
+     */
     void startRepeatingTask() {
         mStatusChecker.run();
     }
 
+    /**
+     * Stops the live updates.
+     */
     void stopRepeatingTask() {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
-
-    public boolean onOptionsItemSelected(MenuItem item){
-        finish();
-        return true;
-    }
-
+    /**
+     * Updates the activity, if the giver interval is not sufficient.
+     * @param v The button view.
+     */
     public void updateButtonClick(View v){
-
         update(c.getAverageSpeedRating(ID));
-        /*
-        float avg = (float) (Math.random()*40)+10;
-        avg = (float) Math.floor(avg);
-        avg = avg/10;
-        update(avg);
-        */
     }
+
     public void changeToStat(View v){
         Intent myIntent=new Intent(ProfessorLive.this,LectureStatistics.class);
         startActivity(myIntent);
     }
+
     /**
      * Translates a float between 1 and 5 to RGB code in hex scaling from blue to red.
      * @param average Float between 1 and 5
@@ -122,7 +120,6 @@ public class ProfessorLive extends AppCompatActivity {
         //Translates opacity into hex
         opacityColor = Integer.toHexString(255-Math.abs(opacity));
 
-
         if (opacity == 0) {
             ratingColor = "#ffffff";
         } else if (opacity > 255 - 16) {
@@ -135,8 +132,6 @@ public class ProfessorLive extends AppCompatActivity {
             ratingColor = "#" + opacityColor + opacityColor + "ff";
         }
         return ratingColor;
-
-
     }
 
     /**
@@ -162,9 +157,7 @@ public class ProfessorLive extends AppCompatActivity {
      * @param average Float between 1 and 5 with input from the tempo RadioButtons from the associated lecture
      */
     protected void update(float average){
-        //System.out.println(average);
 
-        //Checks to see if the average is between the
         if(average<1||average>5){
             average= (float) 3.0;
         }
@@ -177,9 +170,14 @@ public class ProfessorLive extends AppCompatActivity {
         layout.setBackgroundColor(Color.parseColor(translateColor(average)));
         actionBar.setBackgroundDrawable(new ColorDrawable(darker(Color.parseColor(translateColor(average)), (float) 0.8)));
         text = (TextView) findViewById(R.id.treKommaFem);
-        text.setText(String.format("%.1f",average-3));
+        text.setText(String.format(Locale.ENGLISH,"%.1f",average-3));
         studNum= (TextView) findViewById(R.id.current_rating_num);
         studNum.setText(Integer.toString(c.getTempoVotesInLecture(ID)));
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
     }
 
     @Override
