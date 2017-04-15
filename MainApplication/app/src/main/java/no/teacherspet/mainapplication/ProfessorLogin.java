@@ -41,7 +41,7 @@ public class ProfessorLogin extends AppCompatActivity{
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(ProfessorLogin.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfessorLogin.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
                     noConnection=true;
                     finish();
                 }
@@ -56,6 +56,11 @@ public class ProfessorLogin extends AppCompatActivity{
         UserName = (EditText) findViewById(R.id.login_name);
         Password = (EditText) findViewById(R.id.login_password);
     }
+
+    /**
+     * Checks to see whether the username and password is correct.
+     * @param v The button view.
+     */
     public void loginPressed(View v){
         try {
             if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
@@ -71,12 +76,11 @@ public class ProfessorLogin extends AppCompatActivity{
             } else {
                 Toast.makeText(getApplicationContext(), "There does not exist any registered users with this username", Toast.LENGTH_LONG).show();
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
+
 
     private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md=MessageDigest.getInstance("MD5");
@@ -85,6 +89,7 @@ public class ProfessorLogin extends AppCompatActivity{
         byte[] md5Hash=md.digest();
         return convertToHex(md5Hash);
     }
+
     public static String SHA1(String text) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         byte[] textBytes = text.getBytes("iso-8859-1");
