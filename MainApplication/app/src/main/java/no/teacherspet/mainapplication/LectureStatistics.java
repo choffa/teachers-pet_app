@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -46,7 +45,7 @@ public class LectureStatistics extends AppCompatActivity {
                 subjectAvg.add(c.getAverageSubjectRating(s.getId()));
             }
             subject_list = (ListView) findViewById(R.id.subject_listview);
-            IconicAdapter adapter = new IconicAdapter();
+            StatisticsRowAdapter adapter = new StatisticsRowAdapter();
             subject_list.setAdapter(adapter);
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,11 +53,14 @@ public class LectureStatistics extends AppCompatActivity {
     }
 
     public void onListItemClick(ListView parent, View v, int position, long id) {
-        //TODO
+        //TODO show the statistics for the chosen subject
     }
 
-    class IconicAdapter extends ArrayAdapter<Subject> {
-        IconicAdapter() {
+    /**
+     * The adapter for the custom statistics rows.
+     */
+    private class StatisticsRowAdapter extends ArrayAdapter<Subject> {
+        StatisticsRowAdapter() {
             super(LectureStatistics.this, R.layout.lecture_stat_row, subjectArray);
         }
 
@@ -69,12 +71,10 @@ public class LectureStatistics extends AppCompatActivity {
                 LayoutInflater inflater=getLayoutInflater();
                 row=inflater.inflate(R.layout.lecture_stat_row, parent, false);
             }
-            TextView label=(TextView)row.findViewById(R.id.label);
-            label.setText(subjectArray.get(position).getName());
+            TextView subjectName=(TextView)row.findViewById(R.id.label);
+            subjectName.setText(subjectArray.get(position).getName());
             RatingBar ratingIndicator = (RatingBar) row.findViewById(R.id.sub_avg_ratingbar);
             ratingIndicator.setRating(subjectAvg.get(position));
-
-
             return(row);
         }
     }
