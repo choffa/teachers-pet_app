@@ -70,20 +70,24 @@ public class AddSubject extends AppCompatActivity {
             Toast.makeText(this, "All subjects need to have a name", Toast.LENGTH_SHORT).show();
         }else {
             if (intent != null) {
-                if (origin.equals("InitiateSubjects")) {
-                    InitiateSubjects.setName(nameTextview.getText().toString());
-                    InitiateSubjects.setComment(commentTextview.getText().toString());
-                    InitiateSubjects.addToSubjectArray();
-                    InitiateSubjects.adapter.notifyDataSetChanged();
-                    finish();
-                } else if (origin.equals("EditLecture")) {
-                    EditLecture.setName(nameTextview.getText().toString());
-                    EditLecture.setComment(commentTextview.getText().toString());
-                    EditLecture.addToSubjectArray();
-                    EditLecture.adapter.notifyDataSetChanged();
-                    finish();
-                } else {
-                    Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+                switch (origin) {
+                    case "InitiateSubjects":
+                        InitiateSubjects.setName(nameTextview.getText().toString());
+                        InitiateSubjects.setComment(commentTextview.getText().toString());
+                        InitiateSubjects.addToSubjectArray();
+                        InitiateSubjects.adapter.notifyDataSetChanged();
+                        finish();
+                        break;
+                    case "EditLecture":
+                        EditLecture.setName(nameTextview.getText().toString());
+                        EditLecture.setComment(commentTextview.getText().toString());
+                        EditLecture.addToSubjectArray();
+                        EditLecture.adapter.notifyDataSetChanged();
+                        finish();
+                        break;
+                    default:
+                        Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+                        break;
                 }
             } else {
                 Toast.makeText(AddSubject.this, "Intent is NULL", Toast.LENGTH_LONG).show();

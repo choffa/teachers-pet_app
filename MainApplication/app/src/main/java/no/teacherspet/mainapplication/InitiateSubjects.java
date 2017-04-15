@@ -20,7 +20,7 @@ import frontend.Subject;
 public class InitiateSubjects extends AppCompatActivity{
     public static ArrayList<Subject> subjectArray = new ArrayList<>();
     public static ArrayAdapter<Subject> adapter;
-    static int ID;
+    static int Position;
     static String Name;
     static String Comment;
     ListView list_view;
@@ -40,51 +40,14 @@ public class InitiateSubjects extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Subject SI= (Subject) list_view.getItemAtPosition(position);
-                ID = position;
+                Position = position;
                 Name = SI.getName();
                 Comment = SI.getComment();
                 startOnClickMethod();
-
-
             }
         });
 
 
-    }
-
-    public static int getID() {
-        return ID;
-    }
-
-    public static String getName() {
-        return Name;
-    }
-
-    public static String getComment() {
-        return Comment;
-    }
-
-    public static void setID(int ID) {
-        InitiateSubjects.ID = ID;
-    }
-
-    public static void setName(String name) {
-        Name = name;
-    }
-
-    public static void setComment(String comment) {
-        Comment = comment;
-    }
-
-    public void addItems(View v){
-        //  listItems.add(Name);
-        subjectArray.add(new Subject(Name,Comment));
-        adapter.notifyDataSetChanged();
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        finish();
-        return true;
     }
 
     /**
@@ -97,38 +60,63 @@ public class InitiateSubjects extends AppCompatActivity{
 
     }
 
-
     /**
      * Handles the Add New Subject button
      * Resets the static fields before starting startOnClickMethod.
      * @param view
      */
     public void addNewSubjectClick(View view) {
-        setID(-1);
+        setPosition(-1);
         setName(null);
         setComment(null);
         startOnClickMethod();
     }
 
     /**
-     * Adds new subject to the array, or edits an existing one, depending on action taken.
+     * Adds new subject to the array, or edits an existing one, depending on action taken. Called from AddSubject.
      */
     public static void addToSubjectArray(){
-        if(ID ==-1){
+        if(Position ==-1){
             subjectArray.add(new Subject(Name,Comment));
-            // int lastIndex = subjectArray.size()-1;
-            // subjectArray.get(lastIndex).setLocalID(lastIndex);
         }else{
-            Subject curSub= subjectArray.get(ID);
+            Subject curSub= subjectArray.get(Position);
             curSub.setName(Name);
             curSub.setComment(Comment);
         }
-        //adapter.notifyDataSetChanged();
     }
 
     public void finishedClick(View view) {
         CreateLecture.setSubjectsArray(subjectArray);
         finish();
+    }
+
+    public static int getPosition() {
+        return Position;
+    }
+
+    public static String getName() {
+        return Name;
+    }
+
+    public static String getComment() {
+        return Comment;
+    }
+
+    public static void setPosition(int position) {
+        InitiateSubjects.Position = position;
+    }
+
+    public static void setName(String name) {
+        Name = name;
+    }
+
+    public static void setComment(String comment) {
+        Comment = comment;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        finish();
+        return true;
     }
 
 }
