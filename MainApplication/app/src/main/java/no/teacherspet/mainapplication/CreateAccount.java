@@ -154,15 +154,8 @@ public class CreateAccount extends AppCompatActivity {
      * @return
      */
     public boolean onOptionsItemSelected(MenuItem item) {
-        try{
-            c.close();
-            finish();
-            return true;
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
     }
 
     @Override

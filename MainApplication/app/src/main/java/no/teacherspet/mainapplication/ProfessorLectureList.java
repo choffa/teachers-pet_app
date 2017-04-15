@@ -88,13 +88,8 @@ public class ProfessorLectureList extends AppCompatActivity {
     }
 
     public void createBtnClicked(View v){
-            try {
-                Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
-                startActivity(creatingLecture);
-                c.close();
-            }catch (IOException e){
-                Toast.makeText(getApplicationContext(),"Noe gikk galt med lukking av kobling til server",Toast.LENGTH_LONG).show();
-            }
+        Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
+        startActivity(creatingLecture);
     }
 
     /**

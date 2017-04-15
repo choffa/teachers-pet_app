@@ -259,12 +259,7 @@ class RowModel {
 
 
     public boolean onOptionsItemSelected(MenuItem item){
-        try {
-            c.close();
-            finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        finish();
         return true;
 
     }

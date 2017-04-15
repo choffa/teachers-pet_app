@@ -107,14 +107,8 @@ public class ProfessorLogin extends AppCompatActivity{
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        try {
-            c.close();
-            finish();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
     }
 
     @Override

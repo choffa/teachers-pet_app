@@ -137,12 +137,7 @@ public class CreateLecture extends AppCompatActivity {
                     }
                     break;
                 case(R.id.cancelbtn):
-                    try {
-                        c.close();
-                        finish();
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
+                    finish();
                     break;
             }
         }
