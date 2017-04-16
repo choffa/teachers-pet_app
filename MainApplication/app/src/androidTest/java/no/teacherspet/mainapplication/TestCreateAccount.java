@@ -57,8 +57,8 @@ public class TestCreateAccount{
                 passwordConfirm.setText("TEST");
             }
         });
-        onView(withId(R.id.createbtn)).perform(click());
-        onView(withId(R.id.createbtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.account_createbtn)).perform(click());
+        onView(withId(R.id.account_createbtn)).check(ViewAssertions.matches(isDisplayed()));
         createAcc.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -70,8 +70,8 @@ public class TestCreateAccount{
                 passwordConfirm.setText("b");
             }
         });
-        onView(withId(R.id.createbtn)).perform(click());
-        onView(withId(R.id.createbtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.account_createbtn)).perform(click());
+        onView(withId(R.id.account_createbtn)).check(ViewAssertions.matches(isDisplayed()));
     }
 
     @Test
@@ -80,7 +80,6 @@ public class TestCreateAccount{
             @Override
             public void run() {
                 EditText userName= (EditText) createAcc.findViewById(R.id.email);
-
                 userName.setText(randomUUID().toString());
                 EditText password= (EditText) createAcc.findViewById(R.id.password);
                 password.setText("b");
@@ -88,7 +87,7 @@ public class TestCreateAccount{
                 passwordConfirm.setText("b");
             }
         });
-        onView(withId(R.id.createbtn)).perform(click());
+        onView(withId(R.id.account_createbtn)).perform(click());
         Activity loggedIn=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertNotNull(loggedIn);
     }
