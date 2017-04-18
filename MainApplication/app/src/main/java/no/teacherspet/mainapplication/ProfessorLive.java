@@ -32,15 +32,22 @@ public class ProfessorLive extends AppCompatActivity {
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
+    ActionBar actionBar;
+    RelativeLayout layout;
+    TextView text;
+    TextView studNum;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.professor_live);
-        ActionBar actionBar = getSupportActionBar();
+        layout = (RelativeLayout) findViewById(R.id.profRelLayout);
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
+        text = (TextView) findViewById(R.id.treKommaFem);
+        studNum= (TextView) findViewById(R.id.current_rating_num);
         setID(ProfessorLectureList.getID());
         thread=new Thread(new Runnable() {
             @Override
@@ -161,17 +168,9 @@ public class ProfessorLive extends AppCompatActivity {
         if(average<1||average>5){
             average= (float) 3.0;
         }
-        RelativeLayout layout;
-        TextView text;
-        TextView studNum;
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-        layout = (RelativeLayout) findViewById(R.id.profRelLayout);
         layout.setBackgroundColor(Color.parseColor(translateColor(average)));
         actionBar.setBackgroundDrawable(new ColorDrawable(darker(Color.parseColor(translateColor(average)), (float) 0.8)));
-        text = (TextView) findViewById(R.id.treKommaFem);
         text.setText(String.format(Locale.ENGLISH,"%.1f",average-3));
-        studNum= (TextView) findViewById(R.id.current_rating_num);
         studNum.setText(Integer.toString(c.getTempoVotesInLecture(ID)));
     }
 
