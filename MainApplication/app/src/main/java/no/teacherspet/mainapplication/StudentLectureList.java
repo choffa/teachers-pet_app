@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,10 +111,10 @@ public class StudentLectureList extends AppCompatActivity {
             TextView date = (TextView) row.findViewById(R.id.date_textView);
             courseID.setText(lecturesArray.get(position).getCourseID());
             room.setText(lecturesArray.get(position).getRoom());
-            time.setText(lecturesArray.get(position).getStart()+":15 - " + lecturesArray.get(position).getEnd());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.ENGLISH);
+            time.setText(lecturesArray.get(position).getStart()+":15 - " + lecturesArray.get(position).getEnd()+":00");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd.MM.yy", Locale.ENGLISH);
             Date lectureDate = lecturesArray.get(position).getDate();
-            lectureDate.setYear(lectureDate.getYear()-1900);
+            lectureDate.setYear(lectureDate.getYear());
             String text = dateFormat.format(lectureDate);
             date.setText(text);
             return(row);
