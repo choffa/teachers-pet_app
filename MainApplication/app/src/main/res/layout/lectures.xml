@@ -3,14 +3,14 @@
     android:id="@+id/lectures_stud"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_margin="3dp">
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/createbtn"
-        android:layout_weight="0.76" />
+        />
 
     <Button
         android:id="@+id/createbtn"

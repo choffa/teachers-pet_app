@@ -71,7 +71,7 @@ public class ProfessorLectureList extends AppCompatActivity {
      * @param listView The ListView to set the logic for.
      * @param listAdapter The ListAdapter to override onItemClick for.
      */
-    private void initiateListAdapter(ListView listView, ListAdapter listAdapter){
+    private void initiateListAdapter(final ListView listView, ListAdapter listAdapter){
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

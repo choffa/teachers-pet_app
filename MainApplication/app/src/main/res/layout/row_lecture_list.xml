@@ -3,7 +3,8 @@
     android:id="@+id/lectureRow_relLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/rounded_rectangle">
 
     <TextView
         android:id="@+id/roomTextView"
@@ -13,8 +14,7 @@
         android:layout_alignParentTop="true"
         android:maxLength="12"
         android:text="Room"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/lectureName_textView"
@@ -29,18 +29,20 @@
 
     <TextView
         android:id="@+id/time_textView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/lectureName_textView"
-        android:layout_toStartOf="@+id/date_textView"
+        android:paddingRight="10dp"
         android:text="HH:MM" />
 
     <TextView
         android:id="@+id/date_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lectureName_textView"
-        android:layout_toStartOf="@+id/roomTextView"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textAlignment="viewStart"
+        android:layout_alignBaseline="@+id/time_textView"
+        android:layout_alignBottom="@+id/time_textView"
+        android:layout_toEndOf="@+id/time_textView" />
 </RelativeLayout>
