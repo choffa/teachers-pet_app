@@ -145,7 +145,7 @@ class RatingAdapter extends ArrayAdapter {
         super(StudentRating.this, R.layout.student_rating_row, list);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ViewWrapper wrapper;
         RatingBar rate;

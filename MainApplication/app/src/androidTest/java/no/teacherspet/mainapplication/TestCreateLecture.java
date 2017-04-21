@@ -63,7 +63,7 @@ public class TestCreateLecture{
     public void shouldSaveCurrentDateOnClick(){
         timeMonitor = getInstrumentation().addMonitor(DateSetter.class.getName(),null,false);
         onView(withId(R.id.datebtn)).perform(click());
-        Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        final Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(ds,instanceOf(DateSetter.class));
         onView(withId(R.id.datePicker)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.confirmDateBtn)).check(ViewAssertions.matches(isDisplayed()));
@@ -71,18 +71,18 @@ public class TestCreateLecture{
             @Override
             public void run() {
                 DatePicker dp= (DatePicker) ds.findViewById(R.id.datePicker);
-                dp.updateDate(2017,4,27);
+                dp.updateDate(2017,3,27);
             }
         });
         onView(withId(R.id.confirmDateBtn)).perform(click());
-        assertEquals("Date of lecture: Thursday 27 apr 2017",((Button) cl.findViewById(R.id.datebtn)).getText().toString());
+        assertEquals("Date of lecture: Thursday 27 Apr 2017",((Button) cl.findViewById(R.id.datebtn)).getText().toString());
     }
 
     @Test
     public void shouldSaveCurrentStartTimeOnClick(){
         timeMonitor = getInstrumentation().addMonitor(TimeSetter.class.getName(),null,false);
         onView(withId(R.id.startbtn)).perform(click());
-        Activity tsStart = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        final Activity tsStart = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(tsStart,instanceOf(TimeSetter.class));
         onView(withId(R.id.timePicker)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.okbtn)).check(ViewAssertions.matches(isDisplayed()));
@@ -104,7 +104,7 @@ public class TestCreateLecture{
     public void shouldSaveCurrentEndTimeOnClick(){
         timeMonitor = getInstrumentation().addMonitor(TimeSetter.class.getName(),null,false);
         onView(withId(R.id.endbtn)).perform(click());
-        Activity ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        final Activity ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(ts,instanceOf(TimeSetter.class));
         ts.runOnUiThread(new Runnable() {
             @Override

@@ -56,7 +56,7 @@ public class StudentLectureList extends AppCompatActivity {
         }
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        ListView list_view = (ListView) findViewById(android.R.id.list);
+        final ListView list_view = (ListView) findViewById(android.R.id.list);
         lecturesArray = c.getLectures();
         adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
         list_view.setAdapter(adapter);

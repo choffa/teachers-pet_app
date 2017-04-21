@@ -45,25 +45,23 @@ public class TestCreateOrLogin {
 
     @Test
     public void shouldGoToLoginScreen(){
-        onView(withId(R.id.loginbtn)).perform(click());
         timeMonitor=getInstrumentation().addMonitor(ProfessorLogin.class.getName(),null,false);
+        onView(withId(R.id.loginbtn)).perform(click());
         Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(ds,instanceOf(ProfessorLogin.class));
     }
 
     @Test
     public void shouldGoToCreateAccountScreen(){
-        onView(withId(R.id.createbtn)).perform(click());
         timeMonitor=getInstrumentation().addMonitor(CreateAccount.class.getName(),null,false);
+        onView(withId(R.id.createbtn)).perform(click());
         Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(ds,instanceOf(CreateAccount.class));
     }
 
     @Test
-    public void shouldGoToRoleSelect(){
+    public void shouldExitActivity(){
         onView(withId(R.id.backbtn)).perform(click());
-        timeMonitor=getInstrumentation().addMonitor(RoleSelect.class.getName(),null,false);
-        Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
-        assertThat(ds,instanceOf(RoleSelect.class));
+        onView(withId(R.id.backbtn)).check(ViewAssertions.doesNotExist());
     }
 }
