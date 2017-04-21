@@ -2,6 +2,7 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -45,8 +46,7 @@ public class StudentLectureList extends AppCompatActivity {
                 try {
                     c = new Connection();
                 } catch (IOException e) {
-                    Toast.makeText(StudentLectureList.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
-                    noConnection = false;
+                    noConnection = true;
                     finish();
                 }
             }
@@ -60,7 +60,9 @@ public class StudentLectureList extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         ListView list_view = (ListView) findViewById(android.R.id.list);
-        lecturesArray = c.getLectures();
+        if(!noConnection) {
+            lecturesArray = c.getLectures();
+        }
         adapter = new LectureRowAdapter();
         list_view.setAdapter(adapter);
 
@@ -122,13 +124,22 @@ public class StudentLectureList extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        try {
-            if (!noConnection) {
-                c.close();
+    public void onDestroy(){
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    if(!noConnection) {
+                        c.close();
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        });
+        thread.start();
+        if(noConnection){
+            Toast.makeText(StudentLectureList.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }

@@ -41,7 +41,6 @@ public class ProfessorLogin extends AppCompatActivity{
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(ProfessorLogin.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
                     noConnection=true;
                     finish();
                 }
@@ -118,12 +117,21 @@ public class ProfessorLogin extends AppCompatActivity{
 
     @Override
     public void onDestroy(){
-        try {
-            if(!noConnection) {
-                c.close();
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    if(!noConnection) {
+                        c.close();
+                    }
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        });
+        thread.start();
+        if(noConnection){
+            Toast.makeText(ProfessorLogin.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }
