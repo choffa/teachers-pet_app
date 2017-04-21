@@ -19,6 +19,7 @@
         android:ems="10"
         android:hint="@string/courseIDHint"
         android:inputType="textCapCharacters|textCapWords|textCapSentences"
+        android:maxLength="12"
         android:textSize="30sp" />
 
     <TextView
@@ -36,6 +37,7 @@
         android:ems="10"
         android:hint="@string/write_roomnumber_here"
         android:inputType="textCapWords"
+        android:maxLength="12"
         android:textSize="30sp" />
 
     <Button

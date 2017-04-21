@@ -4,19 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import backend.Lecture;
 import frontend.Connection;
@@ -28,7 +31,7 @@ import frontend.Connection;
 public class ProfessorLectureList extends AppCompatActivity {
 
     static ArrayList<Lecture> lecturesArray=new ArrayList<>();
-    public static ArrayAdapter<Lecture> adapter;
+    public static LectureRowAdapter adapter;
     private static String Name;
     private static int ID;
     Thread thread;
@@ -44,7 +47,7 @@ public class ProfessorLectureList extends AppCompatActivity {
                 try {
                     c = new Connection();
                 } catch (IOException e) {
-                    Toast.makeText(ProfessorLectureList.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfessorLectureList.this, "Error while loading page", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
@@ -59,7 +62,7 @@ public class ProfessorLectureList extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         lecturesArray=c.getLectures(RoleSelect.ProfessorID);
         list_view = (ListView) findViewById(android.R.id.list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, lecturesArray);
+        adapter = new LectureRowAdapter();
         initiateListAdapter(list_view,adapter);
     }
 
@@ -68,7 +71,7 @@ public class ProfessorLectureList extends AppCompatActivity {
      * @param listView The ListView to set the logic for.
      * @param listAdapter The ListAdapter to override onItemClick for.
      */
-    private void initiateListAdapter(ListView listView, ListAdapter listAdapter){
+    private void initiateListAdapter(final ListView listView, ListAdapter listAdapter){
         listView.setAdapter(listAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,6 +95,34 @@ public class ProfessorLectureList extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
+    }
+
+    private class LectureRowAdapter extends ArrayAdapter<Lecture> {
+        LectureRowAdapter() {
+            super(ProfessorLectureList.this, R.layout.row_lecture_list, lecturesArray);
+        }
+
+        public View getView(int position, View convertView,
+                            ViewGroup parent) {
+            View row=convertView;
+            if(row==null) {
+                LayoutInflater inflater=getLayoutInflater();
+                row=inflater.inflate(R.layout.row_lecture_list, parent, false);
+            }
+            TextView courseID=(TextView)row.findViewById(R.id.lectureName_textView);
+            TextView room = (TextView) row.findViewById(R.id.roomTextView);
+            TextView time = (TextView) row.findViewById(R.id.time_textView);
+            TextView date = (TextView) row.findViewById(R.id.date_textView);
+            courseID.setText(lecturesArray.get(position).getCourseID());
+            room.setText(lecturesArray.get(position).getRoom());
+            time.setText(lecturesArray.get(position).getStart()+":15 - " + lecturesArray.get(position).getEnd()+":00");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd.MM.yy", Locale.ENGLISH);
+            Date lectureDate = lecturesArray.get(position).getDate();
+            lectureDate.setYear(lectureDate.getYear());
+            String text = dateFormat.format(lectureDate);
+            date.setText(text);
+            return(row);
+        }
     }
 
     public void createBtnClicked(View v){

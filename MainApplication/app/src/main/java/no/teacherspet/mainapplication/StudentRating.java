@@ -15,13 +15,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import backend.Lecture;
 import frontend.Connection;
@@ -168,7 +166,7 @@ public class StudentRating extends AppCompatActivity{
                                     RowModel model = getModel(myPosition);
                                     model.rating = rating;
                                     currentSub = subjects.get(myPosition);
-                                    c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "");
+                                    c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "GTFO");
                                     Toast.makeText(StudentRating.this, "You have rated " + currentSub.getName().trim() + " a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
                                 }
                             }

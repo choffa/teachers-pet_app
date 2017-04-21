@@ -4,15 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import backend.Lecture;
 import frontend.Connection;
@@ -21,7 +27,7 @@ import frontend.Connection;
 public class StudentLectureList extends AppCompatActivity {
 
     static ArrayList<Lecture> lecturesArray = ProfessorLectureList.lecturesArray;
-    public static ArrayAdapter<Lecture> adapter;
+    public static LectureRowAdapter adapter;
     private static int ID;
     private static Lecture L;
     private static String Name;
@@ -55,7 +61,7 @@ public class StudentLectureList extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         ListView list_view = (ListView) findViewById(android.R.id.list);
         lecturesArray = c.getLectures();
-        adapter = new ArrayAdapter<Lecture>(this, android.R.layout.simple_list_item_1, lecturesArray);
+        adapter = new LectureRowAdapter();
         list_view.setAdapter(adapter);
 
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -85,6 +91,34 @@ public class StudentLectureList extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
+    }
+
+    private class LectureRowAdapter extends ArrayAdapter<Lecture> {
+        LectureRowAdapter() {
+            super(StudentLectureList.this, R.layout.row_lecture_list, lecturesArray);
+        }
+
+        public View getView(int position, View convertView,
+                            ViewGroup parent) {
+            View row=convertView;
+            if(row==null) {
+                LayoutInflater inflater=getLayoutInflater();
+                row=inflater.inflate(R.layout.row_lecture_list, parent, false);
+            }
+            TextView courseID=(TextView)row.findViewById(R.id.lectureName_textView);
+            TextView room = (TextView) row.findViewById(R.id.roomTextView);
+            TextView time = (TextView) row.findViewById(R.id.time_textView);
+            TextView date = (TextView) row.findViewById(R.id.date_textView);
+            courseID.setText(lecturesArray.get(position).getCourseID());
+            room.setText(lecturesArray.get(position).getRoom());
+            time.setText(lecturesArray.get(position).getStart()+":15 - " + lecturesArray.get(position).getEnd()+":00");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd.MM.yy", Locale.ENGLISH);
+            Date lectureDate = lecturesArray.get(position).getDate();
+            lectureDate.setYear(lectureDate.getYear());
+            String text = dateFormat.format(lectureDate);
+            date.setText(text);
+            return(row);
+        }
     }
 
     @Override
