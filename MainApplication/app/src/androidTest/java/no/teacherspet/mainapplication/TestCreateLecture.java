@@ -6,6 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import org.junit.Before;
@@ -36,9 +37,8 @@ public class TestCreateLecture{
 
     @Mock
     private static Connection c;
-    private Activity ts;
     private CreateLecture cl;
-    Instrumentation.ActivityMonitor timeMonitor = getInstrumentation().addMonitor(TimeSetter.class.getName(),null,false);
+    Instrumentation.ActivityMonitor timeMonitor;
 
     @Before
     public void setUp() throws Exception{
@@ -47,21 +47,50 @@ public class TestCreateLecture{
 
     @Test
     public void shouldBeAbleToLaunchScreen(){
-        onView(withId(R.id.startbtn)).perform(click());
-        ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
-        assertThat(ts,instanceOf(TimeSetter.class));
-        onView(withId(R.id.timePicker)).check(ViewAssertions.matches(isDisplayed()));
-        onView(withId(R.id.okbtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.lecture_header)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.nametxt)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.room_header)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.roomtxt)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.datebtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.startbtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.endbtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.subjectBtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.donebtn)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.cancelbtn)).check(ViewAssertions.matches(isDisplayed()));
     }
+
     @Test
-    public void shouldSaveCurrentStartTimeOnClick(){
-        onView(withId(R.id.startbtn)).perform(click());
-        ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
-        assertThat(ts,instanceOf(TimeSetter.class));
-        ts.runOnUiThread(new Runnable() {
+    public void shouldSaveCurrentDateOnClick(){
+        timeMonitor = getInstrumentation().addMonitor(DateSetter.class.getName(),null,false);
+        onView(withId(R.id.datebtn)).perform(click());
+        final Activity ds=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        assertThat(ds,instanceOf(DateSetter.class));
+        onView(withId(R.id.datePicker)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.confirmDateBtn)).check(ViewAssertions.matches(isDisplayed()));
+        ds.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                TimePicker tp = (TimePicker) ts.findViewById(R.id.timePicker);
+                DatePicker dp= (DatePicker) ds.findViewById(R.id.datePicker);
+                dp.updateDate(2017,3,27);
+            }
+        });
+        onView(withId(R.id.confirmDateBtn)).perform(click());
+        assertEquals("Date of lecture: Thursday 27 Apr 2017",((Button) cl.findViewById(R.id.datebtn)).getText().toString());
+    }
+
+    @Test
+    public void shouldSaveCurrentStartTimeOnClick(){
+        timeMonitor = getInstrumentation().addMonitor(TimeSetter.class.getName(),null,false);
+        onView(withId(R.id.startbtn)).perform(click());
+        final Activity tsStart = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        assertThat(tsStart,instanceOf(TimeSetter.class));
+        onView(withId(R.id.timePicker)).check(ViewAssertions.matches(isDisplayed()));
+        onView(withId(R.id.okbtn)).check(ViewAssertions.matches(isDisplayed()));
+
+        tsStart.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TimePicker tp = (TimePicker) tsStart.findViewById(R.id.timePicker);
                 tp.setCurrentHour(10);
                 tp.setCurrentMinute(30);
             }
@@ -73,8 +102,9 @@ public class TestCreateLecture{
 
     @Test
     public void shouldSaveCurrentEndTimeOnClick(){
+        timeMonitor = getInstrumentation().addMonitor(TimeSetter.class.getName(),null,false);
         onView(withId(R.id.endbtn)).perform(click());
-        ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
+        final Activity ts = getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertThat(ts,instanceOf(TimeSetter.class));
         ts.runOnUiThread(new Runnable() {
             @Override

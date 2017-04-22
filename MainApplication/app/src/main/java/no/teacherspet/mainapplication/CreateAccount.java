@@ -80,9 +80,7 @@ public class CreateAccount extends AppCompatActivity {
                         finish();
                         Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
                         startActivity(intent);
-                    } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e){
+                    }catch (IOException e){
                         Toast.makeText(getApplicationContext(),"Error occured while connecting to server",Toast.LENGTH_LONG).show();
                         noConnection = true;
                         finish();

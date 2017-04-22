@@ -20,7 +20,7 @@ import frontend.Connection;
  * Created by magnus on 17.03.2017.
  */
 
-public class ProfessorLogin extends AppCompatActivity{
+public class ProfessorLogin extends AppCompatActivity {
     EditText UserName;
     EditText Password;
     private Connection c;
@@ -34,7 +34,7 @@ public class ProfessorLogin extends AppCompatActivity{
         noConnection = false;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        thread=new Thread(new Runnable() {
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -63,9 +63,9 @@ public class ProfessorLogin extends AppCompatActivity{
     public void loginPressed(View v){
         try {
             if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
-                if (c.validateUser(md5(UserName.getText().toString().trim()),SHA1(Password.getText().toString()))) {
+                if (c.validateUser(md5(UserName.getText().toString().trim()), SHA1(Password.getText().toString()))) {
                     RoleSelect.isValidated = true;
-                    RoleSelect.ProfessorID=md5(UserName.getText().toString().trim());
+                    RoleSelect.ProfessorID = md5(UserName.getText().toString().trim());
                     Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
                     finish();
                     startActivity(showLectures);
@@ -82,10 +82,10 @@ public class ProfessorLogin extends AppCompatActivity{
 
 
     private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        MessageDigest md=MessageDigest.getInstance("MD5");
-        byte[] idBytes=id.getBytes("iso-8859-1");
-        md.update(idBytes,0,idBytes.length);
-        byte[] md5Hash=md.digest();
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] idBytes = id.getBytes("iso-8859-1");
+        md.update(idBytes, 0, idBytes.length);
+        byte[] md5Hash = md.digest();
         return convertToHex(md5Hash);
     }
 

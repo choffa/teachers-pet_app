@@ -127,7 +127,6 @@ public class StudentRating extends AppCompatActivity{
     public void sendComment(View view) {
         //TODO Send comments for lecture.
     }
-
     /**
      * Custom ArrayAdapter to handle a ListView of subjects with RatingBars.
      */
