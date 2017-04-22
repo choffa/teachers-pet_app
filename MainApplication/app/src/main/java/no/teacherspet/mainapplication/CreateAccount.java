@@ -43,7 +43,7 @@ public class CreateAccount extends AppCompatActivity {
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(CreateAccount.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    noConnection = true;
                     finish();
                 }
             }
@@ -160,17 +160,21 @@ public class CreateAccount extends AppCompatActivity {
 
     @Override
     public void onDestroy(){
-        thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    c.close();
-                }catch (IOException e) {
-                    e.printStackTrace();
+        if(!noConnection) {
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        }else{
+            Toast.makeText(CreateAccount.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
+        }
         super.onDestroy();
     }
 }
