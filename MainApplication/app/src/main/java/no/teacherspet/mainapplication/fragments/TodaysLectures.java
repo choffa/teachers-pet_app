@@ -18,7 +18,6 @@ import no.teacherspet.mainapplication.R;
 
 public class TodaysLectures extends LectureListSuper {
 
-    static ArrayList<Lecture> lecturesArray=new ArrayList<>();
 
     @Override
     public void setLecturesArray(ArrayList<Lecture> lecturesArray) {
@@ -34,9 +33,7 @@ public class TodaysLectures extends LectureListSuper {
     /**
      * Checks whether the lecture is currently active, is yet to start or is done.
      * @param lectureDate Date of the Lecture
-     * @param start Start hour for the lecture
-     * @param end End hour for the lecture
-     * @return returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
+     * @return returns true if lecture is today, false otherwise.
      */
     private boolean isToday(Date lectureDate){
         Date now = new Date();

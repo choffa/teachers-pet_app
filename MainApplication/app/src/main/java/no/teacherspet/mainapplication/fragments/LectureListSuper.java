@@ -33,7 +33,7 @@ import no.teacherspet.mainapplication.R;
 
 public class LectureListSuper extends Fragment {
 
-    static ArrayList<Lecture> lecturesArray = new ArrayList<>();
+    ArrayList<Lecture> lecturesArray = new ArrayList<>();
     static LayoutInflater inflater;
     private static final String ARG_TAB_NUMBER = "tab_number";
     private LectureRowAdapter adapter;
@@ -99,7 +99,7 @@ public class LectureListSuper extends Fragment {
     }
 
     public void setLecturesArray(ArrayList<Lecture> lecturesArray) {
-        LectureListSuper.lecturesArray = lecturesArray;
+        this.lecturesArray = lecturesArray;
     }
 
     private class LectureRowAdapter extends ArrayAdapter<Lecture> {
@@ -109,6 +109,9 @@ public class LectureListSuper extends Fragment {
 
         public View getView(int position, View convertView,
                             ViewGroup parent) {
+            if(position>=lecturesArray.size()){
+                return null;
+            }
             View row=convertView;
             if(row==null) {
                 LayoutInflater inflater=LectureListSuper.inflater;
