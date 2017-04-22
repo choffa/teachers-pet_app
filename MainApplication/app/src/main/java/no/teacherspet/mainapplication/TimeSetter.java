@@ -25,27 +25,30 @@ public class TimeSetter extends AppCompatActivity {
     }
 
     public void okBtnClick(View v) {
+        Integer currentHour = clock.getCurrentHour();
         if (CreateLecture.getIsStart()) {
-            if (CreateLecture.getEnd() != -1 && CreateLecture.getEnd() < clock.getCurrentHour()) {
-                Toast.makeText(getApplicationContext(), "Start time cannot be after End time (" + CreateLecture.getEnd() + ")", Toast.LENGTH_LONG).show();
-            } else if (CreateLecture.getEnd() != -1 && CreateLecture.getEnd() == clock.getCurrentHour()) {
+            int checkEnd = CreateLecture.getEnd();
+            if (checkEnd != -1 && checkEnd != 0 && checkEnd < currentHour) {
+                Toast.makeText(getApplicationContext(), "Start time cannot be after End time (" + checkEnd + ")", Toast.LENGTH_LONG).show();
+            } else if (checkEnd != -1 && checkEnd == currentHour) {
                 Toast.makeText(getApplicationContext(), "Start time cannot the same as End time", Toast.LENGTH_LONG).show();
             } else {
-                CreateLecture.setStart(clock.getCurrentHour());
+                CreateLecture.setStart(currentHour);
                 finish();
-                CreateLecture.setButtonText("startTime", clock.getCurrentHour().toString());
+                CreateLecture.setButtonText("startTime", currentHour.toString());
             }
 
         } else {
-            if (CreateLecture.getStart() != -1 && CreateLecture.getStart() > clock.getCurrentHour()) {
-                Toast.makeText(getApplicationContext(), "End time cannot be before Start Time (" + CreateLecture.getStart() + ")", Toast.LENGTH_LONG).show();
+            int checkStart = CreateLecture.getStart();
+            if (checkStart != -1 && currentHour != 0 && checkStart > currentHour) {
+                Toast.makeText(getApplicationContext(), "End time cannot be before Start Time (" + checkStart + ")", Toast.LENGTH_LONG).show();
 
-            } else if (CreateLecture.getStart() != -1 && CreateLecture.getStart() == clock.getCurrentHour()) {
+            } else if (checkStart != -1 && checkStart == currentHour) {
                 Toast.makeText(getApplicationContext(), "End time cannot the same as Start time", Toast.LENGTH_LONG).show();
             } else {
-                CreateLecture.setEnd(clock.getCurrentHour());
+                CreateLecture.setEnd(currentHour);
                 finish();
-                CreateLecture.setButtonText("endTime", clock.getCurrentHour().toString());
+                CreateLecture.setButtonText("endTime", currentHour.toString());
             }
         }
     }

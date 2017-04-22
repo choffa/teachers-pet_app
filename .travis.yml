@@ -1,0 +1,55 @@
+language: android
+
+jdk: oraclejdk8
+
+android:
+  components:
+
+    #Tools
+    - tools
+    - platform-tools
+    - build-tools-22.0.1
+
+    # SDK version
+    - android-22
+    
+    #Extras
+    - extra-google-m2repository
+    - extra-android-m2repository
+    - extra-android-support
+
+    #Emulators
+    - sys-img-armeabi-v7a-android-22
+        
+    # Other stuff can be added here, see travis-ci.org for details
+
+  licenses:
+    - 'android-sdk-preview-license-.+'
+    - 'android-sdk-license-.+'
+    - 'google-gd-license-.+'
+
+before_install:
+  - cd MainApplication
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
+#install:
+#  - echo y | android update sdk -u -a -t tools
+#  - echo y | android update sdk -u -a -t platform-tools
+#  - echo y | android update sdk -u -a -t build-tools-25.0.2
+#  - echo y | android update sdk -u -a -t android-25
+#  - echo y | android update sdk -u -a -t extra-google-m2repository
+#  - echo y | android update sdk -u -a -t extra-android-m2repository
+#  - echo y | android update sdk -u -a -t extra-android-support
+
+script:
+  - ./gradlew build jacocoTestReport assembleAndroidTest
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
+  - ./gradlew connectedCheck
+
+after_success:
+  - bash <(curl -s http://codecov.io/bash)

@@ -43,26 +43,26 @@ public class CreateAccount extends AppCompatActivity {
                     c = new Connection();
                 }
                 catch (IOException e){
-                    Toast.makeText(CreateAccount.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
+                    noConnection = true;
                     finish();
                 }
             }
             });
-            thread.start();
+        thread.start();
         try {
             thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         setTitle("Create a new account");
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            userName= (EditText) findViewById(R.id.email);
-            userName.setText("");
-            password= (EditText) findViewById(R.id.password);
-            password.setText("");
-            password_confirm= (EditText) findViewById(R.id.password_confirmation);
-            password_confirm.setText("");
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        userName= (EditText) findViewById(R.id.email);
+        userName.setText("");
+        password= (EditText) findViewById(R.id.password);
+        password.setText("");
+        password_confirm= (EditText) findViewById(R.id.password_confirmation);
+        password_confirm.setText("");
         }
 
 
@@ -152,30 +152,27 @@ public class CreateAccount extends AppCompatActivity {
      * @return
      */
     public boolean onOptionsItemSelected(MenuItem item) {
-        try{
-            c.close();
-            finish();
-            return true;
-        }
-        catch (IOException e){
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
     }
 
     @Override
     public void onDestroy(){
-        thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    c.close();
-                }catch (IOException e) {
-                    e.printStackTrace();
+        if(!noConnection) {
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        }else{
+            Toast.makeText(CreateAccount.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
+        }
         super.onDestroy();
     }
 }

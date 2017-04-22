@@ -1,4 +1,14 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.dicedmelon.gradle:jacoco-android:0.1.1'
+    }
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 25
@@ -22,11 +32,15 @@ android {
         }
         debug {
             debuggable true
+            testCoverageEnabled true
         }
     }
     compileOptions {
         targetCompatibility 1.7
         sourceCompatibility 1.7
+    }
+    lintOptions {
+        abortOnError false
     }
 }
 

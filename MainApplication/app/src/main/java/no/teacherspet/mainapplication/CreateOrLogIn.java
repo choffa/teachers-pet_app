@@ -19,23 +19,28 @@ public class CreateOrLogIn extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
-    @Override
-    public void onResume(){
-        super.onResume();
-        if(RoleSelect.isValidated){
-            finish();
-        }
-    }
 
+    /**
+     * Handles the "Back"-button
+     * @param v
+     */
     public void backBtnPressed(View v){
         finish();
     }
 
+    /**
+     * Handles the "Login"-button
+     * @param v
+     */
     public void gotoLoginPressed(View v){
         Intent login=new Intent(CreateOrLogIn.this,ProfessorLogin.class);
         startActivity(login);
     }
 
+    /**
+     * Handles the "Create Account"-button
+     * @param v
+     */
     public void createBtnPressed(View v){
         Intent createAcc=new Intent(CreateOrLogIn.this,CreateAccount.class);
         startActivity(createAcc);
@@ -44,5 +49,13 @@ public class CreateOrLogIn extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         finish();
         return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        if(RoleSelect.isValidated){
+            finish();
+        }
     }
 }

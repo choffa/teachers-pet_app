@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 
 public class RoleSelect extends AppCompatActivity {
-    //Page for redirecting to the students' GUI or the Professors' GUI. Might be changed for a login page.
+    //Page for redirecting to the students' GUI or the Professors' GUI.
     protected static HashMap<Integer, ArrayList<Integer>> saves=new HashMap<>();
     protected static HashMap<String,String> professors = new HashMap<>();
     protected static String StudentId;
@@ -67,6 +67,11 @@ public class RoleSelect extends AppCompatActivity {
         Intent intent= new Intent(RoleSelect.this,StudentLectureList.class);
         startActivity(intent);
     }
+
+    /**
+     * Logs out the user by deleting all locally saved data.
+     * @param v The button view.
+     */
     public void logOut(View v) {
         isValidated = false;
         ProfessorID="";

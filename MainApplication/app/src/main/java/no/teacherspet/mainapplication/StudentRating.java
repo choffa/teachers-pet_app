@@ -11,16 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import backend.Lecture;
 import frontend.Connection;
@@ -28,7 +27,6 @@ import frontend.Subject;
 
 public class StudentRating extends AppCompatActivity{
 
-    byte rating;
     int radioButtonID;
     private static int lectureID;
     static Subject currentSub;
@@ -39,8 +37,6 @@ public class StudentRating extends AppCompatActivity{
     ArrayList<Integer> subjectIDs = new ArrayList<>();
     private Connection c;
     protected Thread thread;
-    HashMap<String, ArrayList<Integer>> savedLectures = new HashMap<>();
-    TextView hello; //Textfield only for debugging purposes: shows the last two values
     ListView ratingList;
 
     @Override
@@ -75,7 +71,7 @@ public class StudentRating extends AppCompatActivity{
         setContentView(R.layout.activity_student_rating);
         ratingList = (ListView) findViewById(android.R.id.list);
 
-        ratingList.setAdapter(new RatingAdapter(list));
+        ratingList.setAdapter(new SubjectRatingAdapter(list));
         RelativeLayout.LayoutParams mParam = (RelativeLayout.LayoutParams) ratingList.getLayoutParams();
         mParam.height = (calculateHeight(ratingList));
         ratingList.setLayoutParams(mParam);
@@ -86,24 +82,27 @@ public class StudentRating extends AppCompatActivity{
         if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
             tempo.check(RoleSelect.saves.get(lectureID).get(0));
         }
-        hello = (TextView) findViewById(R.id.textView2);
-        //Sets the radiobuttons to send the new info to the server on every click.
+        initiateRadioGroup(tempo);
+    }
+
+    /**
+     * Sets the radiobuttons to send the new info to the server on every click.
+     * @param radioGroup The Tempo RadioGroup.
+     */
+    private void initiateRadioGroup(RadioGroup radioGroup){
+
         tempo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-
             @Override
-            public void onCheckedChanged(RadioGroup tempo, int checkedId) {
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 if (!isValidTime()) {
                     Toast.makeText(getApplicationContext(), "This lecture is not active", Toast.LENGTH_LONG).show();
                     finish();
-
                 } else {
                     ArrayList<Integer> changes = new ArrayList<Integer>();
-                    radioButtonID = tempo.getCheckedRadioButtonId();
+                    radioButtonID = radioGroup.getCheckedRadioButtonId();
                     changes.add(radioButtonID);
-                    //RoleSelect.getStud().setButton(radioButtonID);
-                    View radioButton = tempo.findViewById(radioButtonID);
-                    int rating = tempo.indexOfChild(radioButton) + 1;
+                    RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
+                    int rating = radioGroup.indexOfChild(radioButton) + 1;
                     c.sendSpeedRating(StudentLectureList.getID(), RoleSelect.StudentId, rating);
                     changes.add(rating);
                     if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
@@ -111,125 +110,127 @@ public class StudentRating extends AppCompatActivity{
                     } else {
                         changes.add(0);
                     }
-
-                    //RoleSelect.changeStud((byte)rating);
                     if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
                         RoleSelect.saves.remove(StudentLectureList.getID());
                     }
                     RoleSelect.saves.put(lectureID, changes);
-                    Toast.makeText(StudentRating.this, "Rating sent", Toast.LENGTH_SHORT).show();
-                    hello.setText(Integer.toString(RoleSelect.saves.get(lectureID).get(1)) + " , " + Integer.toString(RoleSelect.saves.get(lectureID).get(2)));
-
-                }
+                    Toast.makeText(StudentRating.this, "Lecture tempo rated: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
+                 }
             }
-
-
         });
-
     }
 
-
-
-
-
-
     private RowModel getModel(int position) {
-        return (RowModel) ((RatingAdapter) ratingList.getAdapter()).getItem(position);
+        return (RowModel) ((SubjectRatingAdapter) ratingList.getAdapter()).getItem(position);
     }
 
     public void sendComment(View view) {
+        //TODO Send comments for lecture.
     }
-
-class RatingAdapter extends ArrayAdapter {
-    RatingAdapter(ArrayList list) {
-        super(StudentRating.this, R.layout.student_rating_row, list);
-    }
-
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        View row = convertView;
-        ViewWrapper wrapper;
-        RatingBar rate;
-        FloatingActionButton showCommentsFAB;
-        if (row == null) {
-            LayoutInflater inflater = getLayoutInflater();
-            row = inflater.inflate(R.layout.student_rating_row, parent, false);
-            wrapper = new ViewWrapper(row);
-            row.setTag(wrapper);
-            rate = wrapper.getRatingBar();
-            RatingBar.OnRatingBarChangeListener l =
-                    new RatingBar.OnRatingBarChangeListener() {
-                        public void onRatingChanged(RatingBar ratingBar,
-                                                    float rating, boolean fromTouch) {
-                            Integer myPosition = (Integer) ratingBar.getTag();
-                            RowModel model = getModel(myPosition);
-                            model.rating = rating;
-                            currentSub = subjects.get(myPosition);
-                            c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "");
-                            Toast.makeText(StudentRating.this, "You have rated " + currentSub.getName() + " a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
-                        }
-                    };
-            rate.setOnRatingBarChangeListener(l);
-            showCommentsFAB = wrapper.getCommentFAB();
-            String currentComment = subjectComments.get(position);
-            if(currentComment.isEmpty()||currentComment.equals("NULL")||currentComment==null) {
-                showCommentsFAB.hide();
-            }
-            FloatingActionButton.OnClickListener fabl = new FloatingActionButton.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    Integer myPosition = (Integer) v.getTag();
-                    currentSub = subjects.get(position);
-                    startActivity(new Intent(StudentRating.this, CommentsPopup.class));
-                }
-            };
-            showCommentsFAB.setOnClickListener(fabl);
-
-
-        } else {
-            wrapper = (ViewWrapper) row.getTag();
-            rate = wrapper.getRatingBar();
+    /**
+     * Custom ArrayAdapter to handle a ListView of subjects with RatingBars.
+     */
+    private class SubjectRatingAdapter extends ArrayAdapter {
+        SubjectRatingAdapter(ArrayList list) {
+            super(StudentRating.this, R.layout.student_rating_row, list);
         }
 
-        RowModel model = getModel(position);
-        int str = row.getHeight();
-        wrapper.getLabel().setText(model.toString());
-        rate.setTag(new Integer(position));
-        rate.setRating(model.rating);
-        return (row);
+        /**
+         * Handles the generation/recycling of row views, and the listeners for all the widgets in each row.
+         * @param position Position in the ListView.
+         * @param convertView ...
+         * @param parent The ListView.
+         * @return A row view.
+         */
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            ViewWrapper wrapper;
+            RatingBar rate;
+            FloatingActionButton showCommentsFAB;
+            if (row == null) {
+                LayoutInflater inflater = getLayoutInflater();
+                row = inflater.inflate(R.layout.student_rating_row, parent, false);
+                wrapper = new ViewWrapper(row);
+                row.setTag(wrapper);
+                rate = wrapper.getRatingBar();
+                RatingBar.OnRatingBarChangeListener listener =
+                        new RatingBar.OnRatingBarChangeListener() {
+                            public void onRatingChanged(RatingBar ratingBar,
+                                                        float rating, boolean fromTouch) {
+                                if (!isValidTime()) {
+                                    Toast.makeText(StudentRating.this, "Lecture is not active", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Integer myPosition = (Integer) ratingBar.getTag();
+                                    RowModel model = getModel(myPosition);
+                                    model.rating = rating;
+                                    currentSub = subjects.get(myPosition);
+                                    c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "GTFO");
+                                    Toast.makeText(StudentRating.this, "You have rated " + currentSub.getName().trim() + " a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        };
+                rate.setOnRatingBarChangeListener(listener);
+                showCommentsFAB = wrapper.getCommentFAB();
+                String currentComment = subjectComments.get(position);
+                if(currentComment.isEmpty() || currentComment.equals("NULL")) {
+                    showCommentsFAB.hide();
+                }
+                FloatingActionButton.OnClickListener fabl = new FloatingActionButton.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Integer myPosition = (Integer) v.getTag();
+                        currentSub = subjects.get(position);
+                        startActivity(new Intent(StudentRating.this, CommentsPopup.class));
+                    }
+                };
+                showCommentsFAB.setOnClickListener(fabl);
+            } else {
+                wrapper = (ViewWrapper) row.getTag();
+                rate = wrapper.getRatingBar();
+            }
+            RowModel model = getModel(position);
+            wrapper.getLabel().setText(model.toString());
+            rate.setTag(position);
+            rate.setRating(model.rating);
+            return (row);
+        }
     }
-}
 
-class RowModel {
-    String subjectName;
-    float rating = 3.0f;
-    String comment;
+    /**
+     * Holds the info of a given row of subjects.
+     */
+    private class RowModel {
+        String subjectName;
+        float rating = 3.0f;
+        String comment;
 
-    RowModel(Subject subject) {
-        this.subjectName = subject.getName();
-        this.comment = subject.getComment();
-        //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getPosition)
+        RowModel(Subject subject) {
+            this.subjectName = subject.getName();
+            this.comment = subject.getComment();
+            //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getPosition)
+        }
+
+        public String toString() {
+            return (subjectName);
+        }
     }
 
-    public String toString() {
-
-        return (subjectName);
-    }
-}
-
+    /**
+     * Gives the total height of the subject list elements.
+     * @param list The ListView to find the height of.
+     * @return Total height of list in pixels.
+     */
     private int calculateHeight(ListView list) {
 
         int height = 0;
-
         for (int i = 0; i < list.getCount(); i++) {
             View childView = list.getAdapter().getView(i, null, list);
             childView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
             height+= childView.getMeasuredHeight();
         }
-
         //dividers height
         height += list.getDividerHeight() * list.getCount();
-
         return height;
     }
 
@@ -238,7 +239,6 @@ class RowModel {
         Date lectureDate = lecture.getDate();
         int start = lecture.getStart();
         int end = lecture.getEnd();
-
         Date now = new Date();
         if(lectureDate.getYear()<now.getYear()||lectureDate.getYear()>now.getYear()){
             return false;
@@ -255,18 +255,9 @@ class RowModel {
         }
     }
 
-
-
-
     public boolean onOptionsItemSelected(MenuItem item){
-        try {
-            c.close();
-            finish();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        finish();
         return true;
-
     }
 
     @Override

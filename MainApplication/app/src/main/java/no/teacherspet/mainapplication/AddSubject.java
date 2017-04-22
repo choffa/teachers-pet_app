@@ -15,7 +15,7 @@ import android.widget.Toast;
  */
 
 public class AddSubject extends AppCompatActivity {
-    static int ID;
+
     String name;
     String comment;
     TextView nameTextview;
@@ -61,14 +61,6 @@ public class AddSubject extends AppCompatActivity {
         return true;
     }
 
-    public static int getID() {
-        return ID;
-    }
-
-    public static void setID(int ID) {
-        AddSubject.ID = ID;
-    }
-
     /**
      * Onclick for the "Finished"-button. Sets the static Name and Comment fields in the origin view, and adds the subject to the subjectArray in the origin.
      * @param view
@@ -78,20 +70,24 @@ public class AddSubject extends AppCompatActivity {
             Toast.makeText(this, "All subjects need to have a name", Toast.LENGTH_SHORT).show();
         }else {
             if (intent != null) {
-                if (origin.equals("InitiateSubjects")) {
-                    InitiateSubjects.setName(nameTextview.getText().toString());
-                    InitiateSubjects.setComment(commentTextview.getText().toString());
-                    InitiateSubjects.addToSubjectArray();
-                    InitiateSubjects.adapter.notifyDataSetChanged();
-                    finish();
-                } else if (origin.equals("EditLecture")) {
-                    EditLecture.setName(nameTextview.getText().toString());
-                    EditLecture.setComment(commentTextview.getText().toString());
-                    EditLecture.addToSubjectArray();
-                    EditLecture.adapter.notifyDataSetChanged();
-                    finish();
-                } else {
-                    Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+                switch (origin) {
+                    case "InitiateSubjects":
+                        InitiateSubjects.setName(nameTextview.getText().toString());
+                        InitiateSubjects.setComment(commentTextview.getText().toString());
+                        InitiateSubjects.addToSubjectArray();
+                        InitiateSubjects.adapter.notifyDataSetChanged();
+                        finish();
+                        break;
+                    case "EditLecture":
+                        EditLecture.setName(nameTextview.getText().toString());
+                        EditLecture.setComment(commentTextview.getText().toString());
+                        EditLecture.addToSubjectArray();
+                        EditLecture.adapter.notifyDataSetChanged();
+                        finish();
+                        break;
+                    default:
+                        Toast.makeText(AddSubject.this, "Error in origin", Toast.LENGTH_LONG).show();
+                        break;
                 }
             } else {
                 Toast.makeText(AddSubject.this, "Intent is NULL", Toast.LENGTH_LONG).show();

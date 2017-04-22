@@ -39,9 +39,9 @@ public class ProfessorLogin extends AppCompatActivity {
             public void run() {
                 try {
                     c = new Connection();
-                } catch (IOException e) {
-                    Toast.makeText(ProfessorLogin.this, "Noe gikk galt under lasting av siden", Toast.LENGTH_SHORT).show();
-                    noConnection = true;
+                }
+                catch (IOException e){
+                    noConnection=true;
                     finish();
                 }
             }
@@ -56,7 +56,11 @@ public class ProfessorLogin extends AppCompatActivity {
         Password = (EditText) findViewById(R.id.login_password);
     }
 
-    public void loginPressed(View v) {
+    /**
+     * Checks to see whether the username and password is correct.
+     * @param v The button view.
+     */
+    public void loginPressed(View v){
         try {
             if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
                 if (c.validateUser(md5(UserName.getText().toString().trim()), SHA1(Password.getText().toString()))) {
@@ -71,12 +75,11 @@ public class ProfessorLogin extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "There does not exist any registered users with this username", Toast.LENGTH_LONG).show();
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
+
 
     private String md5(String id) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md = MessageDigest.getInstance("MD5");
@@ -108,29 +111,26 @@ public class ProfessorLogin extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        try {
-            c.close();
-            finish();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+        finish();
+        return true;
     }
 
     @Override
-    public void onDestroy() {
-        if (!noConnection) {
+    public void onDestroy(){
+        if(!noConnection) {
             thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         c.close();
                     } catch (IOException e) {
-                        Toast.makeText(ProfessorLogin.this, "Noe gikk galt under lukking av server", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
                 }
             });
+            thread.start();
+        }else{
+            Toast.makeText(ProfessorLogin.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }

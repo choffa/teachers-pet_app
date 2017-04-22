@@ -148,8 +148,8 @@ public class Connection implements Closeable {
 			int start = in.nextInt();
 			int end = in.nextInt();
 			String professorID = in.next();
-			String room = in.next().replaceAll("£"," ");
-			String courseID = in.next().replaceAll("£", " ");
+			String room = convertFromServer(in.next());
+			String courseID = convertFromServer(in.next());
 			String[] components = date.split("-");
 			Date d= new Date();
 			d.setYear(Integer.parseInt(components[0])-1900);
@@ -170,8 +170,8 @@ public class Connection implements Closeable {
 	 */
 	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
-		String resCourseID = courseID.replaceAll(" ", "£");
-		String resRoom = room.replaceAll(" ", "£");
+		String resCourseID = convertToServer(courseID);
+		String resRoom = convertToServer(room);
 		checkLectureInput(professorID, resCourseID, start, end, resRoom);
 		out.println("SET_LECTURE " + professorID + " " + resCourseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
 			+ end + " " + resRoom);
@@ -251,9 +251,9 @@ public class Connection implements Closeable {
 		while (in.next().equals("NEXT")){
 			int subInt = in.nextInt();
 			String subName = in.next();
-			subName = subName.replaceAll("£", " ").replaceAll("NULL","");
+			subName = convertFromServer(subName);
 			String subComment = in.next();
-			subComment = subComment.replaceAll("£", " ").replaceAll("¥","\n").replaceAll("NULL","");
+			subComment = convertFromServer(subComment);
 			res.add(new Subject(subInt,subName,subComment));
 		}
 		return res;
@@ -279,9 +279,8 @@ public class Connection implements Closeable {
 		if(comment.isEmpty()){
 			comment = "NULL";
 		}
-		String resName = name.replaceAll(" ", "£");
-		String resComment = comment.replaceAll(" ", "£");
-		resComment = resComment.replaceAll("\n","¥");
+		String resName = convertToServer(name);
+		String resComment = convertToServer(comment);
 		checkSubjectInput(resName);
 		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();
@@ -346,5 +345,18 @@ public class Connection implements Closeable {
 			throw new IllegalStateException();
 		}
 
+	}
+
+	private String convertToServer(String string){
+		String res = string.replaceAll(" ", "£");
+		res = res.replaceAll("\n","¥");
+		res = res.replaceAll("'","''");
+		return res;
+	}
+
+	private String convertFromServer(String string){
+		String res = string.replaceAll("£"," ");
+		res = res.replaceAll("¥", "\n");
+		return res;
 	}
 }
