@@ -2,7 +2,6 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -59,7 +58,7 @@ public class StudentLectureList extends AppCompatActivity {
         }
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        ListView list_view = (ListView) findViewById(android.R.id.list);
+        final ListView list_view = (ListView) findViewById(android.R.id.list);
         if(!noConnection) {
             lecturesArray = c.getLectures();
         }

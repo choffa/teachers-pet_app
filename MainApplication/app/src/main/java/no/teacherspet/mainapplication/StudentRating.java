@@ -142,7 +142,7 @@ public class StudentRating extends AppCompatActivity{
          * @param parent The ListView.
          * @return A row view.
          */
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View row = convertView;
             ViewWrapper wrapper;
             RatingBar rate;

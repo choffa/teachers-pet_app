@@ -28,10 +28,10 @@ public class TestRoleSelect{
     @Rule
     public final ActivityTestRule<RoleSelect> main = new ActivityTestRule<>(RoleSelect.class);
 
-    Instrumentation.ActivityMonitor studentMonitor = getInstrumentation().addMonitor(StudentLectureList.class.getName(),null,false);
-    Instrumentation.ActivityMonitor professorMonitor = getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);
-    Instrumentation.ActivityMonitor loginMonitor = getInstrumentation().addMonitor(CreateOrLogIn.class.getName(),null,false);
-    RoleSelect rs;
+    private Instrumentation.ActivityMonitor studentMonitor = getInstrumentation().addMonitor(StudentLectureList.class.getName(),null,false);
+    private Instrumentation.ActivityMonitor professorMonitor = getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);
+    private Instrumentation.ActivityMonitor loginMonitor = getInstrumentation().addMonitor(CreateOrLogIn.class.getName(),null,false);
+    private RoleSelect rs;
     @Before
     public void setUp(){
         rs=main.getActivity();
@@ -50,7 +50,7 @@ public class TestRoleSelect{
     }
     @Test
     public void shouldGoToLogin(){
-        rs.isValidated=false;
+        RoleSelect.isValidated=false;
         onView(withId(R.id.profBtn)).perform(click());
         Activity login=getInstrumentation().waitForMonitorWithTimeout(loginMonitor,5000);
         assertNotNull(login);
@@ -58,8 +58,8 @@ public class TestRoleSelect{
     }
     @Test
     public void shouldGoToProfessorLectures() throws Exception{
-        rs.isValidated=true;
-        rs.ProfessorID="TestProfessor";
+        RoleSelect.isValidated=true;
+        RoleSelect.ProfessorID="TestProfessor";
         onView(withId(R.id.profBtn)).perform(click());
         Activity prof=getInstrumentation().waitForMonitorWithTimeout(professorMonitor,5000);
         assertNotNull(prof);

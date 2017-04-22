@@ -7,7 +7,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.widget.EditText;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +30,6 @@ public class TestCreateAccount{
 
     CreateAccount createAcc;
     Instrumentation.ActivityMonitor timeMonitor=getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);
-
-    @Before
-    public void setUp()throws Exception{
-        createAcc=main.getActivity();
-    }
 
     @Test
     public void shouldBeAbleToLaunchMainScreen()throws Exception{
