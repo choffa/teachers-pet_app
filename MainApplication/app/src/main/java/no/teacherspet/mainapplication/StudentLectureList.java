@@ -45,8 +45,7 @@ public class StudentLectureList extends AppCompatActivity {
                 try {
                     c = new Connection();
                 } catch (IOException e) {
-                    Toast.makeText(StudentLectureList.this, "Error occurred while loading page", Toast.LENGTH_SHORT).show();
-                    noConnection = false;
+                    noConnection = true;
                     finish();
                 }
             }
@@ -59,8 +58,10 @@ public class StudentLectureList extends AppCompatActivity {
         }
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        ListView list_view = (ListView) findViewById(android.R.id.list);
-        lecturesArray = c.getLectures();
+        final ListView list_view = (ListView) findViewById(android.R.id.list);
+        if(!noConnection) {
+            lecturesArray = c.getLectures();
+        }
         adapter = new LectureRowAdapter();
         list_view.setAdapter(adapter);
 
@@ -122,13 +123,21 @@ public class StudentLectureList extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        try {
-            if (!noConnection) {
-                c.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void onDestroy(){
+        if(!noConnection) {
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        c.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }else{
+            Toast.makeText(StudentLectureList.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }
