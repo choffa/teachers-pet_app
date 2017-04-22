@@ -25,11 +25,12 @@ import static junit.framework.Assert.assertNotNull;
  */
 @RunWith(AndroidJUnit4.class)
 public class TestCreateAccount{
+
     @Rule
     public final ActivityTestRule<CreateAccount> main = new ActivityTestRule<>(CreateAccount.class);
 
     CreateAccount createAcc;
-    Instrumentation.ActivityMonitor timeMonitor=getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);;
+    Instrumentation.ActivityMonitor timeMonitor=getInstrumentation().addMonitor(ProfessorLectureList.class.getName(),null,false);
 
     @Before
     public void setUp()throws Exception{

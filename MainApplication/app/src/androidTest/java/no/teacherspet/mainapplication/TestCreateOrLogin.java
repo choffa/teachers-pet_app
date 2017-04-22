@@ -17,6 +17,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -61,7 +62,9 @@ public class TestCreateOrLogin {
 
     @Test
     public void shouldExitActivity(){
+        Instrumentation.ActivityMonitor timeMonitor=getInstrumentation().addMonitor(RoleSelect.class.getName(),null,false);
         onView(withId(R.id.backbtn)).perform(click());
-        onView(withId(R.id.backbtn)).check(ViewAssertions.doesNotExist());
+        Activity shouldBeNull=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,2000);
+        assertNull(shouldBeNull);
     }
 }
