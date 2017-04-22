@@ -24,11 +24,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import backend.Lecture;
 import frontend.Connection;
 import no.teacherspet.mainapplication.fragments.AllLectures;
+import no.teacherspet.mainapplication.fragments.LectureListSuper;
 import no.teacherspet.mainapplication.fragments.TodaysLectures;
 
 /**
@@ -37,6 +39,7 @@ import no.teacherspet.mainapplication.fragments.TodaysLectures;
 
 public class ProfessorLectureList extends AppCompatActivity {
 
+    public static HashMap<String,LectureListSuper> fragmentHashMap = new HashMap<>();
     static ArrayList<Lecture> lecturesArray=new ArrayList<>();
     private static String Name;
     private static int ID;
@@ -73,7 +76,6 @@ public class ProfessorLectureList extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        lecturesArray=c.getLectures(RoleSelect.ProfessorID);
     }
 
 
@@ -135,7 +137,10 @@ public class ProfessorLectureList extends AppCompatActivity {
     private void update(){
         lecturesArray.clear();
         lecturesArray.addAll(c.getLectures(RoleSelect.ProfessorID));
-        //TODO: Foreach fragment: update();
+        if(!fragmentHashMap.isEmpty()) {
+            fragmentHashMap.get("AllLectures").update();
+            fragmentHashMap.get("TodaysLectures").update(); //TODO: Get this one to work
+        }
     }
 
     public static int getID(){

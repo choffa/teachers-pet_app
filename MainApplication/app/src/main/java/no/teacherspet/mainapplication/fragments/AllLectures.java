@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import backend.Lecture;
+import no.teacherspet.mainapplication.ProfessorLectureList;
 import no.teacherspet.mainapplication.R;
 
 /**
@@ -17,7 +18,9 @@ import no.teacherspet.mainapplication.R;
 
 public class AllLectures extends LectureListSuper {
 
-    static ArrayList<Lecture> lecturesArray=new ArrayList<>();
-
-
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ProfessorLectureList.fragmentHashMap.put("AllLectures",this);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import backend.Lecture;
+import no.teacherspet.mainapplication.ProfessorLectureList;
 import no.teacherspet.mainapplication.R;
 
 /**
@@ -18,6 +19,11 @@ import no.teacherspet.mainapplication.R;
 
 public class TodaysLectures extends LectureListSuper {
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ProfessorLectureList.fragmentHashMap.put("TodaysLectures",this);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     @Override
     public void setLecturesArray(ArrayList<Lecture> lecturesArray) {
