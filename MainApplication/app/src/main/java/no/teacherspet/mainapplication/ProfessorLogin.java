@@ -117,20 +117,19 @@ public class ProfessorLogin extends AppCompatActivity{
 
     @Override
     public void onDestroy(){
-        thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    if(!noConnection) {
+        if(!noConnection) {
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         c.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                }catch (IOException e) {
-                    e.printStackTrace();
                 }
-            }
-        });
-        thread.start();
-        if(noConnection){
+            });
+            thread.start();
+        }else{
             Toast.makeText(ProfessorLogin.this, "Error while connecting to server", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
