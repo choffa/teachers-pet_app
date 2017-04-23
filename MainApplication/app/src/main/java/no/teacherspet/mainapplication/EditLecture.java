@@ -128,7 +128,7 @@ public class EditLecture extends AppCompatActivity{
         int counter=0;
         for (Subject s:subjectArray) {
             if(changes[counter]&&counter<originalSize){
-                c.updateSubject(s.getId(),s.getName(),s.getComment()); //TODO Make this work
+                c.updateSubject(s.getId(),s.getName(),s.getComment());
             }else if(changes[counter]){
                 c.createSubject(ProfessorLectureList.getID(),s.getName(),s.getComment());
             }

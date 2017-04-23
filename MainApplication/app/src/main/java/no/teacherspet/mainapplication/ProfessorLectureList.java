@@ -2,6 +2,11 @@ package no.teacherspet.mainapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -19,10 +24,14 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import backend.Lecture;
 import frontend.Connection;
+import no.teacherspet.mainapplication.fragments.AllLectures;
+import no.teacherspet.mainapplication.fragments.LectureListSuper;
+import no.teacherspet.mainapplication.fragments.TodaysLectures;
 
 /**
  * Created by magnus on 22.02.2017.
@@ -30,13 +39,14 @@ import frontend.Connection;
 
 public class ProfessorLectureList extends AppCompatActivity {
 
+    public static HashMap<String,LectureListSuper> fragmentHashMap = new HashMap<>();
     static ArrayList<Lecture> lecturesArray=new ArrayList<>();
-    public static LectureRowAdapter adapter;
     private static String Name;
     private static int ID;
     Thread thread;
     protected Connection c;
-    ListView list_view;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -58,115 +68,71 @@ public class ProfessorLectureList extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        lecturesArray=c.getLectures(RoleSelect.ProfessorID);
-        list_view = (ListView) findViewById(android.R.id.list);
-        adapter = new LectureRowAdapter();
-        initiateListAdapter(list_view,adapter);
     }
+
 
     /**
-     * Sets the onClick logic for listView's adapter listAdapter
-     * @param listView The ListView to set the logic for.
-     * @param listAdapter The ListAdapter to override onItemClick for.
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
      */
-    private void initiateListAdapter(final ListView listView, ListAdapter listAdapter){
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent myIntent=new Intent(ProfessorLectureList.this,ProfessorLive.class);
-                Lecture L= (Lecture) listView.getItemAtPosition(position);
-                ID=L.getID();
-                Name = L.getCourseID();
-                switch (beforeNowAfter(L.getDate(),L.getStart(),L.getEnd())) {
-                    case 0:
-                        myIntent = new Intent(ProfessorLectureList.this, LectureStatistics.class);
-                        break;
-                    case 1:
-                        myIntent = new Intent(ProfessorLectureList.this, ProfessorLive.class);
-                        break;
-                    case 2:
-                        myIntent = new Intent(ProfessorLectureList.this, EditLecture.class);
-                        break;
-                }
-                ProfessorLive.setID(ID);
-                startActivity(myIntent);
-            }
-        });
-    }
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    private class LectureRowAdapter extends ArrayAdapter<Lecture> {
-        LectureRowAdapter() {
-            super(ProfessorLectureList.this, R.layout.row_lecture_list, lecturesArray);
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
         }
 
-        public View getView(int position, View convertView,
-                            ViewGroup parent) {
-            View row=convertView;
-            if(row==null) {
-                LayoutInflater inflater=getLayoutInflater();
-                row=inflater.inflate(R.layout.row_lecture_list, parent, false);
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    AllLectures allLectures = new AllLectures();
+                    return allLectures;
+                case 1:
+                    TodaysLectures todaysLectures = new TodaysLectures();
+                    return todaysLectures;
             }
-            TextView courseID=(TextView)row.findViewById(R.id.lectureName_textView);
-            TextView room = (TextView) row.findViewById(R.id.roomTextView);
-            TextView time = (TextView) row.findViewById(R.id.time_textView);
-            TextView date = (TextView) row.findViewById(R.id.date_textView);
-            courseID.setText(lecturesArray.get(position).getCourseID());
-            room.setText(lecturesArray.get(position).getRoom());
-            time.setText(lecturesArray.get(position).getStart()+":15 - " + lecturesArray.get(position).getEnd()+":00");
-            SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd.MM.yy", Locale.ENGLISH);
-            Date lectureDate = lecturesArray.get(position).getDate();
-            lectureDate.setYear(lectureDate.getYear());
-            String text = dateFormat.format(lectureDate);
-            date.setText(text);
-            return(row);
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            // Show 2 total pages.
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "History";
+                case 1:
+                    return "Today";
+
+            }
+            return null;
         }
     }
+
 
     public void createBtnClicked(View v){
         Intent creatingLecture = new Intent(getApplicationContext(), CreateLecture.class);
         startActivity(creatingLecture);
     }
 
-    /**
-     * Checks whether the lecture is currently active, is yet to start or is done.
-     * @param lectureDate Date of the Lecture
-     * @param start Start hour for the lecture
-     * @param end End hour for the lecture
-     * @return returns 0 if lecture is done, 1 if ongoing, 2 if not yet started
-     */
-    private int beforeNowAfter(Date lectureDate, int start, int end){
-        Date now = new Date();
-        if(lectureDate.getYear()<now.getYear()){
-            return 0;
-        }else if(lectureDate.getYear()>now.getYear()){
-            return 2;
-        }else{
-            if(lectureDate.getMonth()<now.getMonth()){
-                return 0;
-            }else if(lectureDate.getMonth()>now.getMonth()){
-                return 2;
-            }else{
-                if(lectureDate.getDate()<now.getDate()){
-                    return 0;
-                }else if(lectureDate.getDate()>now.getDate()){
-                    return 2;
-                }else{
-                    if(end==now.getHours()&&now.getMinutes()>15){ //Lectures end officially after 15min past the end hour.
-                        return 0;
-                    }else if(end<now.getHours()){
-                        return 0;
-                    }else if(start>now.getHours()){
-                        return 2;
-                    }else{
-                        return 1;
-                    }
-                }
-            }
-        }
-    }
+
 
     /**
      * Updates the list to check for new lectures.
@@ -174,15 +140,27 @@ public class ProfessorLectureList extends AppCompatActivity {
     private void update(){
         lecturesArray.clear();
         lecturesArray.addAll(c.getLectures(RoleSelect.ProfessorID));
-        adapter.notifyDataSetChanged();
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     public static int getID(){
         return ProfessorLectureList.ID;
     }
 
+    public static void setID(int ID) {
+        ProfessorLectureList.ID = ID;
+    }
+
+    public static void setName(String name) {
+        Name = name;
+    }
+
     public static String getName() {
         return ProfessorLectureList.Name;
+    }
+
+    public static ArrayList<Lecture> getLecturesArray() {
+        return lecturesArray;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {

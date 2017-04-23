@@ -272,13 +272,6 @@ public class Connection implements Closeable {
 	 */
 	public void createSubject(int lectureID, String name, String comment) {
 		checkState();
-
-		if(name.isEmpty()){
-			name = "NULL";
-		}
-		if(comment.isEmpty()){
-			comment = "NULL";
-		}
 		String resName = convertToServer(name);
 		String resComment = convertToServer(comment);
 		checkSubjectInput(resName);
@@ -348,6 +341,9 @@ public class Connection implements Closeable {
 	}
 
 	private String convertToServer(String string){
+		if(string.isEmpty()){
+			return "NULL";
+		}
 		String res = string.replaceAll(" ", "£");
 		res = res.replaceAll("\n","¥");
 		res = res.replaceAll("'","''");
@@ -355,8 +351,12 @@ public class Connection implements Closeable {
 	}
 
 	private String convertFromServer(String string){
+		if (string.equalsIgnoreCase("NULL")){
+			return "";
+		}
 		String res = string.replaceAll("£"," ");
 		res = res.replaceAll("¥", "\n");
+
 		return res;
 	}
 }

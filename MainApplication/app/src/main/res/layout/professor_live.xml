@@ -33,7 +33,6 @@
         android:layout_below="@+id/treKommaFem"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
-        android:onClick="updateButtonClick"
         android:text="Update" />
 
     <TextView
@@ -57,15 +56,5 @@
         android:hint="#"
         android:textAlignment="center"
         android:textSize="36sp" />
-
-    <Button
-        android:id="@+id/changeToStatBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="changeToStat"
-        android:text="Statistics" />
 
 </RelativeLayout>

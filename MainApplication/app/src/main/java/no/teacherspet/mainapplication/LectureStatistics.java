@@ -59,7 +59,7 @@ public class LectureStatistics extends AppCompatActivity {
     /**
      * The adapter for the custom statistics rows.
      */
-    private class StatisticsRowAdapter extends ArrayAdapter<Subject> {
+    public class StatisticsRowAdapter extends ArrayAdapter<Subject> {
         StatisticsRowAdapter() {
             super(LectureStatistics.this, R.layout.lecture_stat_row, subjectArray);
         }
