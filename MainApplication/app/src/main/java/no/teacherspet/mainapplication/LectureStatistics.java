@@ -1,5 +1,6 @@
 package no.teacherspet.mainapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -47,13 +49,27 @@ public class LectureStatistics extends AppCompatActivity {
             subject_list = (ListView) findViewById(R.id.subject_listview);
             StatisticsRowAdapter adapter = new StatisticsRowAdapter();
             subject_list.setAdapter(adapter);
+            subject_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Subject curSub = subjectArray.get(position);
+                    Intent myIntent = new Intent(LectureStatistics.this,StatisticsPopup.class);
+                    myIntent.putExtra("subjectDistribution",getUpdatedSubjectRating(curSub.getId()));
+                    myIntent.putExtra("SubjectName",curSub.getName());
+                    startActivity(myIntent);
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void onListItemClick(ListView parent, View v, int position, long id) {
-        //TODO show the statistics for the chosen subject
+        Subject curSub = subjectArray.get(position);
+        Intent myIntent = new Intent(LectureStatistics.this,StatisticsPopup.class);
+        myIntent.putExtra("subjectDistribution",getUpdatedSubjectRating(curSub.getId()));
+        myIntent.putExtra("SubjectName",curSub.getName());
+        startActivity(myIntent);
     }
 
     /**
@@ -77,6 +93,10 @@ public class LectureStatistics extends AppCompatActivity {
             ratingIndicator.setRating(subjectAvg.get(position));
             return(row);
         }
+    }
+
+    public int[] getUpdatedSubjectRating(int subjectID){
+        return c.getSubjectStats(subjectID);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
