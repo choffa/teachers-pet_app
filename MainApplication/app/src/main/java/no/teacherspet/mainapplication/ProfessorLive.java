@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import frontend.Connection;
 import no.teacherspet.mainapplication.fragments.LectureStatisticsFragment;
 import no.teacherspet.mainapplication.fragments.ProfessorLiveFragment;
@@ -118,7 +120,9 @@ public class ProfessorLive extends AppCompatActivity {
                 Math.max( (int)(b * factor), 0 ) );
     }
 
-
+    public static int[] getUpdatedSubjectRating(int subjectID){
+        return c.getSubjectStats(subjectID);
+    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

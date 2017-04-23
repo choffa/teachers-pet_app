@@ -1,12 +1,14 @@
 package no.teacherspet.mainapplication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RatingBar;
@@ -20,6 +22,7 @@ import no.teacherspet.mainapplication.LectureStatistics;
 import no.teacherspet.mainapplication.ProfessorLectureList;
 import no.teacherspet.mainapplication.ProfessorLive;
 import no.teacherspet.mainapplication.R;
+import no.teacherspet.mainapplication.StatisticsPopup;
 
 /**
  * Created by eirik on 23.04.2017.
@@ -48,6 +51,16 @@ public class LectureStatisticsFragment extends Fragment {
         subject_list = (ListView) rootView.findViewById(R.id.subject_listview);
         StatisticsRowAdapter adapter = new StatisticsRowAdapter(getActivity(),subjectArray);
         subject_list.setAdapter(adapter);
+        subject_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Subject curSub = subjectArray.get(position);
+                Intent myIntent = new Intent(getActivity(),StatisticsPopup.class);
+                myIntent.putExtra("subjectDistribution",ProfessorLive.getUpdatedSubjectRating(curSub.getId()));
+                myIntent.putExtra("SubjectName",curSub.getName());
+                startActivity(myIntent);
+            }
+        });
         return rootView;
     }
 
@@ -72,8 +85,5 @@ public class LectureStatisticsFragment extends Fragment {
             return(row);
         }
 
-        public void onListItemClick(ListView parent, View v, int position, long id) {
-            //TODO show the statistics for the chosen subject
-    }
     }
 }

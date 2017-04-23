@@ -111,6 +111,26 @@ public class Connection implements Closeable {
 		return res;
 	}
 
+	/**
+	 * A method that requests the distribution of ratings for a specific subject
+	 * @param subjectId The subjectID of the subject in question
+	 * @return A list of integers representing the amount of votes of that degree.
+	 */
+	public int[] getSubjectStats(int subjectId){
+		checkState();
+		out.println("GET_STATS "+subjectId);
+		out.flush();
+
+		int[] res = new int[6];
+		int counter=0;
+		while (in.next().compareTo("NEXT") == 0){
+			int count = in.nextInt();
+			res[counter]=count;
+			counter++;
+		}
+		return res;
+	}
+
 	//------------------------------------------------------------------------
 	//The lecture stuff
 
