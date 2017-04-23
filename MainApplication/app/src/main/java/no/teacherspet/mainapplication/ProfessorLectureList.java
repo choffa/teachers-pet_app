@@ -89,7 +89,10 @@ public class ProfessorLectureList extends AppCompatActivity {
             super(fm);
         }
 
-
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
 
         @Override
         public Fragment getItem(int position) {
@@ -137,10 +140,7 @@ public class ProfessorLectureList extends AppCompatActivity {
     private void update(){
         lecturesArray.clear();
         lecturesArray.addAll(c.getLectures(RoleSelect.ProfessorID));
-        if(!fragmentHashMap.isEmpty()) {
-            fragmentHashMap.get("AllLectures").update();
-            fragmentHashMap.get("TodaysLectures").update(); //TODO: Get this one to work
-        }
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     public static int getID(){

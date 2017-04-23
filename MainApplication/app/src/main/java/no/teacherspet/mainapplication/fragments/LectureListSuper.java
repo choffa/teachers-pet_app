@@ -93,11 +93,6 @@ public class LectureListSuper extends Fragment {
         return rootView;
     }
 
-    public void update(){
-        setLecturesArray(ProfessorLectureList.getLecturesArray());
-        adapter.notifyDataSetChanged();
-    }
-
     public void setLecturesArray(ArrayList<Lecture> lecturesArray) {
         this.lecturesArray = lecturesArray;
     }
