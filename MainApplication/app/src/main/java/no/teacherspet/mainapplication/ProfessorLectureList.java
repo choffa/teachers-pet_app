@@ -117,7 +117,7 @@ public class ProfessorLectureList extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 1:
-                    return "History";
+                    return "All Lectures";
                 case 0:
                     return "Today";
 

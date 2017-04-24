@@ -33,6 +33,7 @@ public class LectureStatistics extends AppCompatActivity {
     Connection c;
     int lectureID;
     Button lectureCommentsBtn;
+    TextView tempoTextview;
 
     /** Called when the activity is first created. */
     @Override
@@ -63,6 +64,12 @@ public class LectureStatistics extends AppCompatActivity {
                     startActivity(toStatIntent);
                 }
             });
+            String tempoString = ProfessorLive.getTempoText(c.getAverageSpeedRating(lectureID));
+            tempoTextview = (TextView) findViewById(R.id.statistics_tempo_textview);
+            tempoTextview.setText("Tempo of lecture:\n" + tempoString);
+            if(subjectArray.size()==0){
+                tempoTextview.setPadding(0,300,0,0);
+            }
             commentsArray = c.getLectureComments(lectureID);
             lectureCommentsBtn = (Button) findViewById(R.id.lecturecomments_btn);
             lectureCommentsBtn.setText("Show Comments (" + commentsArray.size()+")");

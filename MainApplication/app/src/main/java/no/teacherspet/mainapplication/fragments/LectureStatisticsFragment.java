@@ -3,7 +3,9 @@ package no.teacherspet.mainapplication.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,10 @@ public class LectureStatisticsFragment extends Fragment {
     LayoutInflater inflater;
     private ArrayList<String> commentsArray;
     private Button lectureCommentsBtn;
+    private StatisticsRowAdapter adapter;
+    private Handler mHandler;
+    private int mInterval = 2000;
+    TextView tempoTextview;
 
     @Nullable
     @Override
@@ -50,10 +56,10 @@ public class LectureStatisticsFragment extends Fragment {
         c=ProfessorLive.c;
         subjectArray = c.getSubjects(lectureID);
         for (Subject s: subjectArray) {
-            subjectAvg.add(c.getAverageSubjectRating(s.getId()));
+            s.setAverageRating(c.getAverageSubjectRating(s.getId()));
         }
         subject_list = (ListView) rootView.findViewById(R.id.subject_listview);
-        StatisticsRowAdapter adapter = new StatisticsRowAdapter(getActivity(),subjectArray);
+        adapter = new StatisticsRowAdapter(getActivity(),subjectArray);
         subject_list.setAdapter(adapter);
         subject_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,7 +83,46 @@ public class LectureStatisticsFragment extends Fragment {
                 startActivity(toCommentsIntent);
             }
         });
+        tempoTextview = (TextView) rootView.findViewById(R.id.statistics_tempo_textview);
+        tempoTextview.setVisibility(View.GONE);
+        mHandler = new Handler();
+        startRepeatingTask();
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        stopRepeatingTask();
+        super.onDestroyView();
+    }
+
+    Runnable mStatusChecker = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                update();
+            } finally {
+                mHandler.postDelayed(mStatusChecker, mInterval);
+            }
+        }
+    };
+
+    void startRepeatingTask() {
+        mStatusChecker.run();
+    }
+
+    void stopRepeatingTask() {
+        mHandler.removeCallbacks(mStatusChecker);
+    }
+
+    protected void update(){
+        commentsArray.clear();
+        commentsArray.addAll(c.getLectureComments(lectureID));
+        lectureCommentsBtn.setText("Show Comments (" + commentsArray.size()+")");
+        for (Subject s : subjectArray) {
+            s.setAverageRating(c.getAverageSubjectRating(s.getId()));
+        }
+        adapter.notifyDataSetChanged();
     }
 
     /**
@@ -97,7 +142,7 @@ public class LectureStatisticsFragment extends Fragment {
             TextView subjectName=(TextView)row.findViewById(R.id.label);
             subjectName.setText(subjectArray.get(position).getName());
             RatingBar ratingIndicator = (RatingBar) row.findViewById(R.id.sub_avg_ratingbar);
-            ratingIndicator.setRating(subjectAvg.get(position));
+            ratingIndicator.setRating(subjectArray.get(position).getAverageRating());
             return(row);
         }
 

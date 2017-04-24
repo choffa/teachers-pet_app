@@ -2,6 +2,7 @@ package no.teacherspet.mainapplication.fragments;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ public class ProfessorLiveFragment extends Fragment {
     private TextView text;
     private TextView studNum;
     private Handler mHandler;
+    private Button updateBtn;
 
     public ProfessorLiveFragment(){
     }
@@ -41,7 +43,7 @@ public class ProfessorLiveFragment extends Fragment {
         text = (TextView) rootView.findViewById(R.id.treKommaFem);
         studNum= (TextView) rootView.findViewById(R.id.current_rating_num);
         mHandler = new Handler();
-        Button updateBtn = (Button) rootView.findViewById(R.id.updateLiveBtn);
+        updateBtn = (Button) rootView.findViewById(R.id.updateLiveBtn);
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,15 +95,25 @@ public class ProfessorLiveFragment extends Fragment {
      * @param average Float between 1 and 5 with input from the tempo RadioButtons from the associated lecture
      */
     protected void update(float average){
-
+        String tempoString;
         if(average<1||average>5){
+            tempoString = ProfessorLive.getTempoText(-1);
             average= (float) 3.0;
+        }else{
+            tempoString = ProfessorLive.getTempoText(average);
         }
+        int tempoVotes = ProfessorLive.c.getTempoVotesInLecture(ProfessorLive.ID);
+        if(tempoVotes==0){
+            tempoString = ProfessorLive.getTempoText(-1);
+        };
         int parsedColor=Color.parseColor(ProfessorLive.translateColor(average));
         layout.setBackgroundColor(parsedColor);
-        ProfessorLive.actionBar.setBackgroundDrawable(new ColorDrawable(ProfessorLive.darker(parsedColor, (float) 0.8)));
-        ProfessorLive.tabLayout.setBackgroundDrawable(new ColorDrawable(ProfessorLive.darker(parsedColor, (float) 0.8)));
-        text.setText(String.format(Locale.ENGLISH,"%.1f",average-3));
+        int darkColor = ProfessorLive.darker(parsedColor, (float) 0.8);
+        ProfessorLive.actionBar.setBackgroundDrawable(new ColorDrawable(darkColor));
+        ProfessorLive.tabLayout.setBackgroundDrawable(new ColorDrawable(darkColor));
+        updateBtn.setBackgroundColor(darkColor);
+        text.setText(tempoString);
+        //text.setText(String.format(Locale.ENGLISH,"%.1f",average-3));
         studNum.setText(Integer.toString(ProfessorLive.c.getTempoVotesInLecture(ProfessorLive.ID)));
     }
 
