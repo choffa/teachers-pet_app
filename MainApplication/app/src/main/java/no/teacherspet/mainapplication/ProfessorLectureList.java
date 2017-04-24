@@ -97,10 +97,10 @@ public class ProfessorLectureList extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0:
+                case 1:
                     AllLectures allLectures = new AllLectures();
                     return allLectures;
-                case 1:
+                case 0:
                     TodaysLectures todaysLectures = new TodaysLectures();
                     return todaysLectures;
             }
@@ -116,9 +116,9 @@ public class ProfessorLectureList extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
-                    return "History";
                 case 1:
+                    return "History";
+                case 0:
                     return "Today";
 
             }

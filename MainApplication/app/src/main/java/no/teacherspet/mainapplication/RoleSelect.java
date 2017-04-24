@@ -38,11 +38,13 @@ public class RoleSelect extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(),StudentId,Toast.LENGTH_LONG).show();
-
         //Allows threads
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+    }
+
+    public static String getStudentId() {
+        return StudentId;
     }
 
     /**

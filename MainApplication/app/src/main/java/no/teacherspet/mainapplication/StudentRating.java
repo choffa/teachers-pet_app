@@ -38,9 +38,12 @@ public class StudentRating extends AppCompatActivity{
     private Connection c;
     protected Thread thread;
     ListView ratingList;
+    public boolean isOnCreate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        isOnCreate =true;
         super.onCreate(savedInstanceState);
         lectureID = StudentLectureList.getID();
         thread = new Thread(new Runnable() {
@@ -79,10 +82,12 @@ public class StudentRating extends AppCompatActivity{
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(StudentLectureList.getName());
         tempo = (RadioGroup) findViewById(R.id.tempoRadioGroup);
-        if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
-            tempo.check(RoleSelect.saves.get(lectureID).get(0));
+        int curTempoRating = c.getStudentSpeedRating(RoleSelect.getStudentId(),lectureID);
+        if (curTempoRating!=-1) {
+            tempo.check(tempo.getChildAt(curTempoRating-1).getId());
         }
         initiateRadioGroup(tempo);
+        isOnCreate=false;
     }
 
     /**
@@ -91,29 +96,17 @@ public class StudentRating extends AppCompatActivity{
      */
     private void initiateRadioGroup(RadioGroup radioGroup){
 
-        tempo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 if (!isValidTime()) {
                     Toast.makeText(getApplicationContext(), "This lecture is not active", Toast.LENGTH_LONG).show();
                     finish();
-                } else {
-                    ArrayList<Integer> changes = new ArrayList<Integer>();
+                }else{
                     radioButtonID = radioGroup.getCheckedRadioButtonId();
-                    changes.add(radioButtonID);
                     RadioButton radioButton = (RadioButton) radioGroup.findViewById(radioButtonID);
                     int rating = radioGroup.indexOfChild(radioButton) + 1;
                     c.sendSpeedRating(StudentLectureList.getID(), RoleSelect.StudentId, rating);
-                    changes.add(rating);
-                    if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
-                        changes.add(RoleSelect.saves.get(StudentLectureList.getID()).get(1));
-                    } else {
-                        changes.add(0);
-                    }
-                    if (RoleSelect.saves.containsKey(StudentLectureList.getID())) {
-                        RoleSelect.saves.remove(StudentLectureList.getID());
-                    }
-                    RoleSelect.saves.put(lectureID, changes);
                     Toast.makeText(StudentRating.this, "Lecture tempo rated: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
                  }
             }
@@ -160,7 +153,7 @@ public class StudentRating extends AppCompatActivity{
                                 if (!isValidTime()) {
                                     Toast.makeText(StudentRating.this, "Lecture is not active", Toast.LENGTH_SHORT).show();
                                     finish();
-                                } else {
+                                } else if (!isOnCreate){
                                     Integer myPosition = (Integer) ratingBar.getTag();
                                     RowModel model = getModel(myPosition);
                                     model.rating = rating;
@@ -171,6 +164,7 @@ public class StudentRating extends AppCompatActivity{
                             }
                         };
                 rate.setOnRatingBarChangeListener(listener);
+
                 showCommentsFAB = wrapper.getCommentFAB();
                 String currentComment = subjectComments.get(position);
                 if(currentComment.isEmpty() || currentComment.equals("NULL")) {
@@ -202,13 +196,14 @@ public class StudentRating extends AppCompatActivity{
      */
     private class RowModel {
         String subjectName;
-        float rating = 3.0f;
+        float rating;
         String comment;
+
 
         RowModel(Subject subject) {
             this.subjectName = subject.getName();
             this.comment = subject.getComment();
-            //TODO: this.rating = c.getStudentSubjectRating(RoleSelect.studentID,subject.getPosition)
+            this.rating = c.getStudentSubjectRating(RoleSelect.getStudentId(),subject.getId());
         }
 
         public String toString() {

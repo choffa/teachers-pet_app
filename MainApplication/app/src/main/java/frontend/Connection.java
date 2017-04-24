@@ -131,6 +131,26 @@ public class Connection implements Closeable {
 		return res;
 	}
 
+	public int getStudentSubjectRating(String studentId, int subjectId){
+        checkState();
+        out.println("GET_STUDENTSUBJECTRATING " + studentId +" "+ subjectId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return 0;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
+
+    public int getStudentSpeedRating(String studentId, int lectureId){
+        checkState();
+        out.println("GET_STUDENTSPEEDRATING " + studentId +" "+ lectureId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return -1;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
+
 	//------------------------------------------------------------------------
 	//The lecture stuff
 
