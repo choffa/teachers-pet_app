@@ -126,8 +126,11 @@ public class StudentRating extends AppCompatActivity{
     }
 
     public void sendComment(View view) {
-        c.setLectureComment(lectureID, commentsTxtView.getText().toString());
-        Toast.makeText(this, "Comments sent", Toast.LENGTH_SHORT).show();
+        String comment = commentsTxtView.getText().toString();
+        if(comment.length()>2){
+            c.setLectureComment(lectureID, comment);
+            Toast.makeText(this, "Comments sent", Toast.LENGTH_SHORT).show();
+        }
         commentsTxtView.setText("");
     }
     /**
