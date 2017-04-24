@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 import frontend.Connection;
 import frontend.Subject;
+import no.teacherspet.mainapplication.LectureCommentsPopup;
 import no.teacherspet.mainapplication.LectureStatistics;
 import no.teacherspet.mainapplication.ProfessorLectureList;
 import no.teacherspet.mainapplication.ProfessorLive;
@@ -36,6 +38,8 @@ public class LectureStatisticsFragment extends Fragment {
     Connection c;
     private ListView subject_list;
     LayoutInflater inflater;
+    private ArrayList<String> commentsArray;
+    private Button lectureCommentsBtn;
 
     @Nullable
     @Override
@@ -59,6 +63,17 @@ public class LectureStatisticsFragment extends Fragment {
                 myIntent.putExtra("subjectDistribution",ProfessorLive.getUpdatedSubjectRating(curSub.getId()));
                 myIntent.putExtra("SubjectName",curSub.getName());
                 startActivity(myIntent);
+            }
+        });
+        commentsArray = c.getLectureComments(lectureID);
+        lectureCommentsBtn = (Button) rootView.findViewById(R.id.lecturecomments_btn);
+        lectureCommentsBtn.setText("Show Comments (" + commentsArray.size()+")");
+        lectureCommentsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toCommentsIntent = new Intent(getActivity(),LectureCommentsPopup.class);
+                toCommentsIntent.putExtra("lectureComments",commentsArray);
+                toCommentsIntent.putExtra("lectureName",ProfessorLectureList.getName());
             }
         });
         return rootView;

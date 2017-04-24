@@ -232,6 +232,25 @@ public class Connection implements Closeable {
 				lecture.getEnd(), lecture.getRoom());
 	}
 
+
+	public ArrayList<String> getLectureComments(int lectureId){
+		checkState();
+		out.println("GET_LECTURECOMMENTS "+lectureId);
+		out.flush();
+		ArrayList<String> comments = new ArrayList<String>();
+		while("NEXT".equals(in.next())){
+			comments.add(convertFromServer(in.next()));
+		}
+		return comments;
+	}
+
+
+	public void setLectureComment(int lectureId, String comment){
+		checkState();
+		out.println("SET_LECTURECOMMENT "+lectureId+" "+convertToServer(comment));
+		out.flush();
+	}
+
 	private void checkLectureInput(String professorID, String courseID, int start, int end, String room){
 		boolean flag = false;
 		if (professorID.contains(" ") || courseID.contains(" ") || room.contains(" ")){

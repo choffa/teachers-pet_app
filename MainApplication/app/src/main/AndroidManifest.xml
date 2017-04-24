@@ -36,7 +36,8 @@
             android:theme="@style/AppTheme.PopupTheme"></activity>
         <activity android:name=".StatisticsPopup"
             android:theme="@style/AppTheme.PopupTheme"></activity>
-
+        <activity android:name=".LectureCommentsPopup"
+            android:theme="@style/AppTheme.PopupTheme"></activity>
         <activity android:name=".RoleSelect" android:label="@string/startup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

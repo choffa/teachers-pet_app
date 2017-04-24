@@ -103,7 +103,7 @@
             tools:listitem="@layout/student_rating_row" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/studentrating_comments_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/list"
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="35dp"
-            android:layout_toEndOf="@+id/editText"
+            android:layout_toEndOf="@+id/studentrating_comments_textview"
             android:onClick="sendComment"
             android:text="Send Comment"
             android:textSize="10sp" />

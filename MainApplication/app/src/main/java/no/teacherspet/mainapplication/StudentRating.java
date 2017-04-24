@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -39,6 +41,7 @@ public class StudentRating extends AppCompatActivity{
     protected Thread thread;
     ListView ratingList;
     public boolean isOnCreate;
+    TextView commentsTxtView;
 
 
     @Override
@@ -72,8 +75,8 @@ public class StudentRating extends AppCompatActivity{
             list.add(new RowModel(s));
         }
         setContentView(R.layout.activity_student_rating);
+        commentsTxtView = (TextView) findViewById(R.id.studentrating_comments_textview);
         ratingList = (ListView) findViewById(android.R.id.list);
-
         ratingList.setAdapter(new SubjectRatingAdapter(list));
         RelativeLayout.LayoutParams mParam = (RelativeLayout.LayoutParams) ratingList.getLayoutParams();
         mParam.height = (calculateHeight(ratingList));
@@ -118,7 +121,8 @@ public class StudentRating extends AppCompatActivity{
     }
 
     public void sendComment(View view) {
-        //TODO Send comments for lecture.
+        c.setLectureComment(lectureID, commentsTxtView.getText().toString());
+        Toast.makeText(this, "Comments sent", Toast.LENGTH_SHORT).show();
     }
     /**
      * Custom ArrayAdapter to handle a ListView of subjects with RatingBars.
@@ -159,12 +163,11 @@ public class StudentRating extends AppCompatActivity{
                                     model.rating = rating;
                                     currentSub = subjects.get(myPosition);
                                     c.sendSubjectRating(currentSub.getId(), RoleSelect.StudentId, Math.round(rating), "GTFO");
-                                    Toast.makeText(StudentRating.this, "You have rated " + currentSub.getName().trim() + " a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(StudentRating.this, currentSub.getName().trim() + " rated a " + Math.round(rating) + "/5", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         };
                 rate.setOnRatingBarChangeListener(listener);
-
                 showCommentsFAB = wrapper.getCommentFAB();
                 String currentComment = subjectComments.get(position);
                 if(currentComment.isEmpty() || currentComment.equals("NULL")) {

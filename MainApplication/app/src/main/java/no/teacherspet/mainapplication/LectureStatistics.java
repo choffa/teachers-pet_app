@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -28,8 +29,10 @@ public class LectureStatistics extends AppCompatActivity {
     ListView subject_list;
     ArrayList<Subject> subjectArray = new ArrayList<>();
     ArrayList<Float> subjectAvg = new ArrayList<>();
+    ArrayList<String> commentsArray = new ArrayList<>();
     Connection c;
     int lectureID;
+    Button lectureCommentsBtn;
 
     /** Called when the activity is first created. */
     @Override
@@ -40,6 +43,7 @@ public class LectureStatistics extends AppCompatActivity {
             setContentView(R.layout.lecture_statistics);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(ProfessorLectureList.getName());
             lectureID = ProfessorLectureList.getID();
             c = new Connection();
             subjectArray = c.getSubjects(lectureID);
@@ -53,23 +57,26 @@ public class LectureStatistics extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Subject curSub = subjectArray.get(position);
-                    Intent myIntent = new Intent(LectureStatistics.this,StatisticsPopup.class);
-                    myIntent.putExtra("subjectDistribution",getUpdatedSubjectRating(curSub.getId()));
-                    myIntent.putExtra("SubjectName",curSub.getName());
-                    startActivity(myIntent);
+                    Intent toStatIntent = new Intent(LectureStatistics.this,StatisticsPopup.class);
+                    toStatIntent.putExtra("subjectDistribution",getUpdatedSubjectRating(curSub.getId()));
+                    toStatIntent.putExtra("SubjectName",curSub.getName());
+                    startActivity(toStatIntent);
+                }
+            });
+            commentsArray = c.getLectureComments(lectureID);
+            lectureCommentsBtn = (Button) findViewById(R.id.lecturecomments_btn);
+            lectureCommentsBtn.setText("Show Comments (" + commentsArray.size()+")");
+            lectureCommentsBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent toCommentsIntent = new Intent(LectureStatistics.this,LectureCommentsPopup.class);
+                    toCommentsIntent.putExtra("lectureComments",commentsArray);
+                    toCommentsIntent.putExtra("lectureName",ProfessorLectureList.getName());
                 }
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void onListItemClick(ListView parent, View v, int position, long id) {
-        Subject curSub = subjectArray.get(position);
-        Intent myIntent = new Intent(LectureStatistics.this,StatisticsPopup.class);
-        myIntent.putExtra("subjectDistribution",getUpdatedSubjectRating(curSub.getId()));
-        myIntent.putExtra("SubjectName",curSub.getName());
-        startActivity(myIntent);
     }
 
     /**
