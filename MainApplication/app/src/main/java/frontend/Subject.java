@@ -5,6 +5,7 @@ package frontend;
  */
 public class Subject {
 
+    private float averageRating =0;
     private int id;
     private String name;
     private String comment;
@@ -37,6 +38,14 @@ public class Subject {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void setAverageRating(float avg){
+        averageRating = avg;
+    }
+
+    public float getAverageRating() {
+        return averageRating;
     }
 
     @Override

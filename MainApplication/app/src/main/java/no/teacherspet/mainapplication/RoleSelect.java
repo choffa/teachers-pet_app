@@ -6,6 +6,7 @@ import android.os.StrictMode;
 import android.provider.Settings.Secure;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
@@ -26,6 +27,7 @@ public class RoleSelect extends AppCompatActivity {
     protected static String StudentId;
     protected static boolean isValidated;
     protected static String ProfessorID="";
+    Button logoutBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +40,23 @@ public class RoleSelect extends AppCompatActivity {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        Toast.makeText(getApplicationContext(),StudentId,Toast.LENGTH_LONG).show();
-
         //Allows threads
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+        logoutBtn = (Button) findViewById(R.id.logoutBtn);
+        logoutBtn.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        if(isValidated){
+            logoutBtn.setVisibility(View.VISIBLE);
+        }
+        super.onResume();
+    }
+
+    public static String getStudentId() {
+        return StudentId;
     }
 
     /**
@@ -76,6 +90,7 @@ public class RoleSelect extends AppCompatActivity {
         isValidated = false;
         ProfessorID="";
         Toast.makeText(getApplicationContext(),"You are now logged out",Toast.LENGTH_LONG).show();
+        logoutBtn.setVisibility(View.GONE);
     }
 
 

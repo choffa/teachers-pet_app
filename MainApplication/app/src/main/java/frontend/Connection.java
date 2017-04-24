@@ -131,6 +131,26 @@ public class Connection implements Closeable {
 		return res;
 	}
 
+	public int getStudentSubjectRating(String studentId, int subjectId){
+        checkState();
+        out.println("GET_STUDENTSUBJECTRATING " + studentId +" "+ subjectId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return 0;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
+
+    public int getStudentSpeedRating(String studentId, int lectureId){
+        checkState();
+        out.println("GET_STUDENTSPEEDRATING " + studentId +" "+ lectureId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return -1;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
+
 	//------------------------------------------------------------------------
 	//The lecture stuff
 
@@ -210,6 +230,25 @@ public class Connection implements Closeable {
 	public int createLecture(Lecture lecture){
 		return createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
 				lecture.getEnd(), lecture.getRoom());
+	}
+
+
+	public ArrayList<String> getLectureComments(int lectureId){
+		checkState();
+		out.println("GET_LECTURECOMMENTS "+lectureId);
+		out.flush();
+		ArrayList<String> comments = new ArrayList<String>();
+		while("NEXT".equals(in.next())){
+			comments.add(convertFromServer(in.next()));
+		}
+		return comments;
+	}
+
+
+	public void setLectureComment(int lectureId, String comment){
+		checkState();
+		out.println("SET_LECTURECOMMENT "+lectureId+" "+convertToServer(comment));
+		out.flush();
 	}
 
 	private void checkLectureInput(String professorID, String courseID, int start, int end, String room){

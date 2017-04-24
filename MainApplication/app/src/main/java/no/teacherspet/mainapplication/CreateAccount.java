@@ -69,14 +69,14 @@ public class CreateAccount extends AppCompatActivity {
     public void onCreateBtnClick(View v){
         try {
             if (password.getText().toString().equals(password_confirm.getText().toString())) {
-                if (c.checkUsername(md5(userName.getText().toString()))) {
+                if (c.checkUsername(md5(userName.getText().toString().toLowerCase().trim()))) {
                     Toast.makeText(CreateAccount.this, "This e-mail is already used", Toast.LENGTH_SHORT).show();;
                 } else {
                     try {
-                        RoleSelect.professors.put(md5(userName.getText().toString()), SHA1(password.getText().toString()));
-                        c.createUser(md5(userName.getText().toString()), SHA1(password.getText().toString()));
+                        RoleSelect.professors.put(md5(userName.getText().toString().toLowerCase().trim()), SHA1(password.getText().toString()));
+                        c.createUser(md5(userName.getText().toString().toLowerCase().trim()), SHA1(password.getText().toString()));
                         RoleSelect.isValidated=true;
-                        RoleSelect.ProfessorID=this.userName.getText().toString();
+                        RoleSelect.ProfessorID=this.userName.getText().toString().toLowerCase().trim();
                         finish();
                         Intent intent =new Intent(CreateAccount.this,ProfessorLectureList.class);
                         startActivity(intent);

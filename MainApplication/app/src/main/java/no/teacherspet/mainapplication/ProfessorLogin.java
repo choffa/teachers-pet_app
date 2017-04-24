@@ -62,10 +62,10 @@ public class ProfessorLogin extends AppCompatActivity {
      */
     public void loginPressed(View v){
         try {
-            if (c.checkUsername(md5(UserName.getText().toString().trim()))) {
-                if (c.validateUser(md5(UserName.getText().toString().trim()), SHA1(Password.getText().toString()))) {
+            if (c.checkUsername(md5(UserName.getText().toString().toLowerCase().trim()))) {
+                if (c.validateUser(md5(UserName.getText().toString().toLowerCase().trim()), SHA1(Password.getText().toString()))) {
                     RoleSelect.isValidated = true;
-                    RoleSelect.ProfessorID = md5(UserName.getText().toString().trim());
+                    RoleSelect.ProfessorID = md5(UserName.getText().toString().toLowerCase().trim());
                     Intent showLectures = new Intent(getApplicationContext(), ProfessorLectureList.class);
                     finish();
                     startActivity(showLectures);

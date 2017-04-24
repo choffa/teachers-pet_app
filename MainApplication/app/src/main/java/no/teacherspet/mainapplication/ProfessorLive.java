@@ -120,6 +120,22 @@ public class ProfessorLive extends AppCompatActivity {
                 Math.max( (int)(b * factor), 0 ) );
     }
 
+    public static String getTempoText(float avg){
+        if(avg==-1){
+            return "No votes registered";
+        } else if(avg<1.8){
+            return "Very slow";
+        }else if(avg<2.6){
+            return "Slow";
+        }else if(avg<3.4){
+            return "Perfect";
+        }else if(avg<4.2){
+            return "Fast";
+        }else{
+            return "Very Fast";
+        }
+    }
+
     public static int[] getUpdatedSubjectRating(int subjectID){
         return c.getSubjectStats(subjectID);
     }
