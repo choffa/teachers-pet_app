@@ -74,6 +74,7 @@ public class LectureStatisticsFragment extends Fragment {
                 Intent toCommentsIntent = new Intent(getActivity(),LectureCommentsPopup.class);
                 toCommentsIntent.putExtra("lectureComments",commentsArray);
                 toCommentsIntent.putExtra("lectureName",ProfessorLectureList.getName());
+                startActivity(toCommentsIntent);
             }
         });
         return rootView;

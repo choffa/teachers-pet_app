@@ -42,6 +42,7 @@ public class StudentRating extends AppCompatActivity{
     ListView ratingList;
     public boolean isOnCreate;
     TextView commentsTxtView;
+    TextView subjectHeader;
 
 
     @Override
@@ -90,6 +91,10 @@ public class StudentRating extends AppCompatActivity{
             tempo.check(tempo.getChildAt(curTempoRating-1).getId());
         }
         initiateRadioGroup(tempo);
+        subjectHeader = (TextView) findViewById(R.id.studentRating_subjectHeader);
+        if(subjects.size()<1){
+            subjectHeader.setVisibility(View.GONE);
+        }
         isOnCreate=false;
     }
 
@@ -123,6 +128,7 @@ public class StudentRating extends AppCompatActivity{
     public void sendComment(View view) {
         c.setLectureComment(lectureID, commentsTxtView.getText().toString());
         Toast.makeText(this, "Comments sent", Toast.LENGTH_SHORT).show();
+        commentsTxtView.setText("");
     }
     /**
      * Custom ArrayAdapter to handle a ListView of subjects with RatingBars.

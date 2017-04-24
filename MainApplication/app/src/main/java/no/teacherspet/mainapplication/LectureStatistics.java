@@ -72,6 +72,7 @@ public class LectureStatistics extends AppCompatActivity {
                     Intent toCommentsIntent = new Intent(LectureStatistics.this,LectureCommentsPopup.class);
                     toCommentsIntent.putExtra("lectureComments",commentsArray);
                     toCommentsIntent.putExtra("lectureName",ProfessorLectureList.getName());
+                    startActivity(toCommentsIntent);
                 }
             });
         } catch (IOException e) {
