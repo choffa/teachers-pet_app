@@ -51,6 +51,6 @@ script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  - ./gradlew connectedAndroidTest
+  - ./gradlew assembleDebug assembleDebugAndroidTest
   - ./gradlew jacocoTestReport
-  - bash <(curl -s http://codecov.io/bash)
+  - bash <(curl -s http://codecov.io/bash -t a9866b06-382d-4cc3-b0e6-c7169409e2cb)
