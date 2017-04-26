@@ -1,5 +1,7 @@
 package frontend;
 
+import android.widget.Toast;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,6 +12,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import backend.Lecture;
+import no.teacherspet.mainapplication.AddSubject;
 
 public class Connection implements Closeable {
 
@@ -83,11 +86,11 @@ public class Connection implements Closeable {
 	 * @param rating    The actual rating of the subject, this is a number between 1 and 5 (inclusive)
 	 * @throws IllegalArgumentException This is thrown if the ranking is wrong
 	 */
-	public void sendSubjectRating(int subjectID, int studentID, int rating, String comment)
+	public void sendSubjectRating(int subjectID, String studentID, int rating, String comment)
 			throws IllegalArgumentException {
 		checkState();
-		if (rating < 1 || rating > 5) {
-			throw new IllegalArgumentException("Rating must be between 1 and 5");
+		if (rating < 0 || rating > 5) {
+			throw new IllegalArgumentException("Rating must be between 0 and 5");
 		}
 
 		out.println("SET_SUBJECTRATING " + subjectID + " " + studentID + " " + rating + " " + comment);
@@ -104,8 +107,49 @@ public class Connection implements Closeable {
 		checkState();
 		out.println("GET_AVERAGESUBJECTRATING " + subjectID);
 		out.flush();
-		return in.nextFloat();
+		float res = in.nextFloat();
+		return res;
 	}
+
+	/**
+	 * A method that requests the distribution of ratings for a specific subject
+	 * @param subjectId The subjectID of the subject in question
+	 * @return A list of integers representing the amount of votes of that degree.
+	 */
+	public int[] getSubjectStats(int subjectId){
+		checkState();
+		out.println("GET_STATS "+subjectId);
+		out.flush();
+
+		int[] res = new int[6];
+		int counter=0;
+		while (in.next().compareTo("NEXT") == 0){
+			int count = in.nextInt();
+			res[counter]=count;
+			counter++;
+		}
+		return res;
+	}
+
+	public int getStudentSubjectRating(String studentId, int subjectId){
+        checkState();
+        out.println("GET_STUDENTSUBJECTRATING " + studentId +" "+ subjectId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return 0;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
+
+    public int getStudentSpeedRating(String studentId, int lectureId){
+        checkState();
+        out.println("GET_STUDENTSPEEDRATING " + studentId +" "+ lectureId);
+        out.flush();
+        String rat = in.next();
+        if("NOSTRING".equals(rat)) return -1;
+        int rating = Integer.parseInt(rat);
+        return rating;
+    }
 
 	//------------------------------------------------------------------------
 	//The lecture stuff
@@ -144,8 +188,8 @@ public class Connection implements Closeable {
 			int start = in.nextInt();
 			int end = in.nextInt();
 			String professorID = in.next();
-			String room = in.next();
-			String courseID = in.next();
+			String room = convertFromServer(in.next());
+			String courseID = convertFromServer(in.next());
 			String[] components = date.split("-");
 			Date d= new Date();
 			d.setYear(Integer.parseInt(components[0])-1900);
@@ -159,19 +203,21 @@ public class Connection implements Closeable {
 
 	/**
 	 * A method for creating a new lecture in the database
-	 *
-	 * @param date  The date that the lecture takes place
+	 *  @param date  The date that the lecture takes place
 	 * @param start The time the lecture starts
 	 * @param end   The end time the lecture ends
 	 * @param room  The room that the lecture takes place
 	 */
-	public void createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
+	public int createLecture(String professorID, String courseID, Date date, int start, int end, String room) {
 		checkState();
-		checkLectureInput(professorID, courseID, start, end, room);
-		out.println("SET_LECTURE " + professorID + " " + courseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
-			+ end + " " + room);
+		String resCourseID = convertToServer(courseID);
+		String resRoom = convertToServer(room);
+		checkLectureInput(professorID, resCourseID, start, end, resRoom);
+		out.println("SET_LECTURE " + professorID + " " + resCourseID + " " + (date.getYear()+1900) + "-" + (date.getMonth() +1) + "-" + date.getDate() + " " + start + " "
+			+ end + " " + resRoom);
 		out.flush();
-		//Should the server respond with boolean?
+		int res = in.nextInt();
+		return res;
 	}
 
 	/**
@@ -181,9 +227,28 @@ public class Connection implements Closeable {
 	 *
 	 * @param lecture	The Lecture object to create instance for
 	 */
-	public void createLecture(Lecture lecture){
-		createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
+	public int createLecture(Lecture lecture){
+		return createLecture(lecture.getProfessorID(), lecture.getCourseID(), lecture.getDate(), lecture.getStart(),
 				lecture.getEnd(), lecture.getRoom());
+	}
+
+
+	public ArrayList<String> getLectureComments(int lectureId){
+		checkState();
+		out.println("GET_LECTURECOMMENTS "+lectureId);
+		out.flush();
+		ArrayList<String> comments = new ArrayList<String>();
+		while("NEXT".equals(in.next())){
+			comments.add(convertFromServer(in.next()));
+		}
+		return comments;
+	}
+
+
+	public void setLectureComment(int lectureId, String comment){
+		checkState();
+		out.println("SET_LECTURECOMMENT "+lectureId+" "+convertToServer(comment));
+		out.flush();
 	}
 
 	private void checkLectureInput(String professorID, String courseID, int start, int end, String room){
@@ -239,13 +304,24 @@ public class Connection implements Closeable {
 	 */
 	public ArrayList<Subject> getSubjects(int lectureID) {
 		checkState();
-		out.println("GET_SUBJECTS");
+		out.println("GET_SUBJECTS "+lectureID);
 		out.flush();
 		ArrayList<Subject> res = new ArrayList<>();
-		while (in.next() == "NEXT"){
-			res.add(new Subject(in.nextInt(), in.next()));
+		while (in.next().equals("NEXT")){
+			int subInt = in.nextInt();
+			String subName = in.next();
+			subName = convertFromServer(subName);
+			String subComment = in.next();
+			subComment = convertFromServer(subComment);
+			res.add(new Subject(subInt,subName,subComment));
 		}
 		return res;
+	}
+
+	public void updateSubject(int subjectID, String name, String comment){
+		checkState();
+		out.println("UPDATE_SUBJECT " + subjectID + " " + name + " " + comment);
+		out.flush();
 	}
 
 	/**
@@ -253,10 +329,12 @@ public class Connection implements Closeable {
 	 *
 	 * @param lectureID The ID of the lecture to associate the subject with
 	 */
-	public void createSubject(int lectureID) {
-		//TODO: Create method for creating subject associated with specific lecture
+	public void createSubject(int lectureID, String name, String comment) {
 		checkState();
-		out.println("SET_SUBJECT " + lectureID);
+		String resName = convertToServer(name);
+		String resComment = convertToServer(comment);
+		checkSubjectInput(resName);
+		out.println("SET_SUBJECT " + lectureID + " " + resName + " " + resComment);
 		out.flush();
 	}
 
@@ -319,5 +397,25 @@ public class Connection implements Closeable {
 			throw new IllegalStateException();
 		}
 
+	}
+
+	private String convertToServer(String string){
+		if(string.isEmpty()){
+			return "NULL";
+		}
+		String res = string.replaceAll(" ", "£");
+		res = res.replaceAll("\n","¥");
+		res = res.replaceAll("'","''");
+		return res;
+	}
+
+	private String convertFromServer(String string){
+		if (string.equalsIgnoreCase("NULL")){
+			return "";
+		}
+		String res = string.replaceAll("£"," ");
+		res = res.replaceAll("¥", "\n");
+
+		return res;
 	}
 }

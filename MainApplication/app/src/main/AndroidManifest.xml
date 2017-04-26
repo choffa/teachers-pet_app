@@ -20,6 +20,8 @@
         <activity android:name=".LectureStatistics"></activity>
         <activity android:name=".StudentRating">
         </activity>
+        <activity android:name=".InitiateSubjects">
+        </activity>
         <activity android:name=".ProfessorLogin">
         </activity>
         <activity android:name=".ProfessorLectureList">
@@ -29,7 +31,13 @@
         <activity android:name=".ProfessorLive" android:screenOrientation="portrait">
         </activity>
         <activity android:name=".StudentLectureList"/>
-
+        <activity android:name=".AddSubject"></activity>
+        <activity android:name=".CommentsPopup"
+            android:theme="@style/AppTheme.PopupTheme"></activity>
+        <activity android:name=".StatisticsPopup"
+            android:theme="@style/AppTheme.PopupTheme"></activity>
+        <activity android:name=".LectureCommentsPopup"
+            android:theme="@style/AppTheme.PopupTheme"></activity>
         <activity android:name=".RoleSelect" android:label="@string/startup">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

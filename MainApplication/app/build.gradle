@@ -21,9 +21,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary="true"
-        jackOptions{
-            enabled true
-        }
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
     }
     buildTypes {
         release {
@@ -36,8 +36,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility 1.7
+        sourceCompatibility 1.7
     }
     lintOptions {
         abortOnError false
@@ -51,6 +51,10 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.1.1'
     testCompile 'junit:junit:4.12'
+    androidTestCompile "org.mockito:mockito-android:2.+"
+    testCompile "org.mockito:mockito-core:2.+"
+    compile 'com.github.blackfizz:eazegraph:1.2.5l@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:support-v4:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.1'

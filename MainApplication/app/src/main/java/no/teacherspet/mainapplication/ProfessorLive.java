@@ -1,20 +1,23 @@
 package no.teacherspet.mainapplication;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.Toast;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import frontend.Connection;
+import no.teacherspet.mainapplication.fragments.LectureStatisticsFragment;
+import no.teacherspet.mainapplication.fragments.ProfessorLiveFragment;
 
 /**
  * Created by magnus on 17.02.2017.
@@ -22,94 +25,60 @@ import frontend.Connection;
 
 
 public class ProfessorLive extends AppCompatActivity {
-    private int mInterval = 2000;
-    private Handler mHandler;
-    private static int ID;
-    Connection c;
+    public static int ID;
+    public static Connection c;
+    protected Thread thread;
+    private ViewPager mViewPager;
+    public static TabLayout tabLayout;
     public static void setID(int ID) {
         ProfessorLive.ID = ID;
     }
-    //View thisView;
+    public static ActionBar actionBar;
+    RelativeLayout layout;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.professor_live);
-        //thisView=this.findViewBy
-        ActionBar actionBar = getSupportActionBar();
+        setContentView(R.layout.professor_live_container);
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(ProfessorLectureList.getName());
         setID(ProfessorLectureList.getID());
-        try {
-            c = new Connection();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        mHandler = new Handler();
-        startRepeatingTask();
-
-
-    }
-
-
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            try {
-                update(c.getAverageSpeedRating(ID));
-            } finally {
-                // 100% guarantee that this always happens, even if
-                // your update method throws an exception
-                mHandler.postDelayed(mStatusChecker, mInterval);
+        thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    c = new Connection();
+                }
+                catch (IOException e){
+                    Toast.makeText(ProfessorLive.this, "Error occurred when loading page.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
-        }
-    };
-
-    void startRepeatingTask() {
-        mStatusChecker.run();
-    }
-
-    void stopRepeatingTask() {
-        mHandler.removeCallbacks(mStatusChecker);
-    }
-
-
-    public boolean onOptionsItemSelected(MenuItem item){
-        /* Sets the Back button to create a new instance of a view - didn't work as intended, but might be interesting later.
-        Intent myIntent = new Intent(getApplicationContext(), RoleSelect.class);
-        startActivityForResult(myIntent, 0);
-        */
+        });
+        thread.start();
         try {
-            c.close();
-            finish();
-        } catch (IOException e) {
+            thread.join();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return true;
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.live_container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        tabLayout = (TabLayout) findViewById(R.id.live_tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
     }
 
-    public void updateButtonClick(View v){
 
-        update(c.getAverageSpeedRating(ID));
-        /*
-        float avg = (float) (Math.random()*40)+10;
-        avg = (float) Math.floor(avg);
-        avg = avg/10;
-        update(avg);
-        */
-    }
-    public void changeToStat(View v){
-        Intent myIntent=new Intent(ProfessorLive.this,LectureStatistics.class);
-        startActivity(myIntent);
-    }
     /**
      * Translates a float between 1 and 5 to RGB code in hex scaling from blue to red.
      * @param average Float between 1 and 5
      * @return Color in form of hex-string "#XXXXXX"
      */
-    protected String translateColor(float average){
+    public static String translateColor(float average){
 
         String ratingColor;
         String opacityColor;
@@ -118,7 +87,6 @@ public class ProfessorLive extends AppCompatActivity {
         int opacity = (int) ((average-3)*100)*250/200;
         //Translates opacity into hex
         opacityColor = Integer.toHexString(255-Math.abs(opacity));
-
 
         if (opacity == 0) {
             ratingColor = "#ffffff";
@@ -132,8 +100,6 @@ public class ProfessorLive extends AppCompatActivity {
             ratingColor = "#" + opacityColor + opacityColor + "ff";
         }
         return ratingColor;
-
-
     }
 
     /**
@@ -154,35 +120,76 @@ public class ProfessorLive extends AppCompatActivity {
                 Math.max( (int)(b * factor), 0 ) );
     }
 
-    /**
-     * Updates all info on the ProfessorLive view: Background and ActionBar color, and the number on the text view.
-     * @param average Float between 1 and 5 with input from the tempo RadioButtons from the associated lecture
-     */
-    protected void update(float average){
-        //System.out.println(average);
-
-        //Checks to see if the average is between the
-        if(average<1||average>5){
-            average= (float) 3.0;
+    public static String getTempoText(float avg){
+        if(avg==-1){
+            return "No votes registered";
+        } else if(avg<1.8){
+            return "Very slow";
+        }else if(avg<2.6){
+            return "Slow";
+        }else if(avg<3.4){
+            return "Perfect";
+        }else if(avg<4.2){
+            return "Fast";
+        }else{
+            return "Very Fast";
         }
-        RelativeLayout layout;
-        TextView text;
-        TextView studNum;
-        ActionBar actionBar;
-        actionBar = getSupportActionBar();
-        layout = (RelativeLayout) findViewById(R.id.profRelLayout);
-        layout.setBackgroundColor(Color.parseColor(translateColor(average)));
-        actionBar.setBackgroundDrawable(new ColorDrawable(darker(Color.parseColor(translateColor(average)), (float) 0.8)));
-        text = (TextView) findViewById(R.id.treKommaFem);
-        text.setText(String.format("%.1f",average-3));
-        studNum= (TextView) findViewById(R.id.current_rating_num);
-        studNum.setText(Integer.toString(c.getTempoVotesInLecture(ID)));
+    }
+
+    public static int[] getUpdatedSubjectRating(int subjectID){
+        return c.getSubjectStats(subjectID);
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    ProfessorLiveFragment profLive = new ProfessorLiveFragment();
+                    return profLive;
+                case 1:
+                    LectureStatisticsFragment stat = new LectureStatisticsFragment();
+                    return stat;
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Live View";
+                case 1:
+                    return "Statistics";
+
+            }
+            return null;
+        }
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        finish();
+        return true;
     }
 
     @Override
     public void onDestroy(){
         try {
-            stopRepeatingTask();
             c.close();
         } catch (IOException e) {
             e.printStackTrace();

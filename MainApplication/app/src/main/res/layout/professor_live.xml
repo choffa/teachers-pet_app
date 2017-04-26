@@ -10,12 +10,13 @@
         android:id="@+id/treKommaFem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:gravity="center"
         android:hint="#"
         android:textColor="#000000"
-        android:textSize="150sp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="62dp" />
+        android:textSize="50sp"/>
 
     <ImageView
         android:id="@+id/imageView2"
@@ -33,7 +34,6 @@
         android:layout_below="@+id/treKommaFem"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="29dp"
-        android:onClick="updateButtonClick"
         android:text="Update" />
 
     <TextView
@@ -58,14 +58,13 @@
         android:textAlignment="center"
         android:textSize="36sp" />
 
-    <Button
-        android:id="@+id/changeToStatBtn"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:onClick="changeToStat"
-        android:text="Statistics" />
+        android:text="Current Tempo:"
+        android:textSize="24sp"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
