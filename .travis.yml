@@ -53,4 +53,5 @@ script:
   - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
   - ./gradlew assembleDebug assembleDebugAndroidTest
   - ./gradlew jacocoTestReport
+  - cd app
   - bash <(curl -s http://codecov.io/bash) -t a9866b06-382d-4cc3-b0e6-c7169409e2cb
