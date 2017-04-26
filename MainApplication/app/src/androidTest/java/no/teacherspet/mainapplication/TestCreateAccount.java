@@ -1,11 +1,9 @@
 package no.teacherspet.mainapplication;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.widget.EditText;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,11 +11,8 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static java.util.UUID.randomUUID;
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * Created by magnus on 31.03.2017.
@@ -38,7 +33,7 @@ public class TestCreateAccount{
         onView(withId(R.id.password_confirmation)).check(ViewAssertions.matches(isDisplayed()));
         onView(withId(R.id.account_createbtn)).check(ViewAssertions.matches(isDisplayed()));
     }
-
+/*
     @Test
     public void shouldNotCreateUser(){
         createAcc.runOnUiThread(new Runnable() {
@@ -86,4 +81,5 @@ public class TestCreateAccount{
         Activity loggedIn=getInstrumentation().waitForMonitorWithTimeout(timeMonitor,5000);
         assertNotNull(loggedIn);
     }
+    */
 }
